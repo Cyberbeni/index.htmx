@@ -20,8 +20,8 @@ RUN --mount=type=cache,target=/workspace/.build,id=build-$TARGETPLATFORM \
 	--mount=type=cache,target=/workspace/.spm-cache,id=spm-cache \
 	scripts/build-release.sh && \
 	mkdir -p dist && \
-	cp .build/release/ExampleApp dist
+	cp .build/release/index_htmx dist
 
 FROM scratch AS release
-COPY --from=build /workspace/dist/ExampleApp /usr/local/bin/swift-example
-ENTRYPOINT ["/usr/local/bin/swift-example"]
+COPY --from=build /workspace/dist/index_htmx /usr/local/bin/index_htmx
+ENTRYPOINT ["/usr/local/bin/index_htmx"]

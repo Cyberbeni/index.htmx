@@ -4,23 +4,28 @@
 import PackageDescription
 
 let package = Package(
-	name: "ExampleApp",
+	name: "index_htmx",
 	products: [
 		.executable(
-			name: "ExampleApp",
-			targets: ["ExampleApp"]
+			name: "index_htmx",
+			targets: ["index_htmx"]
 		),
 	],
 	dependencies: [
-		// .package(url: "https://github.com/swift-server-community/mqtt-nio", from: "2.11.0"),
+		.package(url: "https://github.com/vapor/vapor", from: "4.113.2"),
+		.package(url: "https://github.com/vapor-community/vapor-elementary", from: "0.2.1"),
+		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
 		// Plugins:
-		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.54.5"),
+		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.55.5"),
 	],
 	targets: [
 		.executableTarget(
-			name: "ExampleApp",
+			name: "index_htmx",
 			dependencies: [
-				// .product(name: "MQTTNIO", package: "mqtt-nio"),
+				.product(name: "Vapor", package: "vapor"),
+				.product(name: "VaporElementary", package: "vapor-elementary"),
+				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
+				.product(name: "ElementaryHTMXSSE", package: "elementary-htmx"),
 			],
 			swiftSettings: [
 				.unsafeFlags(["-warnings-as-errors"], .when(configuration: .release)),
