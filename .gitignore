@@ -9,3 +9,6 @@
 # VSCode
 .vscode/*
 !.vscode/extensions.json
+
+# npm
+node_modules

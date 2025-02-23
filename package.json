@@ -1,0 +1,14 @@
+{
+  "name": "index.htmx",
+  "version": "0.0.0",
+  "description": "Lightweight server-side rendered dashboard.",
+  "scripts": {
+    "vendor": ""
+  },
+  "author": "Benedek Kozma",
+  "license": "MIT",
+  "dependencies": {
+    "htmx.org": "^2.0.4",
+    "htmx-ext-sse": "^2.2.3"
+  }
+}
