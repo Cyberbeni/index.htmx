@@ -12,6 +12,28 @@ enum Routes {
 			}
 		}
 
+		router.get("/site.webmanifest") { _, _ in
+			Response(
+				status: .ok,
+				headers: [.contentType: "application/manifest+json"],
+				// TODO: name, icon
+				body: ResponseBody(byteBuffer: .init(string: """
+				{
+				"name": "Dashboard",
+				"display":"standalone",
+				"start_url":"/",
+				"icons": [
+					{
+					"src": "icons/512.png",
+					"type": "image/png",
+					"sizes": "512x512"
+					}
+				]
+				}
+				"""))
+			)
+		}
+
 		router.get("/time") { _, _ in
 			Response(
 				status: .ok,

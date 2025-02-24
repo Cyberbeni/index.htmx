@@ -10,22 +10,26 @@ struct MainPage: HTMLDocument {
 		// TODO: icon
 		// TODO: apple-touch-icon
 		meta(.name("mobile-web-app-capable"), .content("yes"))
-        script(.src("/htmx.min.js")) {}
-        script(.src("/htmxsse.min.js")) {}
+		// TODO: theme-color based on pico.css --pico-background-color or config
+		meta(.name("theme-color"), .content("#fff"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: light)"))
+		meta(.name("theme-color"), .content("#13171f"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: dark)"))
+		link(.href("/site.webmanifest"), .rel("manifest"))
 		link(.href("/pico.css"), .rel(.stylesheet))
 		link(.href("/style.css"), .rel(.stylesheet))
+        script(.src("/htmx.min.js")) {}
+        script(.src("/htmxsse.min.js")) {}
     }
 
     var body: some HTML {
         header(.class("container")) {
             h2 { "Hummingbird + Elementary + HTMX Demo" }
         }
-        main(.class("container")) {
+        main(.class("container"), .hx.ext(.sse), .sse.connect("/time")) {
 			div(.class("grid")) {
 				for _ in 0..<5 {
 					div {
 						h6 { "HTMX SSE example - main" }
-						div(.hx.ext(.sse), .sse.connect("/time"), .sse.swap("message")) {
+						div(.sse.swap("message")) {
 							TimeElement()
 						}
 					}
