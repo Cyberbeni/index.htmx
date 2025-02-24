@@ -12,6 +12,11 @@
 	}
 }
 
+main {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
 /* custom classes */
 
 a.tile {

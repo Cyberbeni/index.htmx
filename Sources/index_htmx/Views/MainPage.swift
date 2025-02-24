@@ -21,10 +21,9 @@ struct MainPage: HTMLDocument {
     }
 
     var body: some HTML {
-        header(.class("container")) {
-            h2 { "Hummingbird + Elementary + HTMX Demo" }
-        }
         main(.class("container"), .hx.ext(.sse), .sse.connect("/time")) {
+			// TODO: use flex
+			// TODO: section header
 			div(.class("grid")) {
 				BasicTile()
 				BasicTile()
@@ -47,5 +46,6 @@ struct MainPage: HTMLDocument {
 				}
 			}
         }
+		// TODO: footer reload button
     }
 }
