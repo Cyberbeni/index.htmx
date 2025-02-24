@@ -1,3 +1,5 @@
+/* pico.css overrides */
+
 @media (min-width: 768px) {
 	.grid {
 		grid-template-columns: 1fr 1fr;
@@ -8,4 +10,52 @@
 	.grid {
 		grid-template-columns: 1fr 1fr 1fr;
 	}
+}
+
+/* custom classes */
+
+a.tile {
+	--pico-background-color: var(--pico-dropdown-background-color);
+	--pico-border-color: var(--pico-dropdown-border-color);
+	--pico-color: var(--pico-dropdown-color);
+	--pico-box-shadow: var(--pico-dropdown-box-shadow);
+}
+
+a.tile:is(:hover, :active, :focus) {
+	--pico-background-color: var(--pico-dropdown-hover-background-color);
+	--pico-border-color: var(--pico-dropdown-border-color);
+	--pico-color: var(--pico-dropdown-color);
+	--pico-box-shadow: var(--pico-dropdown-box-shadow);
+}
+
+a.tile.basic {
+	min-height: 96px;
+	display:flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 110%;
+}
+
+a.tile.basic > img {
+	width: 64px;
+}
+
+a.tile.detailed {
+	min-height: 96px;
+}
+
+a.tile.detailed > .title-row {
+	display:flex;
+	align-items: center;
+	gap: 12px;
+}
+
+a.tile.detailed > .title-row > img {
+	width: 32px;
+}
+
+a.tile.detailed > .detail-row {
+	display:flex;
+	flex: 0 0 100%;
+	gap: 4px;
 }

@@ -26,11 +26,22 @@ struct MainPage: HTMLDocument {
         }
         main(.class("container"), .hx.ext(.sse), .sse.connect("/time")) {
 			div(.class("grid")) {
+				BasicTile()
+				BasicTile()
+				BasicTile()
+				DetailedTile()
+				DetailedTile()
+				DetailedTile()
 				for _ in 0..<5 {
-					div {
-						h6 { "HTMX SSE example - main" }
-						div(.sse.swap("message")) {
-							TimeElement()
+					a(.href("/"), .style("display:block;--pico-text-decoration:none;")){
+						article(.style("display:flex;")) {
+							img(.src("/placeholder.svg"), .width(48))
+							div {
+								h6 { "HTMX SSE example - main" }
+								div(.sse.swap("message")) {
+									TimeElement()
+								}
+							}
 						}
 					}
 				}
