@@ -18,7 +18,7 @@ enum Routes {
 				headers: [.contentType: "text/event-stream"],
 				body: .init { writer in
 					for await _ in AsyncTimerSequence.repeating(every: .seconds(1)).cancelOnGracefulShutdown() {
-						try await writer.writeSSE(html: TimeHeading())
+						try await writer.writeSSE(html: TimeElement())
 					}
 					try await writer.finish(nil)
 				}

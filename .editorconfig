@@ -1,6 +1,6 @@
 root = true
 
-[*.{sh,swift}]
+[*.{sh,swift,css}]
 indent_style = tab
 
 end_of_line = lf

@@ -28,6 +28,7 @@ COPY ./package.json ./package-lock.json /workspace/
 RUN npm ci
 
 FROM scratch AS release
+COPY ./Resources /data
 COPY --from=npm-build /workspace/node_modules/htmx.org/dist/htmx.min.js /data/public/htmx.min.js
 COPY --from=npm-build /workspace/node_modules/htmx-ext-sse/dist/sse.min.js /data/public/htmxsse.min.js
 COPY --from=npm-build /workspace/node_modules/@picocss/pico/css/pico.css /data/public/pico.css
