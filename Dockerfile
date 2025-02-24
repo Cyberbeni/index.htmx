@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM --platform=$BUILDPLATFORM docker.io/swift:6.0.2 AS build
+FROM --platform=$BUILDPLATFORM docker.io/swift:6.0.2 AS swift-build
 WORKDIR /workspace
 RUN swift sdk install \
 	https://download.swift.org/swift-6.0.2-release/static-sdk/swift-6.0.2-RELEASE/swift-6.0.2-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz \
@@ -22,6 +22,13 @@ RUN --mount=type=cache,target=/workspace/.build,id=build-$TARGETPLATFORM \
 	mkdir -p dist && \
 	cp .build/release/index_htmx dist
 
+FROM --platform=$BUILDPLATFORM docker.io/node:lts-alpine AS npm-build
+WORKDIR /workspace
+COPY ./package.json ./package-lock.json /workspace/
+RUN npm ci
+
 FROM scratch AS release
-COPY --from=build /workspace/dist/index_htmx /usr/local/bin/index_htmx
+COPY --from=npm-build /workspace/node_modules/htmx.org/dist/htmx.min.js /data/Public/htmx.min.js
+COPY --from=npm-build /workspace/node_modules/htmx-ext-sse/dist/sse.min.js /data/Public/htmxsse.min.js
+COPY --from=swift-build /workspace/dist/index_htmx /usr/local/bin/index_htmx
 ENTRYPOINT ["/usr/local/bin/index_htmx"]
