@@ -8,6 +8,7 @@ struct MainPage: HTMLDocument {
         meta(.charset(.utf8))
         script(.src("/htmx.min.js")) {}
         script(.src("/htmxsse.min.js")) {}
+		link(.href("/pico.css"), .rel(.stylesheet))
     }
 
     var body: some HTML {
