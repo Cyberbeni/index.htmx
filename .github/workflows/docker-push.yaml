@@ -11,4 +11,4 @@ jobs:
       packages: write
     uses: Cyberbeni/workflows/.github/workflows/docker-push.yml@master
     with:
-      image_name: index_htmx
+      image_name: ${{ github.repository }}
