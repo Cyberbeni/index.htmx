@@ -1,14 +1,14 @@
 #if canImport(FoundationEssentials)
-import FoundationEssentials
+	import FoundationEssentials
 #else
-import Foundation
+	import Foundation
 #endif
 import Elementary
 
 struct TimeElement: HTML {
-    var content: some HTML {
-        p {
-            "Server Time: \(Date())"
-        }
-    }
+	var content: some HTML {
+		p {
+			"Server Time: \(Date())"
+		}
+	}
 }

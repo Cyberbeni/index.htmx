@@ -1,7 +1,7 @@
 import Elementary
 
 struct DetailedTile: HTML {
-    var content: some HTML {
+	var content: some HTML {
 		a(.href("/"), .class("tile detailed"), HTMLAttribute(name: "role", value: "button")) {
 			div(.class("title-row")) {
 				img(.src("/placeholder.svg"))
@@ -14,5 +14,5 @@ struct DetailedTile: HTML {
 				div { "foo" }
 			}
 		}
-    }
+	}
 }

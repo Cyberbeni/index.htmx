@@ -1,13 +1,15 @@
 import Elementary
 import ElementaryHTMXSSE
+import Foundation
 
 struct MainPage: HTMLDocument {
 	let localhostUrlPrefix: String
+	let timestamp: String
 
-    var title: String { "Hummingbird + Elementary + HTMX" }
+	var title: String { "Hummingbird + Elementary + HTMX" }
 
-    var head: some HTML {
-        meta(.charset(.utf8))
+	var head: some HTML {
+		meta(.charset(.utf8))
 		meta(.name("viewport"), .content("width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"))
 		meta(.name("mobile-web-app-capable"), .content("yes"))
 
@@ -21,12 +23,13 @@ struct MainPage: HTMLDocument {
 
 		link(.href("/pico.css"), .rel(.stylesheet))
 		link(.href("/style.css"), .rel(.stylesheet))
-        script(.src("/htmx.min.js")) {}
-        script(.src("/htmxsse.min.js")) {}
-    }
+		script(.src("/htmx.min.js")) {}
+		script(.src("/htmxsse.min.js")) {}
+	}
 
-    var body: some HTML {
-        main(.class("container"), .hx.ext(.sse), .sse.connect("/time")) {
+	var body: some HTML {
+		main(.class("container"), .hx.ext(.sse), .sse.connect("/time?timestamp=\(timestamp)")) {
+			script(.src("/autoreload.js"), .sse.swap("reload")) {}
 			// TODO: use flex
 			// TODO: section header
 			div(.class("grid")) {
@@ -36,8 +39,8 @@ struct MainPage: HTMLDocument {
 				DetailedTile()
 				DetailedTile()
 				DetailedTile()
-				for _ in 0..<5 {
-					a(.href("/"), .style("display:block;--pico-text-decoration:none;")){
+				for _ in 0 ..< 5 {
+					a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
 						article(.style("display:flex;")) {
 							img(.src("/placeholder.svg"), .width(48))
 							div {
@@ -50,7 +53,7 @@ struct MainPage: HTMLDocument {
 					}
 				}
 			}
-        }
+		}
 		// TODO: footer reload button
-    }
+	}
 }
