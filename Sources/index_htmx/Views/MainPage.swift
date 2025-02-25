@@ -1,6 +1,5 @@
 import Elementary
 import ElementaryHTMXSSE
-import Foundation
 
 struct MainPage: HTMLDocument {
 	let localhostUrlPrefix: String
