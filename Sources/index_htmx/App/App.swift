@@ -1,31 +1,31 @@
+#if canImport(FoundationEssentials)
+	import FoundationEssentials
+#else
+	import Foundation
+#endif
 import Hummingbird
+import HummingbirdCompression
 
 enum App {
-    static func run() async throws {
-        let router = Router(context: URLEncodedRequestContext.self)
+	static func run() async throws {
+		let router = Router()
+		let timestamp = "\(Date().timeIntervalSince1970)"
 
-        router.middlewares.add(FileMiddleware("/data/public", searchForIndexHtml: false))
+		router
+			.add(middleware: RequestDecompressionMiddleware())
+			.addSseRoutes(timestamp: timestamp)
+			.add(middleware: ResponseCompressionMiddleware())
+			.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
+			.addRoutes(timestamp: timestamp)
 
-        Routes.addRoutes(to: router)
-
-        let app = Application(
-            router: router,
+		let app = Application(
+			router: router,
 			configuration: ApplicationConfiguration(address: .hostname("0.0.0.0", port: 8080)),
-            onServerRunning: { _ in
-                print("Server running")
-            }
-        )
+			onServerRunning: { _ in
+				print("Server running")
+			}
+		)
 
-        try await app.runService()
-    }
-}
-
-struct URLEncodedRequestContext: RequestContext {
-    var coreContext: CoreRequestContextStorage
-
-    init(source: ApplicationRequestContextSource) {
-        coreContext = .init(source: source)
-    }
-
-    var requestDecoder: URLEncodedFormDecoder { .init() }
+		try await app.runService()
+	}
 }
