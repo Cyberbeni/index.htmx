@@ -13,6 +13,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.9.0"),
+		.package(url: "https://github.com/hummingbird-project/hummingbird-compression", from: "2.0.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
 		// Plugins:
@@ -23,6 +24,7 @@ let package = Package(
 			name: "index_htmx",
 			dependencies: [
 				.product(name: "Hummingbird", package: "hummingbird"),
+				.product(name: "HummingbirdCompression", package: "hummingbird-compression"),
 				.product(name: "HummingbirdElementary", package: "hummingbird-elementary"),
 				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
 				.product(name: "ElementaryHTMXSSE", package: "elementary-htmx"),

@@ -9,7 +9,7 @@ import ElementaryHTMX
 import Hummingbird
 import HummingbirdElementary
 
-enum Routes {
+extension App {
 	static func addRoutes(to router: Router<some RequestContext>) {
 		let timestamp = "\(Date().timeIntervalSince1970)"
 
@@ -41,7 +41,7 @@ enum Routes {
 			)
 		}
 
-		router.get("/time") { request, _ in
+		router.get("/sse") { request, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "text/event-stream"],

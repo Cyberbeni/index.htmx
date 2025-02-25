@@ -1,12 +1,17 @@
 import Hummingbird
+import HummingbirdCompression
 
 enum App {
 	static func run() async throws {
 		let router = Router(context: URLEncodedRequestContext.self)
 
+		// TODO: compression breaks event streams
+		// router.middlewares.add(RequestDecompressionMiddleware())
+		// router.middlewares.add(ResponseCompressionMiddleware())
+
 		router.middlewares.add(FileMiddleware("/data/public", searchForIndexHtml: false))
 
-		Routes.addRoutes(to: router)
+		addRoutes(to: router)
 
 		let app = Application(
 			router: router,

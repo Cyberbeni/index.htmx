@@ -28,7 +28,7 @@ struct MainPage: HTMLDocument {
 	}
 
 	var body: some HTML {
-		main(.class("container"), .hx.ext(.sse), .sse.connect("/time?timestamp=\(timestamp)")) {
+		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(timestamp)")) {
 			script(.src("/autoreload.js"), .sse.swap("reload")) {}
 			// TODO: use flex
 			// TODO: section header
