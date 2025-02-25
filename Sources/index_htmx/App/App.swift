@@ -11,14 +11,12 @@ enum App {
 		let router = Router()
 		let timestamp = "\(Date().timeIntervalSince1970)"
 
-		addSseRoutes(to: router, timestamp: timestamp)
-
 		router
 			.add(middleware: RequestDecompressionMiddleware())
+			.addSseRoutes(timestamp: timestamp)
 			.add(middleware: ResponseCompressionMiddleware())
 			.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
-
-		addRoutes(to: router, timestamp: timestamp)
+			.addRoutes(timestamp: timestamp)
 
 		let app = Application(
 			router: router,

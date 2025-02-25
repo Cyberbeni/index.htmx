@@ -4,9 +4,10 @@ import ElementaryHTMX
 import Hummingbird
 import HummingbirdElementary
 
-extension App {
-	static func addSseRoutes(to router: Router<some RequestContext>, timestamp: String) {
-		router.get("/sse") { request, _ in
+extension Router {
+	@discardableResult
+	func addSseRoutes(timestamp: String) -> Self {
+		get("/sse") { request, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "text/event-stream"],
@@ -24,5 +25,7 @@ extension App {
 				}
 			)
 		}
+
+		return self
 	}
 }

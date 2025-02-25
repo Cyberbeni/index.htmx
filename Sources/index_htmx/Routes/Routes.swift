@@ -4,15 +4,16 @@ import ElementaryHTMX
 import Hummingbird
 import HummingbirdElementary
 
-extension App {
-	static func addRoutes(to router: Router<some RequestContext>, timestamp: String) {
-		router.get("") { request, _ in
+extension Router {
+	@discardableResult
+	func addRoutes(timestamp: String) -> Self {
+		get("") { request, _ in
 			HTMLResponse {
 				MainPage(localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"), timestamp: timestamp)
 			}
 		}
 
-		router.get("/site.webmanifest") { _, _ in
+		get("/site.webmanifest") { _, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "application/manifest+json"],
@@ -33,5 +34,7 @@ extension App {
 				"""))
 			)
 		}
+
+		return self
 	}
 }
