@@ -1,17 +1,24 @@
+#if canImport(FoundationEssentials)
+	import FoundationEssentials
+#else
+	import Foundation
+#endif
 import Hummingbird
 import HummingbirdCompression
 
 enum App {
 	static func run() async throws {
 		let router = Router()
+		let timestamp = "\(Date().timeIntervalSince1970)"
 
-		// TODO: compression breaks event streams
-		// router.middlewares.add(RequestDecompressionMiddleware())
-		// router.middlewares.add(ResponseCompressionMiddleware())
+		addSseRoutes(to: router, timestamp: timestamp)
 
-		router.middlewares.add(FileMiddleware("/data/public", searchForIndexHtml: false))
+		router
+			.add(middleware: RequestDecompressionMiddleware())
+			.add(middleware: ResponseCompressionMiddleware())
+			.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
 
-		addRoutes(to: router)
+		addRoutes(to: router, timestamp: timestamp)
 
 		let app = Application(
 			router: router,
