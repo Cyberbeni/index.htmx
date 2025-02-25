@@ -3,7 +3,7 @@ import HummingbirdCompression
 
 enum App {
 	static func run() async throws {
-		let router = Router(context: URLEncodedRequestContext.self)
+		let router = Router()
 
 		// TODO: compression breaks event streams
 		// router.middlewares.add(RequestDecompressionMiddleware())
@@ -23,14 +23,4 @@ enum App {
 
 		try await app.runService()
 	}
-}
-
-struct URLEncodedRequestContext: RequestContext {
-	var coreContext: CoreRequestContextStorage
-
-	init(source: ApplicationRequestContextSource) {
-		coreContext = .init(source: source)
-	}
-
-	var requestDecoder: URLEncodedFormDecoder { .init() }
 }
