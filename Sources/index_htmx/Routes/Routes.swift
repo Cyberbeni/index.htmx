@@ -6,9 +6,9 @@ import HummingbirdElementary
 
 enum Routes {
 	static func addRoutes(to router: Router<some RequestContext>) {
-		router.get("") { _, _ in
+		router.get("") { request, _ in
 			HTMLResponse {
-				MainPage()
+				MainPage(localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"))
 			}
 		}
 
@@ -24,9 +24,9 @@ enum Routes {
 				"start_url":"/",
 				"icons": [
 					{
-					"src": "icons/512.png",
+					"src": "/apple-touch-icon.png",
 					"type": "image/png",
-					"sizes": "512x512"
+					"sizes": "180x180"
 					}
 				]
 				}
