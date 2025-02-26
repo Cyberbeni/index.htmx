@@ -11,11 +11,10 @@ enum App {
 		let router = Router()
 		let timestamp = "\(Date().timeIntervalSince1970)"
 
-		// TODO: memory leak with compression enabled?
 		router
-			// .add(middleware: RequestDecompressionMiddleware())
+			.add(middleware: RequestDecompressionMiddleware())
 			.addSseRoutes(timestamp: timestamp)
-			// .add(middleware: ResponseCompressionMiddleware())
+			.add(middleware: ResponseCompressionMiddleware())
 			.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
 			.addRoutes(timestamp: timestamp)
 

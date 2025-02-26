@@ -1,5 +1,5 @@
 {
-  "originHash" : "a7e57fb51be0e448771cbd72f33881e79a0f3ae66e5467e825571852f8aba705",
+  "originHash" : "445f519772a867241b6b09034cc42e94f1d6eaa804aa3afa5a96f4065c3196bf",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adam-fowler/compress-nio.git",
       "state" : {
-        "revision" : "459a803a4e38718d94d64f2b31e83f01d934f324",
-        "version" : "1.4.0"
+        "revision" : "f80145433166666a465aee5dde479da9164a896c",
+        "version" : "1.4.1"
       }
     },
     {
