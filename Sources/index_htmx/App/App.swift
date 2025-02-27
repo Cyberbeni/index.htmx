@@ -15,7 +15,15 @@ enum App {
 			.add(middleware: RequestDecompressionMiddleware())
 			.addSseRoutes(timestamp: timestamp)
 			.add(middleware: ResponseCompressionMiddleware())
-			.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
+
+		#if DEBUG
+		// TODO: Serve files from the appropriate place in debug
+		#else
+			router
+				.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
+		#endif
+
+		router
 			.addRoutes(timestamp: timestamp)
 
 		let app = Application(

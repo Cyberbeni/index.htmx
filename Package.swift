@@ -30,6 +30,7 @@ let package = Package(
 				.product(name: "ElementaryHTMXSSE", package: "elementary-htmx"),
 			],
 			swiftSettings: [
+				.define("DEBUG", .when(configuration: .debug)),
 				.unsafeFlags(["-warnings-as-errors"], .when(configuration: .release)),
 			],
 			linkerSettings: [
