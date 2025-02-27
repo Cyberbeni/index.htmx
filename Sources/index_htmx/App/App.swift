@@ -20,7 +20,11 @@ enum App {
 		// TODO: Serve files from the appropriate place in debug
 		#else
 			router
-				.add(middleware: FileMiddleware("/data/public", searchForIndexHtml: false))
+				.add(middleware: FileMiddleware("/data/public", cacheControl: .init([
+					// TODO: use .any when it gets fixed
+					(MediaType(type: .text), [.noCache, .public]),
+					(MediaType(type: .image), [.noCache, .public]),
+				])))
 		#endif
 
 		router
