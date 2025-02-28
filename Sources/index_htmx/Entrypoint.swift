@@ -7,13 +7,22 @@
 #endif
 
 @main
-enum Entrypoint {
+actor Entrypoint {
+	private static var runTask: Task<Void, Error>?
+
 	static func main() async throws {
 		// Make sure print() output is instant
 		setlinebuf(stdout)
 
 		// TODO: setup sample configuration files
 		let app = try App()
-		try await app.run()
+		runTask = Task {
+			try await app.run()
+		}
+		_ = await runTask?.result
+	}
+
+	static func reloadConfig() {
+		runTask?.cancel()
 	}
 }

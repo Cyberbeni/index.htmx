@@ -39,6 +39,13 @@ extension Router {
 			)
 		}
 
+		get("/reload_config") { _, _ in
+			Task.detached {
+				Entrypoint.reloadConfig()
+			}
+			return Response(status: .noContent)
+		}
+
 		return self
 	}
 }
