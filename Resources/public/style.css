@@ -24,6 +24,8 @@ a.tile {
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: var(--pico-dropdown-box-shadow);
+
+	min-height: 96px;
 }
 
 a.tile:is(:hover, :active, :focus) {
@@ -34,7 +36,6 @@ a.tile:is(:hover, :active, :focus) {
 }
 
 a.tile.basic {
-	min-height: 96px;
 	display:flex;
 	align-items: center;
 	gap: 12px;
@@ -43,10 +44,6 @@ a.tile.basic {
 
 a.tile.basic > img {
 	width: 64px;
-}
-
-a.tile.detailed {
-	min-height: 96px;
 }
 
 a.tile.detailed > .title-row {
