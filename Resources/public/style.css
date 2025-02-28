@@ -61,7 +61,7 @@ footer {
 }
 
 /* buttons */
-a[role="button"],
+[role="button"],
 button
 {
 	--pico-background-color: var(--pico-dropdown-background-color);
@@ -69,7 +69,7 @@ button
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: var(--pico-dropdown-box-shadow);
 }
-a[role="button"]:is(:hover, :active, :focus),
+[role="button"]:is(:hover, :active, :focus),
 button:is(:hover, :active, :focus)
 {
 	--pico-background-color: var(--pico-dropdown-hover-background-color);
