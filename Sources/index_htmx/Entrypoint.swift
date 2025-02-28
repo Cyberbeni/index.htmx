@@ -15,11 +15,17 @@ actor Entrypoint {
 		setlinebuf(stdout)
 
 		// TODO: setup sample configuration files
-		let app = try App()
-		runTask = Task {
-			try await app.run()
+		while (true) {
+			let app = try App()
+			runTask = Task {
+				try await app.run()
+			}
+			_ = await runTask?.result
+			guard runTask?.isCancelled == true else {
+				return
+			}
+			print("Restarting server")
 		}
-		_ = await runTask?.result
 	}
 
 	static func reloadConfig() {
