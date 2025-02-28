@@ -7,7 +7,7 @@ struct BasicTile: HTML {
 
 	var content: some HTML {
 		a(.href(url), .class("tile basic"), .role(.button)) {
-			img(.src(icon))
+			img(.src(icon), .alt("\(title) logo"))
 			div { title }
 		}
 	}

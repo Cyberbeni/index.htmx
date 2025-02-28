@@ -47,3 +47,16 @@ extension HTMLAttribute where Tag: HTMLTrait.Attributes.role {
 		HTMLAttribute(name: "role", value: value)
 	}
 }
+
+// alt
+extension HTMLTrait.Attributes {
+	protocol alt {}
+}
+
+extension HTMLTag.img: HTMLTrait.Attributes.alt {}
+
+extension HTMLAttribute where Tag: HTMLTrait.Attributes.alt {
+	static func alt(_ value: String) -> Self {
+		HTMLAttribute(name: "alt", value: value)
+	}
+}

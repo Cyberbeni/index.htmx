@@ -18,7 +18,7 @@ extension Router {
 			Response(
 				status: .ok,
 				headers: [
-					.contentType: "application/manifest+json",
+					.contentType: "application/manifest+json; charset=utf-8",
 					.cacheControl: CacheControl.publicImmutable,
 				],
 				// TODO: name, icon

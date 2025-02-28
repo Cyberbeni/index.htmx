@@ -8,6 +8,8 @@ struct MainPage: HTMLDocument {
 
 	var title: String { "Hummingbird + Elementary + HTMX" }
 
+	var lang: String { "en" }
+
 	var head: some HTML {
 		meta(.charset(.utf8))
 		meta(.name("viewport"), .content("width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"))
@@ -41,7 +43,7 @@ struct MainPage: HTMLDocument {
 				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
 				a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
 					article(.style("display:flex;")) {
-						img(.src("/\(staticFilesTimestamp)/placeholder.svg"), .width(48))
+						img(.src("/\(staticFilesTimestamp)/placeholder.svg"), .width(48), .alt("logo"))
 						div {
 							h6 { "HTMX SSE example - main" }
 							div(.sse.swap("message")) {

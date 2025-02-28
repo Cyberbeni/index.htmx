@@ -15,7 +15,7 @@ actor Entrypoint {
 		setlinebuf(stdout)
 
 		// TODO: setup sample configuration files
-		while (true) {
+		while true {
 			let app = try App()
 			runTask = Task {
 				try await app.run()

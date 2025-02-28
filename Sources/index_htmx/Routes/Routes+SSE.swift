@@ -7,7 +7,7 @@ extension Router {
 		get("/sse") { request, _ in
 			Response(
 				status: .ok,
-				headers: [.contentType: "text/event-stream"],
+				headers: [.contentType: "text/event-stream; charset=utf-8"],
 				body: .init { writer in
 					if request.uri.queryParameters["timestamp"].flatMap({ String($0) }) != runTimestamp {
 						try await Task.sleep(for: .seconds(0.1))
