@@ -52,6 +52,20 @@ struct MainPage: HTMLDocument {
 				}
 			}
 		}
-		// TODO: footer reload button
+		footer(.class("container")) {
+			a(.href("/"), .role(.button), .class("icon")) {
+				svg {
+					Elementary.title { "Refresh page" }
+					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
+				}
+			}
+			a(.href("/"), .role(.button), .class("icon")) {
+				svg {
+					Elementary.title { "Reload config" }
+					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
+					use(.href("/\(staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
+				}
+			}
+		}
 	}
 }

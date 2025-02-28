@@ -6,7 +6,7 @@ struct BasicTile: HTML {
 	let url: String
 
 	var content: some HTML {
-		a(.href(url), .class("tile basic"), HTMLAttribute(name: "role", value: "button")) {
+		a(.href(url), .class("tile basic"), .role(.button)) {
 			img(.src(icon))
 			div { title }
 		}

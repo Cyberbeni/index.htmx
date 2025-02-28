@@ -2,7 +2,7 @@ import Elementary
 
 struct DetailedTile: HTML {
 	var content: some HTML {
-		a(.href("/"), .class("tile detailed"), HTMLAttribute(name: "role", value: "button")) {
+		a(.href("/"), .class("tile detailed"), .role(.button)) {
 			div(.class("title-row")) {
 				img(.src("/placeholder.svg"))
 				div { "AdGuard" }
