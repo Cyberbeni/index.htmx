@@ -1,7 +1,13 @@
 import Hummingbird
 
 extension [CacheControl.Value] {
-	static var publicImmutable: Self { [.public, .maxAge(31_536_000)] }
+	static var publicImmutable: Self {
+		#if DEBUG
+			[.public, .noCache]
+		#else
+			[.public, .maxAge(31_536_000)]
+		#endif
+	}
 }
 
 extension CacheControl {

@@ -27,7 +27,17 @@ actor App {
 			.add(middleware: ResponseCompressionMiddleware())
 
 		#if DEBUG
-		// TODO: Serve files from the appropriate place in debug
+			router
+				.add(middleware: FileMiddleware("./Resources/public", urlBasePath: "/" + staticFilesTimestamp, cacheControl: .init([
+					// TODO: use .any when it gets fixed
+					(MediaType(type: .text), .publicImmutable),
+					(MediaType(type: .image), .publicImmutable),
+				])))
+				.add(middleware: FileMiddleware("./.debug_resources", urlBasePath: "/" + staticFilesTimestamp, cacheControl: .init([
+					// TODO: use .any when it gets fixed
+					(MediaType(type: .text), .publicImmutable),
+					(MediaType(type: .image), .publicImmutable),
+				])))
 		#else
 			router
 				.add(middleware: FileMiddleware("/data/public", urlBasePath: "/" + staticFilesTimestamp, cacheControl: .init([

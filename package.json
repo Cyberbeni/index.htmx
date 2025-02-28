@@ -2,9 +2,6 @@
   "name": "index.htmx",
   "version": "0.0.0",
   "description": "Lightweight server-side rendered dashboard.",
-  "scripts": {
-    "vendor": "echo 'not implemented' && exit 1"
-  },
   "author": "Benedek Kozma",
   "license": "MIT",
   "dependencies": {
