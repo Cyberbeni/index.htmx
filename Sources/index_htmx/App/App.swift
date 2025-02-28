@@ -6,29 +6,39 @@
 import Hummingbird
 import HummingbirdCompression
 
-enum App {
-	static func run() async throws {
+actor App {
+	let runTimestamp = "\(Date().timeIntervalSince1970)"
+	let staticFilesTimestamp: String
+
+	init() throws {
+		#if DEBUG
+			staticFilesTimestamp = runTimestamp
+		#else
+			staticFilesTimestamp = try String(contentsOfFile: "/data/static_files_timestamp", encoding: .utf8)
+		#endif
+	}
+
+	func run() async throws {
 		let router = Router()
-		let timestamp = "\(Date().timeIntervalSince1970)"
 
 		router
 			.add(middleware: RequestDecompressionMiddleware())
-			.addSseRoutes(timestamp: timestamp)
+			.addSseRoutes(runTimestamp: runTimestamp)
 			.add(middleware: ResponseCompressionMiddleware())
 
 		#if DEBUG
 		// TODO: Serve files from the appropriate place in debug
 		#else
 			router
-				.add(middleware: FileMiddleware("/data/public", cacheControl: .init([
+				.add(middleware: FileMiddleware("/data/public", urlBasePath: "/" + staticFilesTimestamp, cacheControl: .init([
 					// TODO: use .any when it gets fixed
-					(MediaType(type: .text), [.noCache, .public]),
-					(MediaType(type: .image), [.noCache, .public]),
+					(MediaType(type: .text), .publicImmutable),
+					(MediaType(type: .image), .publicImmutable),
 				])))
 		#endif
 
 		router
-			.addRoutes(timestamp: timestamp)
+			.addRoutes(runTimestamp: runTimestamp, staticFilesTimestamp: staticFilesTimestamp)
 
 		let app = Application(
 			router: router,

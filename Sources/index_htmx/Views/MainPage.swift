@@ -3,7 +3,8 @@ import ElementaryHTMXSSE
 
 struct MainPage: HTMLDocument {
 	let localhostUrlPrefix: String
-	let timestamp: String
+	let runTimestamp: String
+	let staticFilesTimestamp: String
 
 	var title: String { "Hummingbird + Elementary + HTMX" }
 
@@ -15,38 +16,36 @@ struct MainPage: HTMLDocument {
 		// TODO: theme-color based on pico.css --pico-background-color or config
 		meta(.name("theme-color"), .content("#fff"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: light)"))
 		meta(.name("theme-color"), .content("#13171f"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: dark)"))
-		// TODO: icons from config, svg is not supported
-		link(.href("/placeholder.svg"), .rel(.icon))
-		link(.href("/apple-touch-icon.png"), .rel("apple-touch-icon"), HTMLAttribute(name: "sizes", value: "180x180"))
-		link(.href("/site.webmanifest"), .rel("manifest"))
+		// TODO: icons from config
+		// TODO: figure out what works on iOS
+		link(.href("/\(staticFilesTimestamp)/placeholder.svg"), .rel(.icon))
+		link(.href("/\(staticFilesTimestamp)/apple-touch-icon.png"), .rel("apple-touch-icon"), HTMLAttribute(name: "sizes", value: "180x180"))
+		link(.href("/\(runTimestamp)/site.webmanifest"), .rel("manifest"))
 
-		link(.href("/pico.css"), .rel(.stylesheet))
-		link(.href("/style.css"), .rel(.stylesheet))
-		script(.src("/htmx.min.js")) {}
-		script(.src("/htmxsse.min.js")) {}
+		// static files
+		link(.href("/\(staticFilesTimestamp)/pico.css"), .rel(.stylesheet))
+		link(.href("/\(staticFilesTimestamp)/style.css"), .rel(.stylesheet))
+		script(.src("/\(staticFilesTimestamp)/htmx.min.js")) {}
+		script(.src("/\(staticFilesTimestamp)/htmxsse.min.js")) {}
 	}
 
 	var body: some HTML {
-		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(timestamp)")) {
-			script(.src("/autoreload.js"), .sse.swap("reload")) {}
+		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(runTimestamp)")) {
+			// TODO: fallback?
+			script(.src("/\(staticFilesTimestamp)/autoreload.js"), .sse.swap("reload")) {}
 			// TODO: use flex
 			// TODO: section header
 			div(.class("grid")) {
-				BasicTile()
-				BasicTile()
-				BasicTile()
-				DetailedTile()
-				DetailedTile()
-				DetailedTile()
-				for _ in 0 ..< 5 {
-					a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
-						article(.style("display:flex;")) {
-							img(.src("/placeholder.svg"), .width(48))
-							div {
-								h6 { "HTMX SSE example - main" }
-								div(.sse.swap("message")) {
-									TimeElement()
-								}
+				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
+				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
+				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
+				a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
+					article(.style("display:flex;")) {
+						img(.src("/\(staticFilesTimestamp)/placeholder.svg"), .width(48))
+						div {
+							h6 { "HTMX SSE example - main" }
+							div(.sse.swap("message")) {
+								TimeElement()
 							}
 						}
 					}

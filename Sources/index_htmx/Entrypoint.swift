@@ -13,7 +13,7 @@ enum Entrypoint {
 		setlinebuf(stdout)
 
 		// TODO: setup sample configuration files
-
-		try await App.run()
+		let app = try App()
+		try await app.run()
 	}
 }

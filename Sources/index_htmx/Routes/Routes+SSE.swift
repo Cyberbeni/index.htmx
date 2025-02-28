@@ -3,13 +3,13 @@ import Hummingbird
 
 extension Router {
 	@discardableResult
-	func addSseRoutes(timestamp: String) -> Self {
+	func addSseRoutes(runTimestamp: String) -> Self {
 		get("/sse") { request, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "text/event-stream"],
 				body: .init { writer in
-					if request.uri.queryParameters["timestamp"].flatMap({ String($0) }) != timestamp {
+					if request.uri.queryParameters["timestamp"].flatMap({ String($0) }) != runTimestamp {
 						try await Task.sleep(for: .seconds(0.1))
 						try await writer.writeSSE(event: "reload", html: nil)
 						try await Task.sleep(for: .seconds(1))
