@@ -8,10 +8,7 @@ extension ResponseBodyWriter {
 			buffer.writeString("event: \(event)\n")
 		}
 		buffer.writeStaticString("data: ")
-		if let html {
-			// TODO: render into ByteBuffer
-			try await buffer.writeString(html.renderAsync())
-		}
+		try await html?.render(into: &buffer)
 		buffer.writeStaticString("\n\n")
 		try await write(buffer)
 	}
