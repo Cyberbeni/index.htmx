@@ -17,6 +17,10 @@
 :root {
 	--gap-default: 0.75rem;
 	--gap-small: 0.25rem;
+
+	--font-size-mini: 0.75rem;
+	--font-size-regular: 0.875rem;
+	--font-size-large: 1.1rem;
 }
 
 /* primary margins/alignment */
@@ -84,27 +88,35 @@ button:is(:hover, :active, :focus)
 }
 
 /* basic tile */
-a.tile.basic {
+.tile.basic {
 	display:flex;
 	align-items: center;
 	gap: var(--gap-default);
-	font-size: 110%;
+	font-size: var(--font-size-large);
 }
-a.tile.basic > img {
+.tile.basic > img {
 	width: 64px;
 }
 
 /* detailed tile */
-a.tile.detailed > .title-row {
+.tile.detailed > .title-row {
 	display:flex;
 	align-items: center;
 	gap: var(--gap-default);
+	font-size: var(--font-size-regular);
 }
-a.tile.detailed > .title-row > img {
+.tile.detailed > .title-row > img {
 	width: 32px;
 }
-a.tile.detailed > .detail-row {
+.tile.detailed > .detail-row {
 	display:flex;
 	flex: 0 0 100%;
 	gap: var(--gap-small);
+}
+
+/* mini tile */
+
+.tile.mini {
+	min-height: 44px;
+	font-size: var(--font-size-mini);
 }
