@@ -1,9 +1,9 @@
 import Elementary
 import NIO
 
-extension HTML {
-	consuming func render(into buffer: UnsafeMutablePointer<ByteBuffer>, chunkSize: Int = 1024) async throws {
-		try await render(into: ByteBufferWriter(buffer: buffer), chunkSize: chunkSize)
+extension ByteBuffer {
+	mutating func writeHTML(_ html: consuming any HTML, chunkSize: Int = 1024) async throws {
+		try await html.render(into: ByteBufferWriter(buffer: &self), chunkSize: chunkSize)
 	}
 }
 
