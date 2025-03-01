@@ -1,19 +1,8 @@
-#if canImport(SwiftGlibc)
-	@preconcurrency import SwiftGlibc
-#elseif canImport(SwiftMusl)
-	import SwiftMusl
-#else
-	import Darwin
-#endif
-
 @main
 actor Entrypoint {
 	private static var runTask: Task<Void, Error>?
 
 	static func main() async throws {
-		// Make sure print() output is instant
-		setlinebuf(stdout)
-
 		// TODO: setup sample configuration files
 		while true {
 			let app = try App()
@@ -24,7 +13,7 @@ actor Entrypoint {
 			guard runTask?.isCancelled == true else {
 				return
 			}
-			print("Restarting server")
+			Log.info("Restarting server")
 		}
 	}
 

@@ -54,7 +54,7 @@ actor App {
 			router: router,
 			configuration: ApplicationConfiguration(address: .hostname("0.0.0.0", port: 8080)),
 			onServerRunning: { _ in
-				print("Server running")
+				Log.info("Server running")
 			}
 		)
 
