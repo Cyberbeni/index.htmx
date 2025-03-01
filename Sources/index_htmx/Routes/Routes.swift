@@ -39,7 +39,7 @@ extension Router {
 			)
 		}
 
-		get("/reload_config") { _, _ in
+		post("/reload_config") { _, _ in
 			Task.detached {
 				Entrypoint.reloadConfig()
 			}

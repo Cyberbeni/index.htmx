@@ -61,7 +61,7 @@ struct MainPage: HTMLDocument {
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
 				}
 			}
-			button(.class("icon"), .on(.click, #"fetch("/reload_config")"#)) {
+			button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#)) {
 				svg {
 					Elementary.title { "Reload config" }
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
