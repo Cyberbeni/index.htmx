@@ -1,10 +1,14 @@
 import Elementary
 
 struct BasicTile: HTML {
+	let icon: String
+	let title: String
+	let url: String
+
 	var content: some HTML {
-		a(.href("/"), .class("tile basic"), HTMLAttribute(name: "role", value: "button")) {
-			img(.src("/placeholder.svg"))
-			div { "Home Assistant" }
+		a(.href(url), .class("tile basic"), .role(.button)) {
+			img(.src(icon), .alt("\(title) logo"))
+			div { title }
 		}
 	}
 }

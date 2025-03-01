@@ -3,17 +3,24 @@ import HummingbirdElementary
 
 extension Router {
 	@discardableResult
-	func addRoutes(timestamp: String) -> Self {
+	func addRoutes(runTimestamp: String, staticFilesTimestamp: String) -> Self {
 		get("") { request, _ in
 			HTMLResponse {
-				MainPage(localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"), timestamp: timestamp)
+				MainPage(
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
+					runTimestamp: runTimestamp,
+					staticFilesTimestamp: staticFilesTimestamp
+				)
 			}
 		}
 
-		get("/site.webmanifest") { _, _ in
+		get("/\(runTimestamp)/site.webmanifest") { _, _ in
 			Response(
 				status: .ok,
-				headers: [.contentType: "application/manifest+json"],
+				headers: [
+					.contentType: "application/manifest+json; charset=utf-8",
+					.cacheControl: CacheControl.publicImmutable,
+				],
 				// TODO: name, icon
 				body: ResponseBody(byteBuffer: .init(string: """
 				{
@@ -22,7 +29,7 @@ extension Router {
 				"start_url":"/",
 				"icons": [
 					{
-					"src": "/apple-touch-icon.png",
+					"src": "/\(staticFilesTimestamp)/apple-touch-icon.png",
 					"type": "image/png",
 					"sizes": "180x180"
 					}
@@ -30,6 +37,13 @@ extension Router {
 				}
 				"""))
 			)
+		}
+
+		post("/reload_config") { _, _ in
+			Task.detached {
+				Entrypoint.reloadConfig()
+			}
+			return Response(status: .noContent)
 		}
 
 		return self

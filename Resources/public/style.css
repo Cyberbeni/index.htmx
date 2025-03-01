@@ -5,62 +5,118 @@
 		grid-template-columns: 1fr 1fr;
 	}
 }
-
 @media (min-width: 1024px) {
 	.grid {
 		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
 
-main {
-	margin-top: 16px;
-	margin-bottom: 16px;
+/*
+ * 1 rem = 16px
+ */
+:root {
+	--gap-default: 0.75rem;
+	--gap-small: 0.25rem;
+
+	--font-size-mini: 0.75rem;
+	--font-size-regular: 0.875rem;
+	--font-size-large: 1.1rem;
 }
 
-/* custom classes */
+/* primary margins/alignment */
+main {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--gap-default);
+}
 
-a.tile {
+/* footer position
+ * https://css-tricks.com/couple-takes-sticky-footer/#aa-there-is-flexbox
+ */
+html, body {
+	height: 100%;
+}
+body {
+	display: flex;
+	flex-direction: column;
+}
+main {
+	flex: 1 0 auto;
+}
+footer {
+	flex-shrink: 0;
+}
+
+/* icon */
+.icon {
+	--color: var(--pico-color);
+	width: 50px;
+	aspect-ratio: 1;
+	padding: 0;
+}
+.icon > svg {
+	width: 75%;
+	height: 75%;
+	margin: 12.5%;
+}
+
+/* buttons */
+[role="button"],
+button
+{
 	--pico-background-color: var(--pico-dropdown-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: var(--pico-dropdown-box-shadow);
 }
-
-a.tile:is(:hover, :active, :focus) {
+[role="button"]:is(:hover, :active, :focus),
+button:is(:hover, :active, :focus)
+{
 	--pico-background-color: var(--pico-dropdown-hover-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: var(--pico-dropdown-box-shadow);
 }
 
-a.tile.basic {
+/* tile */
+.tile {
 	min-height: 96px;
-	display:flex;
-	align-items: center;
-	gap: 12px;
-	font-size: 110%;
 }
 
-a.tile.basic > img {
+/* basic tile */
+.tile.basic {
+	display:flex;
+	align-items: center;
+	gap: var(--gap-default);
+	font-size: var(--font-size-large);
+}
+.tile.basic > img {
 	width: 64px;
 }
 
-a.tile.detailed {
-	min-height: 96px;
-}
-
-a.tile.detailed > .title-row {
+/* detailed tile */
+.tile.detailed > .title-row {
 	display:flex;
 	align-items: center;
-	gap: 12px;
+	gap: var(--gap-default);
+	font-size: var(--font-size-regular);
 }
-
-a.tile.detailed > .title-row > img {
+.tile.detailed > .title-row > img {
 	width: 32px;
 }
-
-a.tile.detailed > .detail-row {
+.tile.detailed > .detail-row {
 	display:flex;
 	flex: 0 0 100%;
-	gap: 4px;
+	gap: var(--gap-small);
+}
+
+/* mini tile */
+
+.tile.mini {
+	min-height: 44px;
+	font-size: var(--font-size-mini);
 }

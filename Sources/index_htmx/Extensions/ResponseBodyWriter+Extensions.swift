@@ -3,13 +3,16 @@ import Hummingbird
 
 extension ResponseBodyWriter {
 	mutating func writeSSE(event: String? = nil, html: (any HTML)?) async throws {
+		var buffer = ByteBuffer()
 		if let event {
-			try await write(ByteBuffer(string: "event: \(event)\n"))
+			buffer.writeString("event: \(event)\n")
 		}
-		try await write(ByteBuffer(string: "data: "))
+		buffer.writeStaticString("data: ")
 		if let html {
-			try await writeHTML(html)
+			// TODO: render into ByteBuffer
+			try await buffer.writeString(html.renderAsync())
 		}
-		try await write(ByteBuffer(string: "\n\n"))
+		buffer.writeStaticString("\n\n")
+		try await write(buffer)
 	}
 }
