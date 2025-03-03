@@ -10,7 +10,7 @@ extension ByteBuffer {
 private extension HTML {
 	consuming func render(into buffer: UnsafeMutablePointer<ByteBuffer>, chunkSize: Int) async throws {
 		try await render(into: ByteBufferWriter(buffer: buffer), chunkSize: chunkSize)
-   }
+	}
 }
 
 private class ByteBufferWriter: HTMLStreamWriter {
