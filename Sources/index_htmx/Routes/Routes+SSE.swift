@@ -4,7 +4,7 @@ import Hummingbird
 extension Router {
 	@discardableResult
 	func addSseRoutes(runTimestamp: String) -> Self {
-		get("/sse") { request, _ in
+		get("sse") { request, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "text/event-stream; charset=utf-8"],

@@ -5,6 +5,7 @@ struct MainPage: HTMLDocument {
 	let localhostUrlPrefix: String
 	let runTimestamp: String
 	let staticFilesTimestamp: String
+	let isPwa: Bool
 
 	var title: String { "Hummingbird + Elementary + HTMX" }
 
@@ -55,7 +56,7 @@ struct MainPage: HTMLDocument {
 			}
 		}
 		footer(.class("container")) {
-			a(.href("/"), .role(.button), .class("icon")) {
+			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon")) {
 				svg {
 					Elementary.title { "Refresh page" }
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}

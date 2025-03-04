@@ -9,12 +9,24 @@ extension Router {
 				MainPage(
 					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
 					runTimestamp: runTimestamp,
-					staticFilesTimestamp: staticFilesTimestamp
+					staticFilesTimestamp: staticFilesTimestamp,
+					isPwa: false
 				)
 			}
 		}
 
-		get("/\(runTimestamp)/site.webmanifest") { _, _ in
+		get("pwa.html") { request, _ in
+			HTMLResponse {
+				MainPage(
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
+					runTimestamp: runTimestamp,
+					staticFilesTimestamp: staticFilesTimestamp,
+					isPwa: true
+				)
+			}
+		}
+
+		get("\(runTimestamp)/site.webmanifest") { _, _ in
 			Response(
 				status: .ok,
 				headers: [
@@ -26,7 +38,7 @@ extension Router {
 				{
 				"name": "Dashboard",
 				"display":"standalone",
-				"start_url":"/",
+				"start_url":"/pwa.html",
 				"icons": [
 					{
 					"src": "/\(staticFilesTimestamp)/apple-touch-icon.png",
@@ -39,7 +51,7 @@ extension Router {
 			)
 		}
 
-		post("/reload_config") { _, _ in
+		post("reload_config") { _, _ in
 			Task.detached {
 				Entrypoint.reloadConfig()
 			}
