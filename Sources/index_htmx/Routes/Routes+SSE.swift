@@ -1,17 +1,18 @@
 import AsyncAlgorithms
+import Elementary
 import Hummingbird
 
 extension Router {
 	@discardableResult
 	func addSseRoutes(runTimestamp: String) -> Self {
-		get("/sse") { request, _ in
+		get("sse") { request, _ in
 			Response(
 				status: .ok,
 				headers: [.contentType: "text/event-stream; charset=utf-8"],
 				body: .init { writer in
 					if request.uri.queryParameters["timestamp"].flatMap({ String($0) }) != runTimestamp {
 						try await Task.sleep(for: .seconds(0.1))
-						try await writer.writeSSE(event: "reload", html: nil)
+						try await writer.writeSSE(event: "reload", html: HTMLRaw("location.reload()"))
 						try await Task.sleep(for: .seconds(1))
 					} else {
 						// TODO: stream the same event to  everyone

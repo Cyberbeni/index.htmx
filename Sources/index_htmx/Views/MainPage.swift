@@ -2,11 +2,14 @@ import Elementary
 import ElementaryHTMXSSE
 
 struct MainPage: HTMLDocument {
+	let generalConfig: Config.General
+
 	let localhostUrlPrefix: String
 	let runTimestamp: String
 	let staticFilesTimestamp: String
+	let isPwa: Bool
 
-	var title: String { "Hummingbird + Elementary + HTMX" }
+	var title: String { generalConfig.title }
 
 	var lang: String { "en" }
 
@@ -15,26 +18,30 @@ struct MainPage: HTMLDocument {
 		meta(.name("viewport"), .content("width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"))
 		meta(.name("mobile-web-app-capable"), .content("yes"))
 
-		// TODO: theme-color based on pico.css --pico-background-color or config
-		meta(.name("theme-color"), .content("#fff"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: light)"))
-		meta(.name("theme-color"), .content("#13171f"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: dark)"))
-		// TODO: icons from config
+		meta(.name("theme-color"), .content(generalConfig.theme.light), .media("(prefers-color-scheme: light)"))
+		meta(.name("theme-color"), .content(generalConfig.theme.dark), .media("(prefers-color-scheme: dark)"))
 		// TODO: figure out what works on iOS
-		link(.href("/\(staticFilesTimestamp)/placeholder.svg"), .rel(.icon))
-		link(.href("/\(staticFilesTimestamp)/apple-touch-icon.png"), .rel("apple-touch-icon"), HTMLAttribute(name: "sizes", value: "180x180"))
+		link(.href("/\(runTimestamp)/\(generalConfig.favicon)"), .rel(.icon))
+		for (sizes, path) in generalConfig.pwaIcons {
+			link(.href("/\(runTimestamp)/\(path)"), .rel("apple-touch-icon"), .sizes(sizes))
+		}
 		link(.href("/\(runTimestamp)/site.webmanifest"), .rel("manifest"))
 
-		// static files
 		link(.href("/\(staticFilesTimestamp)/pico.css"), .rel(.stylesheet))
 		link(.href("/\(staticFilesTimestamp)/style.css"), .rel(.stylesheet))
+		for path in generalConfig.customCss {
+			link(.href("/\(runTimestamp)/\(path)"), .rel(.stylesheet))
+		}
 		script(.src("/\(staticFilesTimestamp)/htmx.min.js")) {}
 		script(.src("/\(staticFilesTimestamp)/htmxsse.min.js")) {}
+		for path in generalConfig.customJs {
+			script(.src("/\(runTimestamp)/\(path)"), .defer) {}
+		}
 	}
 
 	var body: some HTML {
 		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(runTimestamp)")) {
-			// TODO: fallback?
-			script(.src("/\(staticFilesTimestamp)/autoreload.js"), .sse.swap("reload")) {}
+			script(.sse.swap("reload")) {}
 			// TODO: use flex
 			// TODO: section header
 			div(.class("grid")) {
@@ -55,17 +62,19 @@ struct MainPage: HTMLDocument {
 			}
 		}
 		footer(.class("container")) {
-			a(.href("/"), .role(.button), .class("icon")) {
+			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon")) {
 				svg {
 					Elementary.title { "Refresh page" }
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
 				}
 			}
-			button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#)) {
-				svg {
-					Elementary.title { "Reload config" }
-					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
-					use(.href("/\(staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
+			if generalConfig.showReloadConfigButton {
+				button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#)) {
+					svg {
+						Elementary.title { "Reload config" }
+						use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
+						use(.href("/\(staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
+					}
 				}
 			}
 		}

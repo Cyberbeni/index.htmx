@@ -3,47 +3,87 @@ import HummingbirdElementary
 
 extension Router {
 	@discardableResult
-	func addRoutes(runTimestamp: String, staticFilesTimestamp: String) -> Self {
+	func addRoutes(
+		runTimestamp: String,
+		staticFilesTimestamp: String,
+		generalConfig: Config.General
+	) -> Self {
 		get("") { request, _ in
 			HTMLResponse {
 				MainPage(
-					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
+					generalConfig: generalConfig,
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
-					staticFilesTimestamp: staticFilesTimestamp
+					staticFilesTimestamp: staticFilesTimestamp,
+					isPwa: false
 				)
 			}
 		}
 
-		get("/\(runTimestamp)/site.webmanifest") { _, _ in
-			Response(
-				status: .ok,
-				headers: [
-					.contentType: "application/manifest+json; charset=utf-8",
-					.cacheControl: CacheControl.publicImmutable,
-				],
-				// TODO: name, icon
-				body: ResponseBody(byteBuffer: .init(string: """
-				{
-				"name": "Dashboard",
-				"display":"standalone",
-				"start_url":"/",
-				"icons": [
-					{
-					"src": "/\(staticFilesTimestamp)/apple-touch-icon.png",
-					"type": "image/png",
-					"sizes": "180x180"
-					}
-				]
-				}
-				"""))
-			)
+		get("pwa.html") { request, _ in
+			HTMLResponse {
+				MainPage(
+					generalConfig: generalConfig,
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+					runTimestamp: runTimestamp,
+					staticFilesTimestamp: staticFilesTimestamp,
+					isPwa: true
+				)
+			}
 		}
 
-		post("/reload_config") { _, _ in
-			Task.detached {
-				Entrypoint.reloadConfig()
+		let icons: [[String: String]] = generalConfig.pwaIcons.compactMap { iconConfig in
+			let path = iconConfig.value
+			let sizes = iconConfig.key
+			if let fileExtension = path.fileExtension(),
+			   let mediaType = MediaType.getMediaType(forExtension: fileExtension)
+			{
+				return [
+					"src": "/\(runTimestamp)/\(path)",
+					"type": mediaType.description,
+					"sizes": sizes,
+				]
+			} else {
+				return nil
 			}
-			return Response(status: .noContent)
+		}
+		let webmanifest = Webmanifest(
+			name: generalConfig.title,
+			display: "standalone",
+			startUrl: "/pwa.html",
+			icons: icons
+		)
+		let webmanifestString: String?
+		do {
+			webmanifestString = try String(data: App.responseJsonEncoder().encode(webmanifest), encoding: .utf8)
+		} catch {
+			webmanifestString = nil
+			Log.error("Failed to encode webmanifest: \(error)")
+		}
+		get("\(runTimestamp)/site.webmanifest") { _, _ in
+			if let webmanifestString {
+				Response(
+					status: .ok,
+					headers: [
+						.contentType: "application/manifest+json; charset=utf-8",
+						.cacheControl: CacheControl.publicImmutable,
+					],
+					body: ResponseBody(byteBuffer: .init(string: webmanifestString))
+				)
+			} else {
+				Response(
+					status: .internalServerError
+				)
+			}
+		}
+
+		if generalConfig.showReloadConfigButton {
+			post("reload_config") { _, _ in
+				Task.detached {
+					Entrypoint.reloadConfig()
+				}
+				return Response(status: .noContent)
+			}
 		}
 
 		return self

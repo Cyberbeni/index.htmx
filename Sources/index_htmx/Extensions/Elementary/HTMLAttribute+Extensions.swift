@@ -60,3 +60,29 @@ extension HTMLAttribute where Tag: HTMLTrait.Attributes.alt {
 		HTMLAttribute(name: "alt", value: value)
 	}
 }
+
+// sizes
+extension HTMLTrait.Attributes {
+	protocol sizes {}
+}
+
+extension HTMLTag.link: HTMLTrait.Attributes.sizes {}
+
+extension HTMLAttribute where Tag: HTMLTrait.Attributes.sizes {
+	static func sizes(_ value: String) -> Self {
+		HTMLAttribute(name: "sizes", value: value)
+	}
+}
+
+// media
+extension HTMLTrait.Attributes {
+	protocol media {}
+}
+
+extension HTMLTag.meta: HTMLTrait.Attributes.media {}
+
+extension HTMLAttribute where Tag: HTMLTrait.Attributes.media {
+	static func media(_ value: String) -> Self {
+		HTMLAttribute(name: "media", value: value)
+	}
+}

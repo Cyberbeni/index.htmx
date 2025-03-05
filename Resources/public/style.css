@@ -71,7 +71,7 @@ button
 	--pico-background-color: var(--pico-dropdown-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
-	--pico-box-shadow: var(--pico-dropdown-box-shadow);
+	--pico-box-shadow: none;
 }
 [role="button"]:is(:hover, :active, :focus),
 button:is(:hover, :active, :focus)
@@ -79,7 +79,7 @@ button:is(:hover, :active, :focus)
 	--pico-background-color: var(--pico-dropdown-hover-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
-	--pico-box-shadow: var(--pico-dropdown-box-shadow);
+	--pico-box-shadow: none;
 }
 
 /* tile */

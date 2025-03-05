@@ -1,3 +1,9 @@
+#if canImport(FoundationEssentials)
+	@_exported import FoundationEssentials
+#else
+	@_exported import Foundation
+#endif
+
 @main
 actor Entrypoint {
 	private static var runTask: Task<Void, Error>?
@@ -9,8 +15,11 @@ actor Entrypoint {
 			runTask = Task {
 				try await app.run()
 			}
-			_ = await runTask?.result
+			let result = await runTask?.result
 			guard runTask?.isCancelled == true else {
+				if case let .failure(error) = result {
+					Log.error("app.run() returned error: \(error)")
+				}
 				return
 			}
 			Log.info("Restarting server")

@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
 	name: "index_htmx",
+	platforms: [.macOS(.v14)],
 	products: [
 		.executable(
 			name: "index_htmx",
