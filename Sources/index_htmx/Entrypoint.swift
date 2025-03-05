@@ -18,7 +18,7 @@ actor Entrypoint {
 			let result = await runTask?.result
 			guard runTask?.isCancelled == true else {
 				if case let .failure(error) = result {
-					Log.error("\(error)")
+					Log.error("app.run() returned error: \(error)")
 				}
 				return
 			}
