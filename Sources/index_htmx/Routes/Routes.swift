@@ -3,11 +3,16 @@ import HummingbirdElementary
 
 extension Router {
 	@discardableResult
-	func addRoutes(runTimestamp: String, staticFilesTimestamp: String) -> Self {
+	func addRoutes(
+		runTimestamp: String,
+		staticFilesTimestamp: String,
+		generalConfig: Config.General
+	) -> Self {
 		get("") { request, _ in
 			HTMLResponse {
 				MainPage(
-					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
+					generalConfig: generalConfig,
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,
 					isPwa: false
@@ -18,7 +23,8 @@ extension Router {
 		get("pwa.html") { request, _ in
 			HTMLResponse {
 				MainPage(
-					localhostUrlPrefix: request.localhostUrlPrefix(fallback: "http://localhost:8080"),
+					generalConfig: generalConfig,
+					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,
 					isPwa: true
@@ -27,35 +33,40 @@ extension Router {
 		}
 
 		get("\(runTimestamp)/site.webmanifest") { _, _ in
-			Response(
+			var icons = [[String: String]]()
+			// TODO: add type to config
+			for iconConfig in generalConfig.pwaIcons {
+				icons.append([
+					"src": "/\(runTimestamp)/\(iconConfig.value)",
+					"type": "image/png",
+					"sizes": iconConfig.key,
+				])
+			}
+			let iconsText = try String(data: App.responseJsonEncoder().encode(icons), encoding: .utf8)
+			return Response(
 				status: .ok,
 				headers: [
 					.contentType: "application/manifest+json; charset=utf-8",
 					.cacheControl: CacheControl.publicImmutable,
 				],
-				// TODO: name, icon
 				body: ResponseBody(byteBuffer: .init(string: """
 				{
-				"name": "Dashboard",
+				"name": "\(generalConfig.title)",
 				"display":"standalone",
 				"start_url":"/pwa.html",
-				"icons": [
-					{
-					"src": "/\(staticFilesTimestamp)/apple-touch-icon.png",
-					"type": "image/png",
-					"sizes": "180x180"
-					}
-				]
+				"icons": \(iconsText ?? "[]")
 				}
 				"""))
 			)
 		}
 
-		post("reload_config") { _, _ in
-			Task.detached {
-				Entrypoint.reloadConfig()
+		if generalConfig.showReloadConfigButton {
+			post("reload_config") { _, _ in
+				Task.detached {
+					Entrypoint.reloadConfig()
+				}
+				return Response(status: .noContent)
 			}
-			return Response(status: .noContent)
 		}
 
 		return self

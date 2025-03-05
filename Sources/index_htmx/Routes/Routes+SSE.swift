@@ -1,4 +1,5 @@
 import AsyncAlgorithms
+import Elementary
 import Hummingbird
 
 extension Router {
@@ -11,7 +12,7 @@ extension Router {
 				body: .init { writer in
 					if request.uri.queryParameters["timestamp"].flatMap({ String($0) }) != runTimestamp {
 						try await Task.sleep(for: .seconds(0.1))
-						try await writer.writeSSE(event: "reload", html: nil)
+						try await writer.writeSSE(event: "reload", html: HTMLRaw("location.reload()"))
 						try await Task.sleep(for: .seconds(1))
 					} else {
 						// TODO: stream the same event to  everyone

@@ -3,7 +3,8 @@
 .DS_Store
 
 # Project specific
-.debug_resources
+.debug_resources/
+debug_config/
 
 # SPM
 .build/
