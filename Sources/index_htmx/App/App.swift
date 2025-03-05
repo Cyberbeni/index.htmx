@@ -28,7 +28,10 @@ actor App {
 		let decoder = Config.jsonDecoder()
 		let generalConfig: Config.General
 		do {
-			generalConfig = try decoder.decode(Config.General.self, from: Data(contentsOf: configDir.appending(component: "config.general.json")))
+			generalConfig = try decoder.decode(
+				Config.General.self,
+				from: Data(contentsOf: configDir.appending(component: "config.general.json"))
+			)
 		} catch {
 			Log.error("Error parsing config.general.json: \(error)")
 			return
@@ -58,10 +61,14 @@ actor App {
 		#endif
 
 		router
-			.add(middleware: FileMiddleware(configDir.appending(component: "public").path, urlBasePath: "/" + runTimestamp, cacheControl: .init([
-				// TODO: add config to use noCache?
-				(MediaType(type: .any), .publicImmutable),
-			])))
+			.add(middleware: FileMiddleware(
+				configDir.appending(component: "public").path,
+				urlBasePath: "/" + runTimestamp,
+				cacheControl: .init([
+					// TODO: add config to use noCache?
+					(MediaType(type: .any), .publicImmutable),
+				])
+			))
 			.addRoutes(
 				runTimestamp: runTimestamp,
 				staticFilesTimestamp: staticFilesTimestamp,
