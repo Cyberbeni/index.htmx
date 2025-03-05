@@ -19,17 +19,15 @@ struct MainPage: HTMLDocument {
 		meta(.name("mobile-web-app-capable"), .content("yes"))
 
 		// TODO: theme-color based on pico.css --pico-background-color or config
-		meta(.name("theme-color"), .content("#fff"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: light)"))
-		meta(.name("theme-color"), .content("#13171f"), HTMLAttribute(name: "media", value: "(prefers-color-scheme: dark)"))
-		// TODO: icons from config
+		meta(.name("theme-color"), .content("#fff"), .media("(prefers-color-scheme: light)"))
+		meta(.name("theme-color"), .content("#13171f"), .media("(prefers-color-scheme: dark)"))
 		// TODO: figure out what works on iOS
 		link(.href("/\(runTimestamp)/\(generalConfig.favicon)"), .rel(.icon))
 		for (sizes, path) in generalConfig.pwaIcons {
-			link(.href("/\(runTimestamp)/\(path)"), .rel("apple-touch-icon"), HTMLAttribute(name: "sizes", value: sizes))
+			link(.href("/\(runTimestamp)/\(path)"), .rel("apple-touch-icon"), .sizes(sizes))
 		}
 		link(.href("/\(runTimestamp)/site.webmanifest"), .rel("manifest"))
 
-		// static files
 		link(.href("/\(staticFilesTimestamp)/pico.css"), .rel(.stylesheet))
 		link(.href("/\(staticFilesTimestamp)/style.css"), .rel(.stylesheet))
 		for path in generalConfig.customCss {
