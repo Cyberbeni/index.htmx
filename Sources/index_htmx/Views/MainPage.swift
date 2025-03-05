@@ -18,9 +18,8 @@ struct MainPage: HTMLDocument {
 		meta(.name("viewport"), .content("width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"))
 		meta(.name("mobile-web-app-capable"), .content("yes"))
 
-		// TODO: theme-color based on pico.css --pico-background-color or config
-		meta(.name("theme-color"), .content("#fff"), .media("(prefers-color-scheme: light)"))
-		meta(.name("theme-color"), .content("#13171f"), .media("(prefers-color-scheme: dark)"))
+		meta(.name("theme-color"), .content(generalConfig.theme.light), .media("(prefers-color-scheme: light)"))
+		meta(.name("theme-color"), .content(generalConfig.theme.dark), .media("(prefers-color-scheme: dark)"))
 		// TODO: figure out what works on iOS
 		link(.href("/\(runTimestamp)/\(generalConfig.favicon)"), .rel(.icon))
 		for (sizes, path) in generalConfig.pwaIcons {

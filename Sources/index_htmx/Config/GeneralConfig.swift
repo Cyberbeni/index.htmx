@@ -12,6 +12,8 @@ extension Config {
 		private let _customCss: [String]?
 		var customJs: [String] { _customJs ?? [] }
 		private let _customJs: [String]?
+		var theme: Theme { _theme ?? .init(light: "#fff", dark: "#13171f") }
+		private let _theme: Theme?
 
 		enum CodingKeys: String, CodingKey {
 			case title
@@ -22,6 +24,12 @@ extension Config {
 			case pwaIcons
 			case _customCss = "customCss"
 			case _customJs = "customJs"
+			case _theme = "theme"
+		}
+
+		struct Theme: Codable {
+			let light: String
+			let dark: String
 		}
 	}
 }
