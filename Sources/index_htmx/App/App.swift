@@ -9,6 +9,7 @@ actor App {
 	static func responseJsonEncoder() -> JSONEncoder {
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+		encoder.keyEncodingStrategy = .convertToSnakeCase
 		return encoder
 	}
 

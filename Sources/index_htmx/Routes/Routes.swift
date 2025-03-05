@@ -32,32 +32,49 @@ extension Router {
 			}
 		}
 
-		get("\(runTimestamp)/site.webmanifest") { _, _ in
-			var icons = [[String: String]]()
-			// TODO: add type to config
-			for iconConfig in generalConfig.pwaIcons {
-				icons.append([
-					"src": "/\(runTimestamp)/\(iconConfig.value)",
-					"type": "image/png",
-					"sizes": iconConfig.key,
-				])
+		let icons: [[String: String]] = generalConfig.pwaIcons.compactMap { iconConfig in
+			let path = iconConfig.value
+			let sizes = iconConfig.key
+			if let fileExtension = path.fileExtension(),
+			   let mediaType = MediaType.getMediaType(forExtension: fileExtension)
+			{
+				return [
+					"src": "/\(runTimestamp)/\(path)",
+					"type": mediaType.description,
+					"sizes": sizes,
+				]
+			} else {
+				return nil
 			}
-			let iconsText = try String(data: App.responseJsonEncoder().encode(icons), encoding: .utf8)
-			return Response(
-				status: .ok,
-				headers: [
-					.contentType: "application/manifest+json; charset=utf-8",
-					.cacheControl: CacheControl.publicImmutable,
-				],
-				body: ResponseBody(byteBuffer: .init(string: """
-				{
-				"name": "\(generalConfig.title)",
-				"display":"standalone",
-				"start_url":"/pwa.html",
-				"icons": \(iconsText ?? "[]")
-				}
-				"""))
-			)
+		}
+		let webmanifest = Webmanifest(
+			name: generalConfig.title,
+			display: "standalone",
+			startUrl: "/pwa.html",
+			icons: icons
+		)
+		let webmanifestString: String?
+		do {
+			webmanifestString = try String(data: App.responseJsonEncoder().encode(webmanifest), encoding: .utf8)
+		} catch {
+			webmanifestString = nil
+			Log.error("Failed to encode webmanifest: \(error)")
+		}
+		get("\(runTimestamp)/site.webmanifest") { _, _ in
+			if let webmanifestString {
+				Response(
+					status: .ok,
+					headers: [
+						.contentType: "application/manifest+json; charset=utf-8",
+						.cacheControl: CacheControl.publicImmutable,
+					],
+					body: ResponseBody(byteBuffer: .init(string: webmanifestString))
+				)
+			} else {
+				Response(
+					status: .internalServerError
+				)
+			}
 		}
 
 		if generalConfig.showReloadConfigButton {
