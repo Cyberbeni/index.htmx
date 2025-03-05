@@ -13,7 +13,7 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.9.0"),
+		.package(url: "https://github.com/hummingbird-project/hummingbird", revision: "8219ec6cb484941c4195648b961cdb83a3d1290e"),
 		.package(url: "https://github.com/hummingbird-project/hummingbird-compression", from: "2.0.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
