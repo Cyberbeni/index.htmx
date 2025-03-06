@@ -32,20 +32,8 @@ extension Router {
 			}
 		}
 
-		let icons: [[String: String]] = generalConfig.pwaIcons.compactMap { iconConfig in
-			let path = iconConfig.value
-			let sizes = iconConfig.key
-			if let fileExtension = path.fileExtension(),
-			   let mediaType = MediaType.getMediaType(forExtension: fileExtension)
-			{
-				return [
-					"src": "/\(runTimestamp)/\(path)",
-					"type": mediaType.description,
-					"sizes": sizes,
-				]
-			} else {
-				return nil
-			}
+		let icons = generalConfig.pwaIcons.compactMap { iconConfig in
+			Icon(runTimestamp: runTimestamp, path: iconConfig.value, sizes: iconConfig.key)
 		}
 		let webmanifest = Webmanifest(
 			name: generalConfig.title,
