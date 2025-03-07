@@ -119,8 +119,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	gap: var(--gap-default);
 	font-size: var(--font-size-large);
 }
-.tile.basic > img {
-	width: 64px;
+.tile.basic > .icon {
+	min-width: 64px;
+	max-width: 64px;
 }
 
 /* detailed tile */
@@ -130,8 +131,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	gap: var(--gap-default);
 	font-size: var(--font-size-regular);
 }
-.tile.detailed > .title-row > img {
-	width: 32px;
+.tile.detailed > .title-row > .icon {
+	min-width: 32px;
+	max-width: 32px;
 }
 .tile.detailed > .detail-row {
 	display:flex;
@@ -148,8 +150,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	padding: var(--gap-small) var(--gap-medium);
 	font-size: var(--font-size-mini);
 }
-.tile.mini > img {
-	width: 24px;
+.tile.mini > .icon {
+	min-width: 24px;
+	max-width: 24px;
 }
 
 /* section */
