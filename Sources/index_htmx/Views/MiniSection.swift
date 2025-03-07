@@ -1,6 +1,6 @@
 import Elementary
 
-struct Section: HTML {
+struct MiniSection: HTML {
 	let config: Config.Cards.Section
 	let samehostUrlPrefix: String
 	let runTimestamp: String
@@ -12,14 +12,16 @@ struct Section: HTML {
 				IconView(config.icon, runTimestamp: runTimestamp)
 				div { config.title }
 			}
-			for card in config.cards {
-				BasicTile(
-					config: card,
-					samehostUrlPrefix: samehostUrlPrefix,
-					runTimestamp: runTimestamp,
-					isPwa: isPwa,
-					isMini: false
-				)
+			div(.class("mini grid")) {
+				for card in config.cards {
+					BasicTile(
+						config: card,
+						samehostUrlPrefix: samehostUrlPrefix,
+						runTimestamp: runTimestamp,
+						isPwa: isPwa,
+						isMini: true
+					)
+				}
 			}
 		}
 	}

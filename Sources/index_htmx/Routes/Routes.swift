@@ -7,13 +7,15 @@ extension Router {
 		runTimestamp: String,
 		staticFilesTimestamp: String,
 		generalConfig: Config.General,
-		mainCardsConfig: Config.MainCards
+		mainCardsConfig: Config.Cards,
+		miniCardsConfig: Config.Cards
 	) -> Self {
 		get("") { request, _ in
 			HTMLResponse {
 				MainPage(
 					generalConfig: generalConfig,
 					mainCardsConfig: mainCardsConfig,
+					miniCardsConfig: miniCardsConfig,
 					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,
@@ -27,6 +29,7 @@ extension Router {
 				MainPage(
 					generalConfig: generalConfig,
 					mainCardsConfig: mainCardsConfig,
+					miniCardsConfig: miniCardsConfig,
 					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,

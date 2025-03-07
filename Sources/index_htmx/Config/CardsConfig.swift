@@ -1,5 +1,5 @@
 extension Config {
-	struct MainCards: Codable {
+	struct Cards: Codable {
 		let sections: [Section]
 
 		struct Section: Codable {

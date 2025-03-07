@@ -3,7 +3,8 @@ import ElementaryHTMXSSE
 
 struct MainPage: HTMLDocument {
 	let generalConfig: Config.General
-	let mainCardsConfig: Config.MainCards
+	let mainCardsConfig: Config.Cards
+	let miniCardsConfig: Config.Cards
 
 	let samehostUrlPrefix: String
 	let runTimestamp: String
@@ -46,6 +47,16 @@ struct MainPage: HTMLDocument {
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {
 					Section(
+						config: section,
+						samehostUrlPrefix: samehostUrlPrefix,
+						runTimestamp: runTimestamp,
+						isPwa: isPwa
+					)
+				}
+			}
+			div {
+				for section in miniCardsConfig.sections {
+					MiniSection(
 						config: section,
 						samehostUrlPrefix: samehostUrlPrefix,
 						runTimestamp: runTimestamp,

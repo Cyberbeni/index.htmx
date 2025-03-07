@@ -3,10 +3,16 @@
 	.grid {
 		grid-template-columns: 1fr 1fr;
 	}
+	.grid.mini {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
 }
 @media (min-width: 1024px) {
 	.grid {
 		grid-template-columns: 1fr 1fr 1fr;
+	}
+	.grid.mini {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
 }
 
@@ -136,7 +142,14 @@ button:is(:hover, :active, :focus:focus-visible)
 /* mini tile */
 .tile.mini {
 	min-height: 50px;
+	display:flex;
+	align-items: center;
+	gap: var(--gap-medium);
+	padding: var(--gap-small) var(--gap-medium);
 	font-size: var(--font-size-mini);
+}
+.tile.mini > img {
+	width: 24px;
 }
 
 /* section */
