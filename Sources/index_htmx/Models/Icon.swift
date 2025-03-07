@@ -14,10 +14,11 @@ struct Icon: Codable {
 	}
 
 	init(from decoder: Decoder) throws {
-		if let container = try? decoder.singleValueContainer() {
+		do {
+			let container = try decoder.singleValueContainer()
 			path = try container.decode(String.self)
 			type = .image
-		} else {
+		} catch {
 			let container = try decoder.container(keyedBy: CodingKeys.self)
 			path = try container.decode(String.self, forKey: .path)
 			type = try container.decode(IconType.self, forKey: .type)

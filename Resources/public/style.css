@@ -69,6 +69,7 @@ footer {
 /* icon */
 .icon {
 	aspect-ratio: 1;
+	object-fit: contain;
 	padding: 0;
 }
 a.icon {
