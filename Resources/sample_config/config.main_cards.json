@@ -1,0 +1,15 @@
+{
+	"sections": [
+		{
+			"icon": "placeholder.svg",
+			"title": "Google",
+			"cards": [
+				{
+					"icon": "placeholder.svg",
+					"title": "Google",
+					"url": "https://google.com"
+				}
+			]
+		}
+	]
+}

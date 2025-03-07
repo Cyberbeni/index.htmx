@@ -27,6 +27,7 @@ actor App {
 		// Parse config
 		let decoder = Config.jsonDecoder()
 		let generalConfig: Config.General
+		let mainCardsConfig: Config.MainCards
 		do {
 			generalConfig = try decoder.decode(
 				Config.General.self,
@@ -34,6 +35,15 @@ actor App {
 			)
 		} catch {
 			Log.error("Error parsing config.general.json: \(error)")
+			return
+		}
+		do {
+			mainCardsConfig = try decoder.decode(
+				Config.MainCards.self,
+				from: Data(contentsOf: configDir.appending(component: "config.main_cards.json"))
+			)
+		} catch {
+			Log.error("Error parsing config.main_cards.json: \(error)")
 			return
 		}
 
@@ -72,7 +82,8 @@ actor App {
 			.addRoutes(
 				runTimestamp: runTimestamp,
 				staticFilesTimestamp: staticFilesTimestamp,
-				generalConfig: generalConfig
+				generalConfig: generalConfig,
+				mainCardsConfig: mainCardsConfig
 			)
 
 		let app = Application(

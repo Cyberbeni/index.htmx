@@ -82,15 +82,17 @@ a.icon {
 
 /* buttons */
 [role="button"],
-button
+[role="button"]:focus:not(:focus-visible),
+button,
+button:focus:not(:focus-visible)
 {
 	--pico-background-color: var(--pico-dropdown-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: none;
 }
-[role="button"]:is(:hover, :active, :focus),
-button:is(:hover, :active, :focus)
+[role="button"]:is(:hover, :active, :focus:focus-visible),
+button:is(:hover, :active, :focus:focus-visible)
 {
 	--pico-background-color: var(--pico-dropdown-hover-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
@@ -132,7 +134,7 @@ button:is(:hover, :active, :focus)
 
 /* mini tile */
 .tile.mini {
-	min-height: 44px;
+	min-height: 50px;
 	font-size: var(--font-size-mini);
 }
 
@@ -146,11 +148,11 @@ button:is(:hover, :active, :focus)
 /* section header */
 .section > .header {
 	display:flex;
-	gap: var(--gap-medium);
+	gap: var(--gap-small);
 	align-items: center;
 	margin-block: 0;
 }
 .section > .header > .icon {
-	min-width: 2rem;
-	max-width: 2rem;
+	min-width: 1.5rem;
+	max-width: 1.5rem;
 }

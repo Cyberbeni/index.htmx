@@ -3,8 +3,9 @@ import ElementaryHTMXSSE
 
 struct MainPage: HTMLDocument {
 	let generalConfig: Config.General
+	let mainCardsConfig: Config.MainCards
 
-	let localhostUrlPrefix: String
+	let samehostUrlPrefix: String
 	let runTimestamp: String
 	let staticFilesTimestamp: String
 	let isPwa: Bool
@@ -42,25 +43,15 @@ struct MainPage: HTMLDocument {
 	var body: some HTML {
 		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(runTimestamp)")) {
 			script(.sse.swap("reload")) {}
-			// TODO: use flex?
 			div(.class("grid")) {
-				Section(
-					runTimestamp: runTimestamp,
-					icon: "placeholder.svg",
-					title: "Section title"
-				)
-				div(.class("section")) {
-					h6(.class("header")) {
-						div(.class("mask icon"), .style("mask-image: url(/\(runTimestamp)/placeholder.svg);")) {}
-						div { "Section title" }
-					}
-					BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
+				for section in mainCardsConfig.sections {
+					Section(
+						config: section,
+						samehostUrlPrefix: samehostUrlPrefix,
+						runTimestamp: runTimestamp,
+						isPwa: isPwa
+					)
 				}
-				BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(runTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
 				a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
 					article(.style("display:flex;")) {
 						img(.src("/\(runTimestamp)/placeholder.svg"), .width(48), .alt("logo"))
