@@ -4,7 +4,7 @@ extension String {
 	func replaceSamehost(with newPrefix: String) -> String {
 		let toReplace = "samehost"
 		if hasPrefix(toReplace) {
-			return newPrefix + String(self.dropFirst(toReplace.count))
+			return newPrefix + String(dropFirst(toReplace.count))
 		} else {
 			return self
 		}
