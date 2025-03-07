@@ -1,5 +1,4 @@
 /* pico.css overrides */
-
 @media (min-width: 768px) {
 	.grid {
 		grid-template-columns: 1fr 1fr;
@@ -16,11 +15,27 @@
  */
 :root {
 	--gap-default: 0.75rem;
+	--gap-medium: 0.5rem;
 	--gap-small: 0.25rem;
 
 	--font-size-mini: 0.75rem;
 	--font-size-regular: 0.875rem;
 	--font-size-large: 1.1rem;
+}
+
+/*
+ * doctored svg image
+ * svg edited to have id="icon" for the root and fill="var(--color)" for the paths
+ */
+svg {
+	--color: var(--pico-color);
+}
+/* mask icon */
+.mask {
+	background: var(--pico-color);
+	mask-size: 100%;
+	mask-position: center center;
+	mask-repeat: no-repeat;
 }
 
 /* primary margins/alignment */
@@ -53,10 +68,11 @@ footer {
 
 /* icon */
 .icon {
-	--color: var(--pico-color);
-	width: 50px;
 	aspect-ratio: 1;
 	padding: 0;
+}
+a.icon {
+	width: 50px;
 }
 .icon > svg {
 	width: 75%;
@@ -66,15 +82,17 @@ footer {
 
 /* buttons */
 [role="button"],
-button
+[role="button"]:focus:not(:focus-visible),
+button,
+button:focus:not(:focus-visible)
 {
 	--pico-background-color: var(--pico-dropdown-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
 	--pico-color: var(--pico-dropdown-color);
 	--pico-box-shadow: none;
 }
-[role="button"]:is(:hover, :active, :focus),
-button:is(:hover, :active, :focus)
+[role="button"]:is(:hover, :active, :focus:focus-visible),
+button:is(:hover, :active, :focus:focus-visible)
 {
 	--pico-background-color: var(--pico-dropdown-hover-background-color);
 	--pico-border-color: var(--pico-dropdown-border-color);
@@ -115,8 +133,26 @@ button:is(:hover, :active, :focus)
 }
 
 /* mini tile */
-
 .tile.mini {
-	min-height: 44px;
+	min-height: 50px;
 	font-size: var(--font-size-mini);
+}
+
+/* section */
+.section {
+	display:flex;
+	flex-direction: column;
+	gap: var(--gap-default);
+}
+
+/* section header */
+.section > .header {
+	display:flex;
+	gap: var(--gap-small);
+	align-items: center;
+	margin-block: 0;
+}
+.section > .header > .icon {
+	min-width: 1.5rem;
+	max-width: 1.5rem;
 }

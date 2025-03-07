@@ -3,8 +3,9 @@ import ElementaryHTMXSSE
 
 struct MainPage: HTMLDocument {
 	let generalConfig: Config.General
+	let mainCardsConfig: Config.MainCards
 
-	let localhostUrlPrefix: String
+	let samehostUrlPrefix: String
 	let runTimestamp: String
 	let staticFilesTimestamp: String
 	let isPwa: Bool
@@ -42,22 +43,14 @@ struct MainPage: HTMLDocument {
 	var body: some HTML {
 		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(runTimestamp)")) {
 			script(.sse.swap("reload")) {}
-			// TODO: use flex
-			// TODO: section header
 			div(.class("grid")) {
-				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				BasicTile(icon: "/\(staticFilesTimestamp)/placeholder.svg", title: "Home Assistant", url: "/")
-				a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
-					article(.style("display:flex;")) {
-						img(.src("/\(staticFilesTimestamp)/placeholder.svg"), .width(48), .alt("logo"))
-						div {
-							h6 { "HTMX SSE example - main" }
-							div(.sse.swap("message")) {
-								TimeElement()
-							}
-						}
-					}
+				for section in mainCardsConfig.sections {
+					Section(
+						config: section,
+						samehostUrlPrefix: samehostUrlPrefix,
+						runTimestamp: runTimestamp,
+						isPwa: isPwa
+					)
 				}
 			}
 		}

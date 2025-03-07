@@ -1,19 +1,26 @@
-import Hummingbird
-
 struct Icon: Codable {
-	let src: String
-	let type: String
-	let sizes: String
+	let type: IconType
+	let path: String
 
-	init?(runTimestamp: String, path: String, sizes: String) {
-		if let fileExtension = path.fileExtension(),
-		   let mediaType = MediaType.getMediaType(forExtension: fileExtension)
-		{
-			src = "/\(runTimestamp)/\(path)"
-			type = mediaType.description
-			self.sizes = sizes
+	enum IconType: String, Codable {
+		case mask
+		case doctoredSvg = "doctored_svg"
+		case image
+	}
+
+	enum CodingKeys: String, CodingKey {
+		case type
+		case path
+	}
+
+	init(from decoder: Decoder) throws {
+		if let container = try? decoder.singleValueContainer() {
+			path = try container.decode(String.self)
+			type = .image
 		} else {
-			return nil
+			let container = try decoder.container(keyedBy: CodingKeys.self)
+			path = try container.decode(String.self, forKey: .path)
+			type = try container.decode(IconType.self, forKey: .type)
 		}
 	}
 }

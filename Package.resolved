@@ -1,5 +1,5 @@
 {
-  "originHash" : "445f519772a867241b6b09034cc42e94f1d6eaa804aa3afa5a96f4065c3196bf",
+  "originHash" : "2c067a39c8c359f8106cd6e6f832a5ad66f18f8f342775fe6a37f043af63adb3",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -42,8 +42,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hummingbird-project/hummingbird",
       "state" : {
-        "revision" : "567c1fdcd577d3463a1406a34d9a64749bf583ec",
-        "version" : "2.9.0"
+        "revision" : "8219ec6cb484941c4195648b961cdb83a3d1290e"
       }
     },
     {
@@ -195,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-numerics.git",
       "state" : {
-        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
-        "version" : "1.0.2"
+        "revision" : "e0ec0f5f3af6f3e4d5e7a19d2af26b481acb6ba8",
+        "version" : "1.0.3"
       }
     },
     {

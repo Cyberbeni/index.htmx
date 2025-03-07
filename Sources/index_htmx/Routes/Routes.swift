@@ -6,13 +6,15 @@ extension Router {
 	func addRoutes(
 		runTimestamp: String,
 		staticFilesTimestamp: String,
-		generalConfig: Config.General
+		generalConfig: Config.General,
+		mainCardsConfig: Config.MainCards
 	) -> Self {
 		get("") { request, _ in
 			HTMLResponse {
 				MainPage(
 					generalConfig: generalConfig,
-					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+					mainCardsConfig: mainCardsConfig,
+					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,
 					isPwa: false
@@ -24,7 +26,8 @@ extension Router {
 			HTMLResponse {
 				MainPage(
 					generalConfig: generalConfig,
-					localhostUrlPrefix: request.localhostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+					mainCardsConfig: mainCardsConfig,
+					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 					runTimestamp: runTimestamp,
 					staticFilesTimestamp: staticFilesTimestamp,
 					isPwa: true
@@ -33,7 +36,7 @@ extension Router {
 		}
 
 		let icons = generalConfig.pwaIcons.compactMap { iconConfig in
-			Icon(runTimestamp: runTimestamp, path: iconConfig.value, sizes: iconConfig.key)
+			AppIcon(runTimestamp: runTimestamp, path: iconConfig.value, sizes: iconConfig.key)
 		}
 		let webmanifest = Webmanifest(
 			name: generalConfig.title,

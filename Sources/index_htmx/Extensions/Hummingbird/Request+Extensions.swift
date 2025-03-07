@@ -1,7 +1,7 @@
 import Hummingbird
 
 extension Request {
-	func localhostUrlPrefix(fallback: String) -> String {
+	func samehostUrlPrefix(fallback: String) -> String {
 		guard
 			let scheme = head.scheme,
 			let authority: String = head.authority,

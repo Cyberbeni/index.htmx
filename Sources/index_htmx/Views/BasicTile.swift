@@ -1,14 +1,20 @@
 import Elementary
 
 struct BasicTile: HTML {
-	let icon: String
-	let title: String
-	let url: String
+	let config: Config.MainCards.Card
+	let samehostUrlPrefix: String
+	let runTimestamp: String
+	let isPwa: Bool
+
+	var url: String {
+		let url = isPwa ? (config.pwaUrl ?? config.url) : config.url
+		return url.replaceSamehost(with: samehostUrlPrefix)
+	}
 
 	var content: some HTML {
-		a(.href(url), .class("tile basic"), .role(.button)) {
-			img(.src(icon), .alt("\(title) logo"))
-			div { title }
+		a(.href(url), .class("tile basic"), .role(.button), .target("_blank")) {
+			IconView(config.icon, runTimestamp: runTimestamp)
+			div { config.title }
 		}
 	}
 }
