@@ -52,17 +52,6 @@ struct MainPage: HTMLDocument {
 						isPwa: isPwa
 					)
 				}
-				a(.href("/"), .style("display:block;--pico-text-decoration:none;")) {
-					article(.style("display:flex;")) {
-						img(.src("/\(runTimestamp)/placeholder.svg"), .width(48), .alt("logo"))
-						div {
-							h6 { "HTMX SSE example - main" }
-							div(.sse.swap("message")) {
-								TimeElement()
-							}
-						}
-					}
-				}
 			}
 		}
 		footer(.class("container")) {
