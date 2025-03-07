@@ -67,7 +67,6 @@ footer {
 }
 
 /* icon */
-/* TODO: images with different aspect ratio */
 .icon {
 	aspect-ratio: 1;
 	object-fit: contain;
