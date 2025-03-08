@@ -1,7 +1,4 @@
-protocol WidgetConfig: Codable {
-	static var typeId: String { get }
-	var id: String { get set }
-}
+protocol WidgetConfig: Decodable {}
 
 protocol WidgetService {}
 extension WidgetService {

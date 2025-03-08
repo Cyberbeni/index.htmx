@@ -1,8 +1,6 @@
 import AsyncHTTPClient
 
 struct AdGuard: WidgetConfig {
-	static var typeId: String { "adguard" }
-	var id: String = ""
 	let url: String
 	let user: String
 	let password: String

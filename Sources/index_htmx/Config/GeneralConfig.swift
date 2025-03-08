@@ -27,7 +27,7 @@ extension Config {
 			case _theme = "theme"
 		}
 
-		struct Theme: Codable {
+		struct Theme: Decodable {
 			let light: String
 			let dark: String
 		}

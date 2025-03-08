@@ -1,18 +1,22 @@
 extension Config {
-	struct Cards: Codable {
+	struct Cards: Decodable {
 		let sections: [Section]
 
-		struct Section: Codable {
+		struct Section: Decodable {
 			let icon: Icon
 			let title: String
 			let cards: [Card]
 		}
 
-		struct Card: Codable {
+		struct Card: Decodable {
 			let icon: Icon
 			let title: String
 			let url: String
 			let pwaUrl: String?
+			let widget: Widget?
+
+			/// Set up at runtime
+			var widgetId: String?
 		}
 	}
 }
