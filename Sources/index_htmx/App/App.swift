@@ -45,8 +45,8 @@ actor App {
 				from: Data(contentsOf: configDir.appending(component: "config.main_cards.json"))
 			)
 		} catch {
-			Log.error("Error parsing config.main_cards.json: \(error)")
-			return
+			Log.warning("Error parsing config.main_cards.json: \(error)")
+			mainCardsConfig = .init(sections: [])
 		}
 		do {
 			miniCardsConfig = try decoder.decode(
@@ -54,8 +54,8 @@ actor App {
 				from: Data(contentsOf: configDir.appending(component: "config.mini_cards.json"))
 			)
 		} catch {
-			Log.error("Error parsing config.mini_cards.json: \(error)")
-			return
+			Log.warning("Error parsing config.mini_cards.json: \(error)")
+			miniCardsConfig = .init(sections: [])
 		}
 
 		// Setup Application
