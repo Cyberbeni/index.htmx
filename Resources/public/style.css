@@ -87,7 +87,9 @@ footer {
 	object-fit: contain;
 	padding: 0;
 }
-a.icon {
+a.icon,
+button.icon
+{
 	width: 50px;
 }
 .icon > svg {

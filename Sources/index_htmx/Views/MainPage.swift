@@ -64,16 +64,14 @@ struct MainPage: HTMLDocument {
 			}
 		}
 		footer(.class("container")) {
-			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon")) {
+			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon"), .title("Refresh page")) {
 				svg {
-					Elementary.title { "Refresh page" }
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
 				}
 			}
 			if generalConfig.showReloadConfigButton {
-				button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#)) {
+				button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#), .title("Reload config")) {
 					svg {
-						Elementary.title { "Reload config" }
 						use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
 						use(.href("/\(staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
 					}
