@@ -7,12 +7,12 @@ struct MiniSection: HTML {
 	let isPwa: Bool
 
 	var content: some HTML {
-		div(.class("section")) {
+		div(.class("section mini")) {
 			h6(.class("header")) {
 				IconView(config.icon, runTimestamp: runTimestamp)
 				div { config.title }
 			}
-			div(.class("mini grid")) {
+			div(.class("grid mini")) {
 				for card in config.cards {
 					BasicTile(
 						config: card,

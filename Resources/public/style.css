@@ -161,6 +161,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	flex-direction: column;
 	gap: var(--gap-default);
 }
+.section.mini {
+	grid-column: 1 / -1;
+}
 
 /* section header */
 .section > .header {

@@ -53,8 +53,6 @@ struct MainPage: HTMLDocument {
 						isPwa: isPwa
 					)
 				}
-			}
-			div {
 				for section in miniCardsConfig.sections {
 					MiniSection(
 						config: section,
