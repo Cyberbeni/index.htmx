@@ -45,6 +45,10 @@ svg {
 }
 
 /* primary margins/alignment */
+body {
+	user-select: none;
+	-webkit-user-select: none;
+}
 main {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
@@ -88,23 +92,38 @@ a.icon {
 }
 
 /* buttons */
-[role="button"],
-[role="button"]:focus:not(:focus-visible),
-button,
-button:focus:not(:focus-visible)
-{
-	--pico-background-color: var(--pico-dropdown-background-color);
-	--pico-border-color: var(--pico-dropdown-border-color);
-	--pico-color: var(--pico-dropdown-color);
-	--pico-box-shadow: none;
+@media (pointer:coarse) {
+	/* VoiceOver has its own indicator for selection, Safari makes links "focus-visible" when clicking them */
+	[role="button"],
+	[role="button"]:is(:hover, :active, :focus),
+	button,
+	button:is(:hover, :active, :focus)
+	{
+		--pico-background-color: var(--pico-dropdown-background-color);
+		--pico-border-color: var(--pico-dropdown-border-color);
+		--pico-color: var(--pico-dropdown-color);
+		--pico-box-shadow: none;
+	}
 }
-[role="button"]:is(:hover, :active, :focus:focus-visible),
-button:is(:hover, :active, :focus:focus-visible)
-{
-	--pico-background-color: var(--pico-dropdown-hover-background-color);
-	--pico-border-color: var(--pico-dropdown-border-color);
-	--pico-color: var(--pico-dropdown-color);
-	--pico-box-shadow: none;
+@media not (pointer:coarse) {
+	[role="button"],
+	[role="button"]:focus:not(:focus-visible),
+	button,
+	button:focus:not(:focus-visible)
+	{
+		--pico-background-color: var(--pico-dropdown-background-color);
+		--pico-border-color: var(--pico-dropdown-border-color);
+		--pico-color: var(--pico-dropdown-color);
+		--pico-box-shadow: none;
+	}
+	[role="button"]:is(:hover, :active, :focus:focus-visible),
+	button:is(:hover, :active, :focus:focus-visible)
+	{
+		--pico-background-color: var(--pico-dropdown-hover-background-color);
+		--pico-border-color: var(--pico-dropdown-border-color);
+		--pico-color: var(--pico-dropdown-color);
+		--pico-box-shadow: none;
+	}
 }
 
 /* tile */
@@ -143,12 +162,17 @@ button:is(:hover, :active, :focus:focus-visible)
 
 /* mini tile */
 .tile.mini {
-	min-height: 50px;
+	min-height: 44px;
 	display:flex;
 	align-items: center;
 	gap: var(--gap-medium);
 	padding: var(--gap-small) var(--gap-medium);
 	font-size: var(--font-size-mini);
+}
+@media (pointer:coarse) {
+	.tile.mini {
+		min-height: 50px;
+	}
 }
 .tile.mini > .icon {
 	min-width: 24px;

@@ -12,13 +12,13 @@ struct IconView: HTML {
 	var content: some HTML {
 		switch icon.type {
 		case .mask:
-			div(.class("mask icon"), .style("mask-image: url(/\(runTimestamp)/\(icon.path));")) {}
+			div(.class("mask icon"), .ariaHidden(true), .style("mask-image: url(/\(runTimestamp)/\(icon.path));")) {}
 		case .doctoredSvg:
-			svg(.class("icon")) {
+			svg(.class("icon"), .ariaHidden(true)) {
 				use(.href("/\(runTimestamp)/\(icon.path)#icon"), .width("100%"), .height("100%")) {}
 			}
 		case .image:
-			img(.class("icon"), .src("/\(runTimestamp)/\(icon.path)"))
+			img(.class("icon"), .ariaHidden(true), .src("/\(runTimestamp)/\(icon.path)"))
 		}
 	}
 }
