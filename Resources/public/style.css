@@ -3,10 +3,16 @@
 	.grid {
 		grid-template-columns: 1fr 1fr;
 	}
+	.grid.mini {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
 }
 @media (min-width: 1024px) {
 	.grid {
 		grid-template-columns: 1fr 1fr 1fr;
+	}
+	.grid.mini {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
 }
 
@@ -113,8 +119,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	gap: var(--gap-default);
 	font-size: var(--font-size-large);
 }
-.tile.basic > img {
-	width: 64px;
+.tile.basic > .icon {
+	min-width: 64px;
+	max-width: 64px;
 }
 
 /* detailed tile */
@@ -124,8 +131,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	gap: var(--gap-default);
 	font-size: var(--font-size-regular);
 }
-.tile.detailed > .title-row > img {
-	width: 32px;
+.tile.detailed > .title-row > .icon {
+	min-width: 32px;
+	max-width: 32px;
 }
 .tile.detailed > .detail-row {
 	display:flex;
@@ -136,7 +144,15 @@ button:is(:hover, :active, :focus:focus-visible)
 /* mini tile */
 .tile.mini {
 	min-height: 50px;
+	display:flex;
+	align-items: center;
+	gap: var(--gap-medium);
+	padding: var(--gap-small) var(--gap-medium);
 	font-size: var(--font-size-mini);
+}
+.tile.mini > .icon {
+	min-width: 24px;
+	max-width: 24px;
 }
 
 /* section */
@@ -144,6 +160,9 @@ button:is(:hover, :active, :focus:focus-visible)
 	display:flex;
 	flex-direction: column;
 	gap: var(--gap-default);
+}
+.section.mini {
+	grid-column: 1 / -1;
 }
 
 /* section header */

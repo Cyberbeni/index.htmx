@@ -1,7 +1,7 @@
 import Elementary
 
 struct Section: HTML {
-	let config: Config.MainCards.Section
+	let config: Config.Cards.Section
 	let samehostUrlPrefix: String
 	let runTimestamp: String
 	let isPwa: Bool
@@ -13,7 +13,13 @@ struct Section: HTML {
 				div { config.title }
 			}
 			for card in config.cards {
-				BasicTile(config: card, samehostUrlPrefix: samehostUrlPrefix, runTimestamp: runTimestamp, isPwa: isPwa)
+				BasicTile(
+					config: card,
+					samehostUrlPrefix: samehostUrlPrefix,
+					runTimestamp: runTimestamp,
+					isPwa: isPwa,
+					isMini: false
+				)
 			}
 		}
 	}

@@ -27,7 +27,9 @@ actor App {
 		// Parse config
 		let decoder = Config.jsonDecoder()
 		let generalConfig: Config.General
-		let mainCardsConfig: Config.MainCards
+		let mainCardsConfig: Config.Cards
+		let miniCardsConfig: Config.Cards
+
 		do {
 			generalConfig = try decoder.decode(
 				Config.General.self,
@@ -39,11 +41,20 @@ actor App {
 		}
 		do {
 			mainCardsConfig = try decoder.decode(
-				Config.MainCards.self,
+				Config.Cards.self,
 				from: Data(contentsOf: configDir.appending(component: "config.main_cards.json"))
 			)
 		} catch {
 			Log.error("Error parsing config.main_cards.json: \(error)")
+			return
+		}
+		do {
+			miniCardsConfig = try decoder.decode(
+				Config.Cards.self,
+				from: Data(contentsOf: configDir.appending(component: "config.mini_cards.json"))
+			)
+		} catch {
+			Log.error("Error parsing config.mini_cards.json: \(error)")
 			return
 		}
 
@@ -83,7 +94,8 @@ actor App {
 				runTimestamp: runTimestamp,
 				staticFilesTimestamp: staticFilesTimestamp,
 				generalConfig: generalConfig,
-				mainCardsConfig: mainCardsConfig
+				mainCardsConfig: mainCardsConfig,
+				miniCardsConfig: miniCardsConfig
 			)
 
 		let app = Application(
