@@ -32,7 +32,7 @@ actor AdGuardService: WidgetService {
 			var request = HTTPClientRequest(url: url)
 			request.method = .GET
 			request.headers = [
-				"Authorization": "Bearer \(authData)"
+				"Authorization": "Bearer \(authData)",
 			]
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(30))
 			// TODO: parse response

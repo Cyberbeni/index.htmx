@@ -1,0 +1,3 @@
+{% for type in types.implementing.WidgetConfig %}
+// {{ type.name }}
+{% endfor %}
