@@ -45,6 +45,10 @@ svg {
 }
 
 /* primary margins/alignment */
+body {
+	user-select: none;
+	-webkit-user-select: none;
+}
 main {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
@@ -143,12 +147,17 @@ button:is(:hover, :active, :focus:focus-visible)
 
 /* mini tile */
 .tile.mini {
-	min-height: 50px;
+	min-height: 44px;
 	display:flex;
 	align-items: center;
 	gap: var(--gap-medium);
 	padding: var(--gap-small) var(--gap-medium);
 	font-size: var(--font-size-mini);
+}
+@media (pointer:coarse) {
+	.tile.mini {
+		min-height: 50px;
+	}
 }
 .tile.mini > .icon {
 	min-width: 24px;

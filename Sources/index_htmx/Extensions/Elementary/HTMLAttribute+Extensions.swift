@@ -86,3 +86,18 @@ extension HTMLAttribute where Tag: HTMLTrait.Attributes.media {
 		HTMLAttribute(name: "media", value: value)
 	}
 }
+
+// aria-hidden
+extension HTMLTrait.Attributes {
+	protocol ariaHidden {}
+}
+
+extension HTMLTag.div: HTMLTrait.Attributes.ariaHidden {}
+extension HTMLTag.img: HTMLTrait.Attributes.ariaHidden {}
+extension HTMLTag.svg: HTMLTrait.Attributes.ariaHidden {}
+
+extension HTMLAttribute where Tag: HTMLTrait.Attributes.ariaHidden {
+	static func ariaHidden(_ value: Bool) -> Self {
+		HTMLAttribute(name: "aria-hidden", value: "\(value)")
+	}
+}
