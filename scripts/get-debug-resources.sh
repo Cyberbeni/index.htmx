@@ -3,6 +3,7 @@
 set -eo pipefail
 
 pushd "$(dirname "${BASH_SOURCE[0]}")/.." > /dev/null
+DOCKER_IMAGE="docker.io/node:lts-slim"
 
 if which npm > /dev/null 2>&1; then
 	RESOURCES_DIR="./.debug_resources"
@@ -19,13 +20,13 @@ elif which docker > /dev/null 2>&1; then
 	docker run --rm \
 		--volume .:/workspace \
 		--user "$(id -u):$(id -g)" \
-		docker.io/node:lts-slim \
+		"$DOCKER_IMAGE" \
 		"/workspace/scripts/$(basename "${BASH_SOURCE[0]}")"
 elif which podman > /dev/null 2>&1; then
 	podman run --rm \
 		--volume .:/workspace \
 		--userns=keep-id \
-		docker.io/node:lts-slim \
+		"$DOCKER_IMAGE" \
 		"/workspace/scripts/$(basename "${BASH_SOURCE[0]}")"
 else
 	echo "Either 'npm', 'docker' or 'podman' has to be installed to export the npm dependencies."

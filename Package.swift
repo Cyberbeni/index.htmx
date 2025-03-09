@@ -17,6 +17,7 @@ let package = Package(
 		.package(url: "https://github.com/hummingbird-project/hummingbird-compression", from: "2.0.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
+		.package(url: "https://github.com/swift-server/async-http-client", from: "1.25.2"),
 		// Plugins:
 		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.55.5"),
 	],
@@ -29,6 +30,7 @@ let package = Package(
 				.product(name: "HummingbirdElementary", package: "hummingbird-elementary"),
 				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
 				.product(name: "ElementaryHTMXSSE", package: "elementary-htmx"),
+				.product(name: "AsyncHTTPClient", package: "async-http-client"),
 			],
 			swiftSettings: [
 				.define("DEBUG", .when(configuration: .debug)),
@@ -37,6 +39,10 @@ let package = Package(
 			linkerSettings: [
 				.unsafeFlags(["-Xlinker", "-s"], .when(configuration: .release)), // STRIP_STYLE = all
 			]
+		),
+		.testTarget(
+			name: "HelperTests",
+			dependencies: ["index_htmx"]
 		),
 	]
 )

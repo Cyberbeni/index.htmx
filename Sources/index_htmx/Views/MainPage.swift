@@ -22,7 +22,6 @@ struct MainPage: HTMLDocument {
 
 		meta(.name("theme-color"), .content(generalConfig.theme.light), .media("(prefers-color-scheme: light)"))
 		meta(.name("theme-color"), .content(generalConfig.theme.dark), .media("(prefers-color-scheme: dark)"))
-		// TODO: figure out what works on iOS
 		link(.href("/\(runTimestamp)/\(generalConfig.favicon)"), .rel(.icon))
 		for (sizes, path) in generalConfig.pwaIcons {
 			link(.href("/\(runTimestamp)/\(path)"), .rel("apple-touch-icon"), .sizes(sizes))

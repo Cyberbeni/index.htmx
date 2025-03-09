@@ -1,8 +1,4 @@
-#if canImport(FoundationEssentials)
-	@_exported import FoundationEssentials
-#else
-	@_exported import Foundation
-#endif
+@_exported import Foundation
 
 @main
 actor Entrypoint {

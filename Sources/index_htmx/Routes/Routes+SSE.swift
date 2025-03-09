@@ -1,10 +1,11 @@
 import AsyncAlgorithms
 import Elementary
 import Hummingbird
+import ServiceLifecycle
 
 extension Router {
 	@discardableResult
-	func addSseRoutes(runTimestamp: String) -> Self {
+	func addSseRoutes(runTimestamp: String, publisher: Publisher) -> Self {
 		get("sse") { request, _ in
 			Response(
 				status: .ok,
@@ -15,10 +16,19 @@ extension Router {
 						try await writer.writeSSE(event: "reload", html: HTMLRaw("location.reload()"))
 						try await Task.sleep(for: .seconds(1))
 					} else {
-						// TODO: stream the same event to  everyone
 						// https://github.com/hummingbird-project/hummingbird-examples/blob/bcac6b501ab36f8df8e409d9893fb70921b64ae4/server-sent-events/Sources/App/Application%2Bbuild.swift#L67-L93
-						for await _ in AsyncTimerSequence.repeating(every: .seconds(1)).cancelOnGracefulShutdown() {
-							// try await writer.writeSSE(html: HTMLRaw("ping"))
+						let (stream, id) = publisher.subscribe()
+						try await withGracefulShutdownHandler {
+							// If connection if closed then this function will call the `onInboundCLosed` closure
+							try await request.body.consumeWithInboundCloseHandler { _ in
+								for try await value in stream {
+									try await writer.write(value)
+								}
+							} onInboundClosed: {
+								publisher.unsubscribe(id)
+							}
+						} onGracefulShutdown: {
+							publisher.unsubscribe(id)
 						}
 					}
 					try await writer.finish(nil)

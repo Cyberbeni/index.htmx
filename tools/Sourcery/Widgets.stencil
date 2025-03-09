@@ -1,0 +1,53 @@
+
+import Elementary
+
+extension Config {
+	enum Widget: Decodable {
+		{% for type in types.implementing.WidgetConfig %}
+		case {{ type.name|lowerFirstLetter }}({{ type.name }})
+		{% endfor %}
+
+		enum CodingKeys: String, CodingKey {
+			case type
+		}
+
+		init(from decoder: Decoder) throws {
+			let container = try decoder.container(keyedBy: CodingKeys.self)
+			let type = try container.decode(String.self, forKey: .type)
+			switch type {
+			{% for type in types.implementing.WidgetConfig %}
+			case "{{ type.name|lowercase }}":
+				let value = try {{ type.name }}(from: decoder)
+				self = .{{ type.name|lowerFirstLetter }}(value)
+			{% endfor %}
+			default:
+				var codingPath = decoder.codingPath
+				codingPath.append(CodingKeys.type)
+				throw DecodingError.dataCorrupted(
+					DecodingError.Context(
+						codingPath: codingPath,
+						debugDescription: "Unsupported widget type '\(type)'"
+					)
+				)
+			}
+		}
+
+		func createService(id: String, publisher: Publisher) -> any WidgetService {
+			switch self {
+			{% for type in types.implementing.WidgetConfig %}
+			case let .{{ type.name|lowerFirstLetter }}(config):
+				{{ type.name }}Service(id: id, config: config, publisher: publisher)
+			{% endfor %}
+			}
+		}
+
+		func render() -> some HTML {
+			switch self {
+			{% for type in types.implementing.WidgetConfig %}
+			case let .{{ type.name|lowerFirstLetter }}(config):
+				config.render(data: nil)
+			{% endfor %}
+			}
+		}
+	}
+}

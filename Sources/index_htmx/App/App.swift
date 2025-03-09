@@ -5,6 +5,8 @@ actor App {
 	let configDir: URL
 	let runTimestamp = "\(Date().timeIntervalSince1970)"
 	let staticFilesTimestamp: String
+	var services = [any WidgetService]()
+	let publisher = Publisher()
 
 	static func responseJsonEncoder() -> JSONEncoder {
 		let encoder = JSONEncoder()
@@ -27,7 +29,7 @@ actor App {
 		// Parse config
 		let decoder = Config.jsonDecoder()
 		let generalConfig: Config.General
-		let mainCardsConfig: Config.Cards
+		var mainCardsConfig: Config.Cards
 		let miniCardsConfig: Config.Cards
 
 		do {
@@ -58,12 +60,29 @@ actor App {
 			miniCardsConfig = .init(sections: [])
 		}
 
+		// Start services
+		var serviceIndex = 0
+		for iSection in mainCardsConfig.sections.indices {
+			for iCard in mainCardsConfig.sections[iSection].cards.indices {
+				if let widget = mainCardsConfig.sections[iSection].cards[iCard].widget {
+					let widgetId = "widget\(serviceIndex)"
+					serviceIndex += 1
+					mainCardsConfig.sections[iSection].cards[iCard].widgetId = widgetId
+					services.append(widget.createService(id: widgetId, publisher: publisher))
+				}
+			}
+		}
+
+		for service in services {
+			await service.start()
+		}
+
 		// Setup Application
 		let router = Router()
 
 		router
 			.add(if: generalConfig.enableCompression, middleware: RequestDecompressionMiddleware())
-			.addSseRoutes(runTimestamp: runTimestamp)
+			.addSseRoutes(runTimestamp: runTimestamp, publisher: publisher)
 			.add(if: generalConfig.enableCompression, middleware: ResponseCompressionMiddleware())
 
 		#if DEBUG
@@ -86,7 +105,6 @@ actor App {
 				configDir.appending(component: "public").path,
 				urlBasePath: "/" + runTimestamp,
 				cacheControl: .init([
-					// TODO: add config to use noCache?
 					(MediaType(type: .any), .publicImmutable),
 				])
 			))
@@ -101,6 +119,7 @@ actor App {
 		let app = Application(
 			router: router,
 			configuration: ApplicationConfiguration(address: .hostname("0.0.0.0", port: 8080)),
+			services: [publisher],
 			onServerRunning: { _ in
 				Log.info("Server running")
 			}
