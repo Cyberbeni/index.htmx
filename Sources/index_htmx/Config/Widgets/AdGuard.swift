@@ -6,8 +6,37 @@ struct AdGuard: WidgetConfig {
 	let url: String
 	let user: String
 	let password: String
+	let fields: [Field]?
 
+	static var defaultFields: [Field] { [.queries, .blocked, .latency] }
 	var pollingInterval: Int64 { 5 }
+
+	enum Field: String, Decodable {
+		case queries
+		case blocked
+		case filtered
+		case latency
+
+		var title: String {
+			switch self {
+				case .queries: "Queries"
+				case .blocked: "Blocked"
+				case .filtered: "Filtered"
+				case .latency: "Latency"
+			}
+		}
+
+		func value(for data: Data?) -> String {
+			guard let data else { return "-" }
+			// TODO: format numbers
+			return switch self {
+				case .queries: "\(data.numDnsQueries)"
+				case .blocked: "\(data.numBlockedFiltering)"
+				case .filtered: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)"
+				case .latency: "\(data.avgProcessingTime * 1000) ms"
+			}
+		}
+	}
 
 	struct Data: Decodable {
 		var numDnsQueries: Int
@@ -20,17 +49,8 @@ struct AdGuard: WidgetConfig {
 
 	@HTMLBuilder
 	func render(data: Data?) -> some HTML {
-		// TODO: format numbers
-		if let data {
-			DetailItem(title: "Queries", value: "\(data.numDnsQueries)")
-			DetailItem(title: "Blocked", value: "\(data.numBlockedFiltering)")
-			DetailItem(title: "Filtered", value: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)")
-			DetailItem(title: "Latency", value: "\(data.avgProcessingTime * 1000) ms")
-		} else {
-			DetailItem(title: "Queries", value: "-")
-			DetailItem(title: "Blocked", value: "-")
-			DetailItem(title: "Filtered", value: "-")
-			DetailItem(title: "Latency", value: "-")
+		for field in fieldConfig {
+			DetailItem(title: field.title, value: field.value(for: data))
 		}
 	}
 }

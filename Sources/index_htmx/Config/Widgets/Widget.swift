@@ -1,9 +1,19 @@
 import Elementary
 
 protocol WidgetConfig: Decodable, Sendable {
-	associatedtype Data
+	associatedtype Data: Decodable
+	associatedtype Field: Decodable
 	associatedtype View: HTML
+
+	var fields: [Field]? { get }
+
+	static var defaultFields: [Field] { get }
+
 	@HTMLBuilder func render(data: Data?) -> View
+}
+
+extension WidgetConfig {
+	var fieldConfig: [Field] { fields ?? Self.defaultFields }
 }
 
 protocol WidgetService: Sendable {
