@@ -40,5 +40,9 @@ let package = Package(
 				.unsafeFlags(["-Xlinker", "-s"], .when(configuration: .release)), // STRIP_STYLE = all
 			]
 		),
+		.testTarget(
+			name: "HelperTests",
+			dependencies: ["index_htmx"]
+		)
 	]
 )

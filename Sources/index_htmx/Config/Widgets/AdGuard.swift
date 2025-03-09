@@ -11,6 +11,7 @@ struct AdGuard: WidgetConfig {
 
 	static var defaultFields: [Field] { [.queries, .blocked, .latency] }
 	var pollingInterval: Int64 { 5 }
+	var timeout: Int64 { 5 }
 
 	enum Field: String, Decodable {
 		case queries
@@ -29,12 +30,11 @@ struct AdGuard: WidgetConfig {
 
 		func value(for data: Data?) -> String {
 			guard let data else { return "-" }
-			// TODO: format numbers
 			return switch self {
-			case .queries: "\(data.numDnsQueries)"
-			case .blocked: "\(data.numBlockedFiltering)"
-			case .filtered: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)"
-			case .latency: "\(data.avgProcessingTime * 1000) ms"
+			case .queries: Formatter.string(from: data.numDnsQueries)
+			case .blocked: Formatter.string(from: data.numBlockedFiltering)
+			case .filtered: Formatter.string(from: data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)
+			case .latency: "\(Formatter.string(from: data.avgProcessingTime * 1000)) ms"
 			}
 		}
 	}
@@ -92,7 +92,7 @@ actor AdGuardService: WidgetService {
 			request.headers = [
 				"Authorization": Authorization.user(config.user, password: config.password),
 			]
-			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(config.pollingInterval - 1))
+			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(config.timeout))
 			if response.status.code == 200 {
 				let body = try await response.body.collect(upTo: maxResponseSize)
 				if let data = try body.getJSONDecodable(Config.Data.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {
