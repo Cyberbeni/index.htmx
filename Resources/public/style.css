@@ -29,10 +29,11 @@
 	--gap-default: var(--gap-l);
 	--gap-m: 0.5rem;
 	--gap-s: 0.25rem;
+	--gap-xs: 0.125rem;
 
 	--font-size-l: 1.125rem;
 	--font-size-m: 0.875rem;
-	--font-size-s: 0.75rem;
+	--font-size-s: 0.8125rem;
 
 	--pico-font-size: 100%;
 }
@@ -195,7 +196,7 @@ button.icon
 	border-style: solid;
 	border-color: var(--pico-dropdown-border-color);
 	border-radius: var(--pico-border-radius);
-	padding: var(--gap-s);
+	padding: var(--gap-xs) var(--gap-s);
 }
 .detail-item > .title {
 	font-weight: 500;
