@@ -37,7 +37,7 @@ actor Publisher: Service {
 		subSource.yield(.add(id, source))
 		Task {
 			let values = await cachedValues.values
-			for value in values  {
+			for value in values {
 				source.yield(value)
 			}
 		}

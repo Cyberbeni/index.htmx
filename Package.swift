@@ -43,6 +43,6 @@ let package = Package(
 		.testTarget(
 			name: "HelperTests",
 			dependencies: ["index_htmx"]
-		)
+		),
 	]
 )

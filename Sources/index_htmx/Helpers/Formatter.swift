@@ -8,7 +8,7 @@ enum Formatter {
 			FloatingPointFormatStyle(locale: userLocale)
 				.precision(.fractionLength(3))
 				.format(value)
-		} else if value < 10_000 {
+		} else if value < 10000 {
 			FloatingPointFormatStyle(locale: userLocale)
 				.precision(.significantDigits(4))
 				.format(value)
@@ -21,11 +21,9 @@ enum Formatter {
 }
 
 private extension Formatter {
-	static let userLocale: Locale = {
-		if let localeId = ProcessInfo.processInfo.environment["LANG"] {
-			Locale(identifier: localeId)
-		} else {
-			Locale.current
-		}
-	}()
+	static let userLocale: Locale = if let localeId = ProcessInfo.processInfo.environment["LANG"] {
+		.init(identifier: localeId)
+	} else {
+		.current
+	}
 }

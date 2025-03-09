@@ -1,5 +1,5 @@
-import Testing
 @testable import index_htmx
+import Testing
 
 // Formatter uses en_001 Locale during tests
 
