@@ -42,6 +42,7 @@ struct MainPage: HTMLDocument {
 
 	var body: some HTML {
 		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(runTimestamp)")) {
+			script(.src("/\(staticFilesTimestamp)/autoreload.js")) {}
 			script(.sse.swap("reload")) {}
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {
