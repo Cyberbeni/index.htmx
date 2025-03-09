@@ -5,6 +5,7 @@ actor App {
 	let configDir: URL
 	let runTimestamp = "\(Date().timeIntervalSince1970)"
 	let staticFilesTimestamp: String
+	var services = [any WidgetService]()
 
 	static func responseJsonEncoder() -> JSONEncoder {
 		let encoder = JSONEncoder()
@@ -27,7 +28,7 @@ actor App {
 		// Parse config
 		let decoder = Config.jsonDecoder()
 		let generalConfig: Config.General
-		let mainCardsConfig: Config.Cards
+		var mainCardsConfig: Config.Cards
 		let miniCardsConfig: Config.Cards
 
 		do {
@@ -56,6 +57,23 @@ actor App {
 		} catch {
 			Log.warning("Error parsing config.mini_cards.json: \(error)")
 			miniCardsConfig = .init(sections: [])
+		}
+
+		// Start services
+		var serviceIndex = 0
+		for iSection in mainCardsConfig.sections.indices {
+			for iCard in mainCardsConfig.sections[iSection].cards.indices {
+				if let widget = mainCardsConfig.sections[iSection].cards[iCard].widget {
+					let widgetId = "widget\(serviceIndex)"
+					serviceIndex += 1
+					mainCardsConfig.sections[iSection].cards[iCard].widgetId = widgetId
+					services.append(widget.createService(id: widgetId))
+				}
+			}
+		}
+
+		for service in services {
+			await service.start()
 		}
 
 		// Setup Application
