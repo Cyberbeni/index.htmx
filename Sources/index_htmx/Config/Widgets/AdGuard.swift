@@ -19,10 +19,10 @@ struct AdGuard: WidgetConfig {
 
 		var title: String {
 			switch self {
-				case .queries: "Queries"
-				case .blocked: "Blocked"
-				case .filtered: "Filtered"
-				case .latency: "Latency"
+			case .queries: "Queries"
+			case .blocked: "Blocked"
+			case .filtered: "Filtered"
+			case .latency: "Latency"
 			}
 		}
 
@@ -30,10 +30,10 @@ struct AdGuard: WidgetConfig {
 			guard let data else { return "-" }
 			// TODO: format numbers
 			return switch self {
-				case .queries: "\(data.numDnsQueries)"
-				case .blocked: "\(data.numBlockedFiltering)"
-				case .filtered: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)"
-				case .latency: "\(data.avgProcessingTime * 1000) ms"
+			case .queries: "\(data.numDnsQueries)"
+			case .blocked: "\(data.numBlockedFiltering)"
+			case .filtered: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)"
+			case .latency: "\(data.avgProcessingTime * 1000) ms"
 			}
 		}
 	}
