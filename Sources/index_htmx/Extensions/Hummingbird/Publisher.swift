@@ -22,9 +22,7 @@ actor Publisher: Service {
 	/// Publish to service
 	/// - Parameter value: Value being published
 	func publish(_ value: Value, id: String) async {
-		// TODO: only publish if changed
-		// TODO: publish last values when someone subscribes
-		// guard cachedValues[id] != value else { return }
+		guard cachedValues[id] != value else { return }
 		cachedValues[id] = value
 		for subscription in subscriptions.values {
 			subscription.yield(value)
@@ -37,6 +35,12 @@ actor Publisher: Service {
 		let id = SubscriptionID()
 		let (stream, source) = AsyncStream<Value>.makeStream()
 		subSource.yield(.add(id, source))
+		Task {
+			let values = await cachedValues.values
+			for value in values  {
+				source.yield(value)
+			}
+		}
 		return (stream, id)
 	}
 
