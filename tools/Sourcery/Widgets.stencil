@@ -13,11 +13,11 @@ extension Config {
 			let container = try decoder.container(keyedBy: CodingKeys.self)
 			let type = try container.decode(String.self, forKey: .type)
 			switch type {
-		{% for type in types.implementing.WidgetConfig %}
+			{% for type in types.implementing.WidgetConfig %}
 			case "{{ type.name|lowercase }}":
 				let value = try {{ type.name }}(from: decoder)
 				self = .{{ type.name|lowerFirstLetter }}(value)
-		{% endfor %}
+			{% endfor %}
 			default:
 				var codingPath = decoder.codingPath
 				codingPath.append(CodingKeys.type)
@@ -27,6 +27,15 @@ extension Config {
 						debugDescription: "Unsupported widget type '\(type)'"
 					)
 				)
+			}
+		}
+
+		func createService(id: String) -> any WidgetService {
+			switch self {
+			{% for type in types.implementing.WidgetConfig %}
+			case let .{{ type.name|lowerFirstLetter }}(config):
+				{{ type.name }}Service(id: id, config: config)
+			{% endfor %}
 			}
 		}
 	}

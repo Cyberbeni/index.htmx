@@ -27,5 +27,12 @@ extension Config {
 				)
 			}
 		}
+
+		func createService(id: String) -> any WidgetService {
+			switch self {
+			case let .adGuard(config):
+				AdGuardService(id: id, config: config)
+			}
+		}
 	}
 }

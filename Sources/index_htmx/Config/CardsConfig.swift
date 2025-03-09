@@ -1,11 +1,11 @@
 extension Config {
 	struct Cards: Decodable {
-		let sections: [Section]
+		var sections: [Section]
 
 		struct Section: Decodable {
 			let icon: Icon
 			let title: String
-			let cards: [Card]
+			var cards: [Card]
 		}
 
 		struct Card: Decodable {
