@@ -13,22 +13,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Install xcbeautify
-      uses: Cyberbeni/install-swift-tool@v3
-      with:
-        url: https://github.com/cpisciotta/xcbeautify
-        version: '*'
     - uses: actions/cache@v4
       with:
         path: .spm-cache
-        key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+        key: ${{ runner.os }}-swift-test-${{ hashFiles('Package.resolved') }}
         restore-keys: |
-          ${{ runner.os }}-spm-
+          ${{ runner.os }}-swift-test-
     - name: Test
       shell: bash
       run: |
         set -o pipefail
-        swift test --cache-path .spm-cache --only-use-versions-from-resolved-file
+        swift test --only-use-versions-from-resolved-file
   check-codegen:
     runs-on: ubuntu-latest
     steps:
