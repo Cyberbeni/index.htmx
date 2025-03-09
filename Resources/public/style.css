@@ -43,12 +43,16 @@
  */
 @media not (prefers-color-scheme: dark) {
 	:root {
-		--secondary-background: #00000010
+		--secondary-background: #00000010;
+		--error-background: #f00c;
+		--error-foreground: white;
 	}
 }
 @media (prefers-color-scheme: dark) {
 	:root {
-		--secondary-background: #00000010
+		--secondary-background: #00000010;
+		--error-background: #f00c;
+		--error-foreground: white;
 	}
 }
 
@@ -207,8 +211,8 @@ button.icon
 .error {
 	font-size: var(--font-size-l);
 	max-lines: 2;
-	background-color: #f00c;
-	color: white;
+	background-color: var(--error-background);
+	color: var(--error-foreground);
 	border-width: 1px;
 	border-style: solid;
 	border-color: var(--pico-dropdown-border-color);
