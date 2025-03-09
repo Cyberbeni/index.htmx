@@ -90,7 +90,6 @@ actor AdGuardService: WidgetService {
 				"Authorization": Authorization.user(config.user, password: config.password),
 			]
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(config.pollingInterval - 1))
-			// TODO: parse response
 			if response.status.code == 200 {
 				let body = try await response.body.collect(upTo: maxResponseSize)
 				if let stats = try body.getJSONDecodable(Config.Data.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {

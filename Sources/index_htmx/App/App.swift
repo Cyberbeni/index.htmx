@@ -104,7 +104,6 @@ actor App {
 				configDir.appending(component: "public").path,
 				urlBasePath: "/" + runTimestamp,
 				cacheControl: .init([
-					// TODO: add config to use noCache?
 					(MediaType(type: .any), .publicImmutable),
 				])
 			))
