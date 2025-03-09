@@ -1,4 +1,5 @@
 import Elementary
+import NIO
 
 protocol WidgetConfig: Decodable, Sendable {
 	associatedtype Data: Decodable
@@ -18,7 +19,8 @@ extension WidgetConfig {
 
 protocol WidgetService: Sendable {
 	associatedtype Config: WidgetConfig
-	init(id: String, config: Config)
+
+	init(id: String, config: Config, publisher: Publisher)
 
 	func start() async
 	nonisolated func jsonDecoder() -> JSONDecoder

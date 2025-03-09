@@ -6,6 +6,7 @@ actor App {
 	let runTimestamp = "\(Date().timeIntervalSince1970)"
 	let staticFilesTimestamp: String
 	var services = [any WidgetService]()
+	let publisher = Publisher()
 
 	static func responseJsonEncoder() -> JSONEncoder {
 		let encoder = JSONEncoder()
@@ -67,7 +68,7 @@ actor App {
 					let widgetId = "widget\(serviceIndex)"
 					serviceIndex += 1
 					mainCardsConfig.sections[iSection].cards[iCard].widgetId = widgetId
-					services.append(widget.createService(id: widgetId))
+					services.append(widget.createService(id: widgetId, publisher: publisher))
 				}
 			}
 		}
@@ -81,7 +82,7 @@ actor App {
 
 		router
 			.add(if: generalConfig.enableCompression, middleware: RequestDecompressionMiddleware())
-			.addSseRoutes(runTimestamp: runTimestamp)
+			.addSseRoutes(runTimestamp: runTimestamp, publisher: publisher)
 			.add(if: generalConfig.enableCompression, middleware: ResponseCompressionMiddleware())
 
 		#if DEBUG
@@ -118,6 +119,7 @@ actor App {
 		let app = Application(
 			router: router,
 			configuration: ApplicationConfiguration(address: .hostname("0.0.0.0", port: 8080)),
+			services: [publisher],
 			onServerRunning: { _ in
 				Log.info("Server running")
 			}

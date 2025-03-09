@@ -30,10 +30,10 @@ extension Config {
 			}
 		}
 
-		func createService(id: String) -> any WidgetService {
+		func createService(id: String, publisher: Publisher) -> any WidgetService {
 			switch self {
 			case let .adGuard(config):
-				AdGuardService(id: id, config: config)
+				AdGuardService(id: id, config: config, publisher: publisher)
 			}
 		}
 

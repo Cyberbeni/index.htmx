@@ -1,5 +1,6 @@
 import AsyncHTTPClient
 import Elementary
+import NIO
 import NIOFoundationCompat
 
 struct AdGuard: WidgetConfig {
@@ -58,12 +59,14 @@ struct AdGuard: WidgetConfig {
 actor AdGuardService: WidgetService {
 	let id: String
 	let config: AdGuard
+	let publisher: Publisher
 
 	var runTask: Task<Void, Error>?
 
-	init(id: String, config: AdGuard) {
+	init(id: String, config: AdGuard, publisher: Publisher) {
 		self.id = id
 		self.config = config
+		self.publisher = publisher
 	}
 
 	deinit {
@@ -92,9 +95,10 @@ actor AdGuardService: WidgetService {
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(config.pollingInterval - 1))
 			if response.status.code == 200 {
 				let body = try await response.body.collect(upTo: maxResponseSize)
-				if let stats = try body.getJSONDecodable(Config.Data.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {
-					Log.debug("HTTP call OK: \(stats)")
-					// TODO: render view
+				if let data = try body.getJSONDecodable(Config.Data.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {
+					Log.debug("HTTP call OK: \(data)")
+					let sse = try await ByteBuffer.sse(event: id, html: config.render(data: data))
+					await publisher.publish(sse, id: id)
 				} else {
 					Log.error("getJSONDecodable returned nil")
 				}
