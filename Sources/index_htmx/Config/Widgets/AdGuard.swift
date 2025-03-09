@@ -1,4 +1,5 @@
 import AsyncHTTPClient
+import Elementary
 import NIOFoundationCompat
 
 struct AdGuard: WidgetConfig {
@@ -7,6 +8,31 @@ struct AdGuard: WidgetConfig {
 	let password: String
 
 	var pollingInterval: Int64 { 5 }
+
+	struct Data: Decodable {
+		var numDnsQueries: Int
+		var numBlockedFiltering: Int
+		var numReplacedSafebrowsing: Int
+		var numReplacedSafesearch: Int
+		var numReplacedParental: Int
+		var avgProcessingTime: Double // microseconds
+	}
+
+	@HTMLBuilder
+	func render(data: Data?) -> some HTML {
+		// TODO: format numbers
+		if let data {
+			DetailItem(title: "Queries", value: "\(data.numDnsQueries)")
+			DetailItem(title: "Blocked", value: "\(data.numBlockedFiltering)")
+			DetailItem(title: "Filtered", value: "\(data.numReplacedSafebrowsing + data.numReplacedSafesearch + data.numReplacedParental)")
+			DetailItem(title: "Latency", value: "\(data.avgProcessingTime * 1000) ms")
+		} else {
+			DetailItem(title: "Queries", value: "-")
+			DetailItem(title: "Blocked", value: "-")
+			DetailItem(title: "Filtered", value: "-")
+			DetailItem(title: "Latency", value: "-")
+		}
+	}
 }
 
 actor AdGuardService: WidgetService {
@@ -35,15 +61,6 @@ actor AdGuardService: WidgetService {
 		}
 	}
 
-	private struct Stats: Decodable {
-		var numDnsQueries: Int
-		var numBlockedFiltering: Int
-		var numReplacedSafebrowsing: Int
-		var numReplacedSafesearch: Int
-		var numReplacedParental: Int
-		var avgProcessingTime: Double // microseconds
-	}
-
 	func getData() async {
 		let url = config.url.appending("/control/stats")
 		do {
@@ -56,7 +73,7 @@ actor AdGuardService: WidgetService {
 			// TODO: parse response
 			if response.status.code == 200 {
 				let body = try await response.body.collect(upTo: maxResponseSize)
-				if let stats = try body.getJSONDecodable(Stats.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {
+				if let stats = try body.getJSONDecodable(Config.Data.self, decoder: jsonDecoder(), at: 0, length: body.readableBytes) {
 					Log.debug("HTTP call OK: \(stats)")
 					// TODO: render view
 				} else {

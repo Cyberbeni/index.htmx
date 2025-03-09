@@ -1,4 +1,10 @@
-protocol WidgetConfig: Decodable, Sendable {}
+import Elementary
+
+protocol WidgetConfig: Decodable, Sendable {
+	associatedtype Data
+	associatedtype View: HTML
+	@HTMLBuilder func render(data: Data?) -> View
+}
 
 protocol WidgetService: Sendable {
 	associatedtype Config: WidgetConfig
@@ -14,5 +20,6 @@ extension WidgetService {
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
 		return decoder
 	}
+
 	var maxResponseSize: Int { 1_000_000 }
 }

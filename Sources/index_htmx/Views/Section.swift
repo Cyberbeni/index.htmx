@@ -13,12 +13,11 @@ struct Section: HTML {
 				div { config.title }
 			}
 			for card in config.cards {
-				BasicTile(
+				LargeTile(
 					config: card,
 					samehostUrlPrefix: samehostUrlPrefix,
 					runTimestamp: runTimestamp,
-					isPwa: isPwa,
-					isMini: false
+					isPwa: isPwa
 				)
 			}
 		}

@@ -25,13 +25,30 @@
  * 1 rem = 16px
  */
 :root {
-	--gap-default: 0.75rem;
-	--gap-medium: 0.5rem;
-	--gap-small: 0.25rem;
+	--gap-l: 0.75rem;
+	--gap-default: var(--gap-l);
+	--gap-m: 0.5rem;
+	--gap-s: 0.25rem;
 
-	--font-size-mini: 0.75rem;
-	--font-size-regular: 0.875rem;
-	--font-size-large: 1.1rem;
+	--font-size-l: 1.125rem;
+	--font-size-m: 0.875rem;
+	--font-size-s: 0.75rem;
+
+	--pico-font-size: 100%;
+}
+
+/**
+ * Color schemes
+ */
+@media not (prefers-color-scheme: dark) {
+	:root {
+		--secondary-background: #00000010
+	}
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--secondary-background: #00000010
+	}
 }
 
 /*
@@ -136,14 +153,15 @@ button.icon
 /* tile */
 .tile {
 	min-height: 96px;
+	padding: var(--gap-m);
 }
 
 /* basic tile */
 .tile.basic {
-	display:flex;
+	display: flex;
 	align-items: center;
 	gap: var(--gap-default);
-	font-size: var(--font-size-large);
+	font-size: var(--font-size-l);
 }
 .tile.basic > .icon {
 	min-width: 64px;
@@ -152,19 +170,38 @@ button.icon
 
 /* detailed tile */
 .tile.detailed > .title-row {
-	display:flex;
+	display: flex;
 	align-items: center;
-	gap: var(--gap-default);
-	font-size: var(--font-size-regular);
+	gap: var(--gap-s);
+	font-size: var(--font-size-m);
+	font-weight: 500;
+	padding-bottom: var(--gap-s);
 }
 .tile.detailed > .title-row > .icon {
-	min-width: 32px;
-	max-width: 32px;
+	min-width: 28px;
+	max-width: 28px;
 }
 .tile.detailed > .detail-row {
-	display:flex;
-	flex: 0 0 100%;
-	gap: var(--gap-small);
+	width: 100%;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	gap: var(--gap-s);
+}
+.detail-item {
+	font-size: var(--font-size-s);
+	background-color: var(--secondary-background);
+	border-width: 1px;
+	border-style: solid;
+	border-color: var(--pico-dropdown-border-color);
+	border-radius: var(--pico-border-radius);
+	padding: var(--gap-s);
+}
+.detail-item > .title {
+	font-weight: 500;
+}
+.detail-item > .value {
+	font-weight: 300;
 }
 
 /* mini tile */
@@ -172,9 +209,10 @@ button.icon
 	min-height: 44px;
 	display:flex;
 	align-items: center;
-	gap: var(--gap-medium);
-	padding: var(--gap-small) var(--gap-medium);
-	font-size: var(--font-size-mini);
+	gap: var(--gap-m);
+	padding: var(--gap-s) var(--gap-m);
+	font-size: var(--font-size-s);
+	font-weight: 500;
 }
 @media (pointer:coarse) {
 	.tile.mini {
@@ -199,7 +237,7 @@ button.icon
 /* section header */
 .section > .header {
 	display:flex;
-	gap: var(--gap-small);
+	gap: var(--gap-s);
 	align-items: center;
 	margin-block: 0;
 }

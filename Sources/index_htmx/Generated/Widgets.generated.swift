@@ -1,6 +1,8 @@
 // Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+import Elementary
+
 extension Config {
 	enum Widget: Decodable {
 		case adGuard(AdGuard)
@@ -32,6 +34,13 @@ extension Config {
 			switch self {
 			case let .adGuard(config):
 				AdGuardService(id: id, config: config)
+			}
+		}
+
+		func render() -> some HTML {
+			switch self {
+			case let .adGuard(config):
+				config.render(data: nil)
 			}
 		}
 	}
