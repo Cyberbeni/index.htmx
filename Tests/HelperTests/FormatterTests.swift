@@ -13,6 +13,7 @@ struct FormatterTests {
 		(12345.6, "12,346"),
 	])
 	func decimalFormatting(input: Double, expectedOutput: String) {
+		print("LOCALE: \(Locale.current)")
 		#expect(Formatter.string(from: input) == expectedOutput)
 	}
 }

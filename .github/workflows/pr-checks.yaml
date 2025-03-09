@@ -18,11 +18,17 @@ jobs:
       with:
         url: https://github.com/cpisciotta/xcbeautify
         version: '*'
+    - uses: actions/cache@v4
+      with:
+        path: .spm-cache
+        key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
     - name: Test
       shell: bash
       run: |
         set -o pipefail
-        swift test | xcbeautify
+        swift test --cache-path .spm-cache --only-use-versions-from-resolved-file
   check-codegen:
     runs-on: ubuntu-latest
     steps:
