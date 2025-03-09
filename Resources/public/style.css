@@ -204,6 +204,17 @@ button.icon
 .detail-item > .value {
 	font-weight: 300;
 }
+.error {
+	font-size: var(--font-size-l);
+	max-lines: 2;
+	background-color: #f00c;
+	color: white;
+	border-width: 1px;
+	border-style: solid;
+	border-color: var(--pico-dropdown-border-color);
+	border-radius: var(--pico-border-radius);
+	padding: var(--gap-m);
+}
 
 /* mini tile */
 .tile.mini {

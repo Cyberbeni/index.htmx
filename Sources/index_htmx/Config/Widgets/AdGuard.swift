@@ -104,12 +104,20 @@ actor AdGuardService: WidgetService {
 				}
 			} else {
 				let body = try await response.body.collect(upTo: maxResponseSize)
-				Log.error("Error status code: \(response.status.code), body: \(String(buffer: body))")
-				// TODO: error
+				let errorText = String(buffer: body)
+				Log.error("Error status code: \(response.status.code), body: \(errorText)")
+
+				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "HTTP \(response.status.code) - \(errorText)"))
+				await publisher.publish(sse, id: id)
 			}
 		} catch {
 			Log.error("\(error)")
-			// TODO: error
+			do {
+				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "\(error)"))
+				await publisher.publish(sse, id: id)
+			} catch {
+				Log.error("\(error)")
+			}
 		}
 	}
 }
