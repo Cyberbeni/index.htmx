@@ -1,8 +1,9 @@
 import Elementary
 
 protocol WidgetConfig: Decodable, Sendable {
-	associatedtype Response: Decodable
+	associatedtype Service: WidgetService<Self>
 	associatedtype Field: Decodable
+	associatedtype Response: Decodable
 	associatedtype View: HTML
 
 	var url: String { get }

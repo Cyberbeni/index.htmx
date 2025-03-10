@@ -1,4 +1,4 @@
-protocol WidgetService: Sendable {
+protocol WidgetService<Config>: Sendable {
 	associatedtype Config: WidgetConfig
 
 	init(id: String, config: Config, publisher: Publisher)

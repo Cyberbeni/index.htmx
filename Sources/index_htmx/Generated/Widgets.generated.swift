@@ -39,11 +39,11 @@ extension Config {
 		func createService(id: String, publisher: Publisher) -> (any WidgetService)? {
 			switch self {
 			case let .adGuard(config):
-				AdGuardService(id: id, config: config, publisher: publisher)
+				AdGuard.Service(id: id, config: config, publisher: publisher)
 			case let .sonarr(config):
-				SonarrService(id: id, config: config, publisher: publisher)
+				Sonarr.Service(id: id, config: config, publisher: publisher)
 			case let .transmission(config):
-				TransmissionService(id: id, config: config, publisher: publisher)
+				Transmission.Service(id: id, config: config, publisher: publisher)
 			case .error:
 				nil
 			}
