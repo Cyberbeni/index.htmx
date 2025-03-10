@@ -10,8 +10,9 @@ protocol WidgetConfig: Decodable, Sendable {
 
 	var path: String { get }
 	static var defaultFields: [Field] { get }
-	static var pollingInterval: Int64 { get }
+	static var pollingInterval: Int { get }
 	static var timeout: Int64 { get }
+	static var maxResponseSize: Int { get }
 
 	@HTMLBuilder func render(response: Response?) -> View
 	func authHeader() -> String?
@@ -19,8 +20,9 @@ protocol WidgetConfig: Decodable, Sendable {
 
 extension WidgetConfig {
 	var fieldConfig: [Field] { fields ?? Self.defaultFields }
-	static var pollingInterval: Int64 { 5 }
+	static var pollingInterval: Int { 5 }
 	static var timeout: Int64 { 5 }
+	static var maxResponseSize: Int { 1_000_000 }
 }
 
 // Password auth

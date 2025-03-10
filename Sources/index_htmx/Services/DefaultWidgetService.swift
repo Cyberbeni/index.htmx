@@ -51,7 +51,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
 			switch response.status.code {
 			case 200:
-				let body = try await response.body.collect(upTo: Self.maxResponseSize)
+				let body = try await response.body.collect(upTo: Config.maxResponseSize)
 				if let response = try body.getJSONDecodable(
 					Config.Response.self,
 					decoder: Self.jsonDecoder(),
@@ -65,7 +65,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 					Log.error("getJSONDecodable returned nil")
 				}
 			default:
-				let body = try await response.body.collect(upTo: Self.maxResponseSize)
+				let body = try await response.body.collect(upTo: Config.maxResponseSize)
 				let errorText = String(buffer: body)
 				Log.error("Error status code: \(response.status.code), body: \(errorText)")
 
