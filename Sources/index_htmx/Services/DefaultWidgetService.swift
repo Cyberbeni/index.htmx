@@ -39,7 +39,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 				"Accept": MediaType.applicationJson.description,
 			]
 			if let authHeader = config.authHeader() {
-				request.headers.add(name: "Authorization", value: authHeader)
+				request.headers.add(name: Config.authHeaderName, value: authHeader)
 			}
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
 			switch response.status.code {

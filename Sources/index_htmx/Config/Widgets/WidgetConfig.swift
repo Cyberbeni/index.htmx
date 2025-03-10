@@ -9,6 +9,7 @@ protocol WidgetConfig: Decodable, Sendable {
 	var fields: [Field]? { get }
 
 	var path: String { get }
+	static var authHeaderName: String { get }
 	static var defaultFields: [Field] { get }
 	static var pollingInterval: Int { get }
 	static var timeout: Int64 { get }
@@ -32,6 +33,7 @@ protocol PasswordAuth {
 }
 
 extension WidgetConfig where Self: PasswordAuth {
+	static var authHeaderName: String { "Authorization" }
 	func authHeader() -> String? {
 		guard !user.isEmpty, !password.isEmpty else { return nil }
 		let authData = Data("\(user):\(password)".utf8).base64EncodedString()
@@ -45,8 +47,9 @@ protocol ApiKeyAuth {
 }
 
 extension WidgetConfig where Self: ApiKeyAuth {
+	static var authHeaderName: String { "X-API-Key" }
 	func authHeader() -> String? {
 		guard !apiKey.isEmpty else { return nil }
-		return "Bearer \(apiKey)"
+		return apiKey
 	}
 }

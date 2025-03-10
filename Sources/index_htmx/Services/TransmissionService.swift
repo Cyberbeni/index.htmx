@@ -51,7 +51,7 @@ actor TransmissionService: WidgetService {
 				"Content-Type": MediaType.applicationJson.description,
 			]
 			if let authHeader = config.authHeader() {
-				request.headers.add(name: "Authorization", value: authHeader)
+				request.headers.add(name: Config.authHeaderName, value: authHeader)
 			}
 			if let sessionToken {
 				request.headers.add(name: sessionHeaderName, value: sessionToken)

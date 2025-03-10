@@ -51,6 +51,10 @@ enum Formatter {
 			return "\(lowPrecisionNumber(speed)) TB/s"
 		}
 	}
+
+	static func iso8601(date: Date) -> String {
+		Date.ISO8601FormatStyle().format(date)
+	}
 }
 
 private extension Formatter {

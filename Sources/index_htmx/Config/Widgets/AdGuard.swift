@@ -37,12 +37,12 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 	}
 
 	struct Response: Decodable {
-		var numDnsQueries: Int
-		var numBlockedFiltering: Int
-		var numReplacedSafebrowsing: Int
-		var numReplacedSafesearch: Int
-		var numReplacedParental: Int
-		var avgProcessingTime: Double // microseconds
+		let numDnsQueries: Int
+		let numBlockedFiltering: Int
+		let numReplacedSafebrowsing: Int
+		let numReplacedSafesearch: Int
+		let numReplacedParental: Int
+		let avgProcessingTime: Double // microseconds
 	}
 
 	@HTMLBuilder
