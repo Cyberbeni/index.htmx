@@ -27,11 +27,11 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 		func value(for response: Response?) -> String {
 			guard let response else { return "-" }
 			return switch self {
-			case .queries: Formatter.string(from: response.numDnsQueries)
-			case .blocked: Formatter.string(from: response.numBlockedFiltering)
+			case .queries: Formatter.number(response.numDnsQueries)
+			case .blocked: Formatter.number(response.numBlockedFiltering)
 			case .filtered: Formatter
-				.string(from: response.numReplacedSafebrowsing + response.numReplacedSafesearch + response.numReplacedParental)
-			case .latency: "\(Formatter.string(from: response.avgProcessingTime * 1000)) ms"
+				.number(response.numReplacedSafebrowsing + response.numReplacedSafesearch + response.numReplacedParental)
+			case .latency: "\(Formatter.number(response.avgProcessingTime * 1000)) ms"
 			}
 		}
 	}

@@ -2,14 +2,25 @@ import AsyncHTTPClient
 import Hummingbird
 import NIOFoundationCompat
 
-actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
+struct TransmissionRequest: Encodable {
+	let method: String
+	let arguments: Arguments
+
+	struct Arguments: Encodable {
+		let fields: [String]
+	}
+}
+
+actor TransmissionService: WidgetService {
 	let id: String
-	let config: Config
+	let config: Transmission
 	let publisher: Publisher
 
+	let sessionHeaderName = "X-Transmission-Session-Id"
+	var sessionToken: String?
 	var runTask: Task<Void, Error>?
 
-	init(id: String, config: Config, publisher: Publisher) {
+	init(id: String, config: Transmission, publisher: Publisher) {
 		self.id = id
 		self.config = config
 		self.publisher = publisher
@@ -24,23 +35,36 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		guard runTask == nil else { return }
 		runTask = Task { [weak self] in
 			while !Task.isCancelled {
-				await self?.getData()
+				await self?.getData(retryOnSessionRenew: true)
 				try await Task.sleep(for: .seconds(Config.pollingInterval))
 			}
 		}
 	}
 
-	func getData() async {
+	func getData(retryOnSessionRenew: Bool) async {
 		do {
 			let url = config.url.appending(config.path)
 			var request = HTTPClientRequest(url: url)
-			request.method = .GET
+			request.method = .POST
 			request.headers = [
 				"Accept": MediaType.applicationJson.description,
+				"Content-Type": MediaType.applicationJson.description,
 			]
 			if let authHeader = config.authHeader() {
 				request.headers.add(name: "Authorization", value: authHeader)
 			}
+			if let sessionToken {
+				request.headers.add(name: sessionHeaderName, value: sessionToken)
+			}
+			request.body = try .bytes(Self.jsonEncoder().encode(TransmissionRequest(
+				method: "torrent-get",
+				arguments: .init(fields: [
+					"percentDone",
+					"status",
+					"rateDownload",
+					"rateUpload",
+				])
+			)))
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
 			switch response.status.code {
 			case 200:
@@ -57,9 +81,23 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 				} else {
 					Log.error("getJSONDecodable returned nil")
 				}
+			case 409:
+				Log.debug("Session renew")
+				if let sessionToken = response.headers.first(name: sessionHeaderName) {
+					self.sessionToken = sessionToken
+					if retryOnSessionRenew {
+						await getData(retryOnSessionRenew: false)
+					} else {
+						let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected session renew"))
+						await publisher.publish(sse, id: id)
+					}
+				} else {
+					fallthrough
+				}
 			default:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				Log.error("Error status code: \(response.status.code), body: \(String(buffer: body))")
+				let errorText = String(buffer: body)
+				Log.error("Error status code: \(response.status.code), body: \(errorText)")
 
 				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "HTTP \(response.status.code)"))
 				await publisher.publish(sse, id: id)

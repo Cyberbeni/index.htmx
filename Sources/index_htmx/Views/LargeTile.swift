@@ -21,7 +21,7 @@ struct LargeTile: HTML {
 					div { config.title }
 				}
 				div(.class("detail-row"), .sse.swap(widgetId)) {
-					widget.render()
+					widget.placeholder()
 				}
 			}
 		} else {
