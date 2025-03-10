@@ -28,20 +28,35 @@ struct Transmission: WidgetConfig, PasswordAuth {
 		func value(for response: Response?) -> String {
 			guard let response else { return "-" }
 			// TODO: better formatting
-			// TODO: leech/seed stopped count
 			switch self {
 			case .leech:
-				let count = response.arguments.torrents.count(where: { $0.status == .downloading })
-				return Formatter.string(from: count)
+				let runningCount = response.arguments.torrents.count(where: { $0.status == .downloading })
+				let totalCount = response.arguments.torrents.count(where: {
+					[.queuedToVerifyLocalData, .verifyingLocalData, .queuedToDownload, .downloading].contains($0.status) ||
+						($0.status == .stopped && $0.percentDone != 1)
+				})
+				if runningCount == totalCount {
+					return Formatter.number(runningCount)
+				} else {
+					return "\(Formatter.number(runningCount)) (\(Formatter.number(totalCount)))"
+				}
 			case .seed:
-				let count = response.arguments.torrents.count(where: { $0.status == .seeding })
-				return Formatter.string(from: count)
+				let runningCount = response.arguments.torrents.count(where: { $0.status == .seeding })
+				let totalCount = response.arguments.torrents.count(where: {
+					[.queuedToSeed, .seeding].contains($0.status) ||
+						($0.status == .stopped && $0.percentDone == 1)
+				})
+				if runningCount == totalCount {
+					return Formatter.number(runningCount)
+				} else {
+					return "\(Formatter.number(runningCount)) (\(Formatter.number(totalCount)))"
+				}
 			case .download:
 				let speed = response.arguments.torrents.reduce(0) { $0 + $1.rateDownload }
-				return Formatter.string(from: speed)
+				return Formatter.transferSpeed(speed)
 			case .upload:
 				let speed = response.arguments.torrents.reduce(0) { $0 + $1.rateUpload }
-				return Formatter.string(from: speed)
+				return Formatter.transferSpeed(speed)
 			}
 		}
 	}
@@ -97,9 +112,12 @@ struct Transmission: WidgetConfig, PasswordAuth {
 
 	@HTMLBuilder
 	func render(response: Response?) -> some HTML {
-		// TODO: error
-		for field in fieldConfig {
-			DetailItem(title: field.title, value: field.value(for: response))
+		if let response, case let .error(error) = response.result {
+			ErrorView(title: error)
+		} else {
+			for field in fieldConfig {
+				DetailItem(title: field.title, value: field.value(for: response))
+			}
 		}
 	}
 }

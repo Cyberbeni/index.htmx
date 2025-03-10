@@ -15,6 +15,19 @@ struct FormatterTests {
 	])
 	func decimalFormatting(input: Double, expectedOutput: String) {
 		setenv("LANG", "hu", 1)
-		#expect(Formatter.string(from: input) == expectedOutput)
+		#expect(Formatter.number(input) == expectedOutput)
+	}
+
+	@Test(arguments: [
+		(1, "1 B/s"),
+		(900, "900 B/s"),
+		(1000, "1,0 kB/s"),
+		(99 * 1024, "99,0 kB/s"),
+		(110 * 1024, "110 kB/s"),
+		(1000 * 1024, "1,0 MB/s"),
+	])
+	func transferSpeedFormatting(input: Int, expectedOutput: String) {
+		setenv("LANG", "hu", 1)
+		#expect(Formatter.transferSpeed(input) == expectedOutput)
 	}
 }
