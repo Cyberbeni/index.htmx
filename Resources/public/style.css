@@ -66,15 +66,18 @@ svg {
 /* mask icon */
 .mask {
 	background: var(--pico-color);
+	-webkit-mask-size: 100%;
 	mask-size: 100%;
+	-webkit-mask-position: center center;
 	mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
 	mask-repeat: no-repeat;
 }
 
 /* primary margins/alignment */
 body {
-	user-select: none;
 	-webkit-user-select: none;
+	user-select: none;
 }
 main {
 	margin-top: 1rem;
@@ -210,7 +213,7 @@ button.icon
 }
 .error {
 	font-size: var(--font-size-l);
-	max-lines: 2;
+	overflow: hidden;
 	background-color: var(--error-background);
 	color: var(--error-foreground);
 	border-width: 1px;

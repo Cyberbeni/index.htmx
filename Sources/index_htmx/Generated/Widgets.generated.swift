@@ -6,6 +6,7 @@ import Elementary
 extension Config {
 	enum Widget: Decodable {
 		case adGuard(AdGuard)
+		case transmission(Transmission)
 
 		enum CodingKeys: String, CodingKey {
 			case type
@@ -18,6 +19,9 @@ extension Config {
 			case "adguard":
 				let value = try AdGuard(from: decoder)
 				self = .adGuard(value)
+			case "transmission":
+				let value = try Transmission(from: decoder)
+				self = .transmission(value)
 			default:
 				var codingPath = decoder.codingPath
 				codingPath.append(CodingKeys.type)
@@ -34,6 +38,8 @@ extension Config {
 			switch self {
 			case let .adGuard(config):
 				AdGuardService(id: id, config: config, publisher: publisher)
+			case let .transmission(config):
+				TransmissionService(id: id, config: config, publisher: publisher)
 			}
 		}
 
@@ -41,6 +47,8 @@ extension Config {
 		func placeholder() -> some HTML {
 			switch self {
 			case let .adGuard(config):
+				config.render(response: nil)
+			case let .transmission(config):
 				config.render(response: nil)
 			}
 		}
