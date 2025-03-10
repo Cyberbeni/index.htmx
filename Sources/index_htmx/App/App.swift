@@ -68,7 +68,9 @@ actor App {
 					let widgetId = "widget\(serviceIndex)"
 					serviceIndex += 1
 					mainCardsConfig.sections[iSection].cards[iCard].widgetId = widgetId
-					services.append(widget.createService(id: widgetId, publisher: publisher))
+					if let service = widget.createService(id: widgetId, publisher: publisher) {
+						services.append(service)
+					}
 				}
 			}
 		}
