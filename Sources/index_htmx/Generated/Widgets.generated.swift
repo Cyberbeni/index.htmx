@@ -37,7 +37,8 @@ extension Config {
 			}
 		}
 
-		func render() -> some HTML {
+		@HTMLBuilder
+		func placeholder() -> some HTML {
 			switch self {
 			case let .adGuard(config):
 				config.render(response: nil)

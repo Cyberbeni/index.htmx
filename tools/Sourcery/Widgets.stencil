@@ -41,7 +41,8 @@ extension Config {
 			}
 		}
 
-		func render() -> some HTML {
+		@HTMLBuilder
+		func placeholder() -> some HTML {
 			switch self {
 			{% for type in types.implementing.WidgetConfig %}
 			case let .{{ type.name|lowerFirstLetter }}(config):
