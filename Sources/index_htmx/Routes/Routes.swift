@@ -41,28 +41,28 @@ extension Router {
 		let icons = generalConfig.pwaIcons.compactMap { iconConfig in
 			AppIcon(runTimestamp: runTimestamp, path: iconConfig.value, sizes: iconConfig.key)
 		}
-		let webmanifest = Webmanifest(
+		let webManifest = WebManifest(
 			name: generalConfig.title,
 			display: "standalone",
 			startUrl: "/pwa.html",
 			icons: icons
 		)
-		let webmanifestString: String?
+		let webManifestString: String?
 		do {
-			webmanifestString = try String(data: App.responseJsonEncoder().encode(webmanifest), encoding: .utf8)
+			webManifestString = try String(data: App.responseJsonEncoder().encode(webManifest), encoding: .utf8)
 		} catch {
-			webmanifestString = nil
+			webManifestString = nil
 			Log.error("Failed to encode webmanifest: \(error)")
 		}
 		get("\(runTimestamp)/site.webmanifest") { _, _ in
-			if let webmanifestString {
+			if let webManifestString {
 				Response(
 					status: .ok,
 					headers: [
 						.contentType: "application/manifest+json; charset=utf-8",
 						.cacheControl: CacheControl.publicImmutable,
 					],
-					body: ResponseBody(byteBuffer: .init(string: webmanifestString))
+					body: ResponseBody(byteBuffer: .init(string: webManifestString))
 				)
 			} else {
 				Response(

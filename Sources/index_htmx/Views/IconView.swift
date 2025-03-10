@@ -1,10 +1,10 @@
 import Elementary
 
 struct IconView: HTML {
-	let icon: Icon
+	let icon: Config.Icon
 	let runTimestamp: String
 
-	init(_ icon: Icon, runTimestamp: String) {
+	init(_ icon: Config.Icon, runTimestamp: String) {
 		self.icon = icon
 		self.runTimestamp = runTimestamp
 	}
