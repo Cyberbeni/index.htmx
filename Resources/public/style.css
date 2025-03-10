@@ -213,7 +213,6 @@ button.icon
 }
 .error {
 	font-size: var(--font-size-l);
-	overflow: hidden;
 	background-color: var(--error-background);
 	color: var(--error-foreground);
 	border-width: 1px;

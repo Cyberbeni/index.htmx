@@ -69,7 +69,6 @@ actor TransmissionService: WidgetService {
 			switch response.status.code {
 			case 200:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				Log.debug("HTTP call OK: \(String(buffer: body))")
 				if let response = try body.getJSONDecodable(
 					Config.Response.self,
 					decoder: Self.jsonDecoder(),
@@ -83,24 +82,30 @@ actor TransmissionService: WidgetService {
 					Log.error("getJSONDecodable returned nil")
 				}
 			case 409:
+				Log.debug("Session renew")
 				if let sessionToken = response.headers.first(name: sessionHeaderName) {
 					self.sessionToken = sessionToken
 					if retryOnSessionRenew {
 						await getData(retryOnSessionRenew: false)
+					} else {
+						let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected session renew"))
+						await publisher.publish(sse, id: id)
 					}
+				} else {
+					fallthrough
 				}
 			default:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
 				let errorText = String(buffer: body)
 				Log.error("Error status code: \(response.status.code), body: \(errorText)")
 
-				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "HTTP \(response.status.code) - \(errorText)"))
+				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "HTTP \(response.status.code)"))
 				await publisher.publish(sse, id: id)
 			}
 		} catch {
 			Log.error("\(error)")
 			do {
-				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "\(error)"))
+				let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected error (see logs)"))
 				await publisher.publish(sse, id: id)
 			} catch {
 				Log.error("\(error)")
