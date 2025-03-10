@@ -40,7 +40,7 @@ extension Config {
 		func render() -> some HTML {
 			switch self {
 			case let .adGuard(config):
-				config.render(data: nil)
+				config.render(response: nil)
 			}
 		}
 	}

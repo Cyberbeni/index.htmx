@@ -1,8 +1,8 @@
-// https://github.com/hummingbird-project/hummingbird-examples/blob/60042c53f940820e664d8556042f7c241bd48755/server-sent-events/Sources/App/Publisher.swift
 import NIO
 import ServiceLifecycle
 
-/// Basic PUB/SUB service.
+/// Modified version of Publisher from this example
+/// https://github.com/hummingbird-project/hummingbird-examples/blob/60042c53f940820e664d8556042f7c241bd48755/server-sent-events/Sources/App/Publisher.swift
 actor Publisher: Service {
 	typealias SubscriptionID = UUID
 	typealias Value = ByteBuffer

@@ -45,7 +45,7 @@ extension Config {
 			switch self {
 			{% for type in types.implementing.WidgetConfig %}
 			case let .{{ type.name|lowerFirstLetter }}(config):
-				config.render(data: nil)
+				config.render(response: nil)
 			{% endfor %}
 			}
 		}
