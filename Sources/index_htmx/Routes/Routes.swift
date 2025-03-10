@@ -10,8 +10,12 @@ extension Router {
 		mainCardsConfig: Config.Cards,
 		miniCardsConfig: Config.Cards
 	) -> Self {
+		let contentSecurityPolicy = "default-src 'self' 'unsafe-inline'"
 		get("") { request, _ in
-			HTMLResponse {
+			HTMLResponse(additionalHeaders: [
+				.cacheControl: CacheControl.publicNoCache,
+				.contentSecurityPolicy: contentSecurityPolicy,
+			]) {
 				MainPage(
 					generalConfig: generalConfig,
 					mainCardsConfig: mainCardsConfig,
@@ -25,7 +29,10 @@ extension Router {
 		}
 
 		get("pwa.html") { request, _ in
-			HTMLResponse {
+			HTMLResponse(additionalHeaders: [
+				.cacheControl: CacheControl.publicNoCache,
+				.contentSecurityPolicy: contentSecurityPolicy,
+			]) {
 				MainPage(
 					generalConfig: generalConfig,
 					mainCardsConfig: mainCardsConfig,
