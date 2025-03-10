@@ -1,6 +1,5 @@
 import AsyncHTTPClient
 import Hummingbird
-import NIO
 import NIOFoundationCompat
 
 actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
