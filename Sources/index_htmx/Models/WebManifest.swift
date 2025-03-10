@@ -1,4 +1,4 @@
-struct Webmanifest: Codable {
+struct WebManifest: Codable {
 	let name: String
 	let display: String
 	let startUrl: String
