@@ -27,7 +27,6 @@ struct Transmission: WidgetConfig, PasswordAuth {
 
 		func value(for response: Response?) -> String {
 			guard let response else { return "-" }
-			// TODO: better formatting
 			switch self {
 			case .leech:
 				let runningCount = response.arguments.torrents.count(where: { $0.status == .downloading })
