@@ -10,7 +10,7 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 
 	var path: String { "/control/stats" }
 	static var defaultFields: [Field] { [.queries, .blocked, .latency] }
-	static var pollingInterval: Int { Int.random(in: 26...36) }
+	static var pollingInterval: Int { Int.random(in: 26 ... 36) }
 
 	enum Field: String, Decodable {
 		case queries
