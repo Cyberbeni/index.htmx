@@ -1,7 +1,7 @@
 import Elementary
 
 struct AdGuard: WidgetConfig, PasswordAuth {
-	typealias Service = DefaultWidgetService<AdGuard>
+	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
 	let user: String

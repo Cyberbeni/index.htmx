@@ -1,7 +1,7 @@
 import Elementary
 
 struct Sonarr: WidgetConfig, ApiKeyAuth {
-	typealias Service = DefaultWidgetService<Sonarr>
+	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
 	let apiKey: String
