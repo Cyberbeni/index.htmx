@@ -1,6 +1,6 @@
 /* pico.css overrides */
 .container {
-	max-width: 1450px;
+	max-width: 1514px;
 }
 @media (min-width: 576px) {
 	.container {
