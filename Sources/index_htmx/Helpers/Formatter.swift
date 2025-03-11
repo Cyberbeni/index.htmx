@@ -55,6 +55,11 @@ enum Formatter {
 	static func iso8601(date: Date) -> String {
 		Date.ISO8601FormatStyle().format(date)
 	}
+
+	static func nearby(date: Date) -> String {
+		// TODO: format date, Date.RelativeFormatStyle or DateFormatter with doesRelativeDateFormatting
+		"\(date)"
+	}
 }
 
 private extension Formatter {

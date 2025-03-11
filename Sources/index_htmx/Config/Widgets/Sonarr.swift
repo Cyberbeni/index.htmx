@@ -4,18 +4,22 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
+	let nextDays: Double?
+	let previousDays: Double?
 	let apiKey: String
 	let fields: [Field]?
 
-	static let fourWeeks: TimeInterval = 28 * 86400
+	static let oneDay: TimeInterval = 86400
+
 
 	var path: String {
-		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -Self.fourWeeks))
-		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: Self.fourWeeks))
+		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -(previousDays ?? 28) * Self.oneDay))
+		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: (nextDays ?? 28) * Self.oneDay))
 		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)"
 	}
 
 	static var defaultFields: [Field] { [.nextAiring, .previousAiring] }
+	static var pollingInterval: Int { 30 }
 
 	enum Field: String, Decodable {
 		case nextAiring
@@ -33,24 +37,25 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 			let now = Date()
 			var response = _response
 			response.sort(by: { $0.airDateUtc < $1.airDateUtc })
-			// TODO: format dates, Date.RelativeFormatStyle or DateFormatter with doesRelativeDateFormatting
 			switch self {
 			case .nextAiring:
 				if let episode = response.first(where: { $0.airDateUtc > now }) {
+					let date = Formatter.nearby(date: episode.airDateUtc)
 					if let title = episode.series.title {
-						return "\(title) - \(episode.airDateUtc)"
+						return "\(title) - \(date)"
 					} else {
-						return "\(episode.airDateUtc)"
+						return "\(date)"
 					}
 				} else {
 					return "-"
 				}
 			case .previousAiring:
 				if let episode = response.last(where: { $0.airDateUtc < now }) {
+					let date = Formatter.nearby(date: episode.airDateUtc)
 					if let title = episode.series.title {
-						return "\(title) - \(episode.airDateUtc)"
+						return "\(title) - \(date)"
 					} else {
-						return "\(episode.airDateUtc)"
+						return "\(date)"
 					}
 				} else {
 					return "-"
