@@ -27,11 +27,13 @@ WORKDIR /workspace
 COPY ./package.json ./package-lock.json /workspace/
 RUN npm ci
 
-FROM busybox:stable-musl AS release
+FROM docker.io/alpine:latest AS release
+RUN apk add --no-cache \
+	tzdata
+COPY ./Resources /data
 COPY --from=npm-build /workspace/node_modules/@picocss/pico/css/pico.css /data/public/pico.css
 COPY --from=npm-build /workspace/node_modules/htmx.org/dist/htmx.min.js /data/public/htmx.min.js
 COPY --from=npm-build /workspace/node_modules/htmx-ext-sse/dist/sse.min.js /data/public/htmxsse.min.js
-COPY ./Resources /data
 RUN date +%s%N | tr -d '\n' > /data/static_files_timestamp
 COPY --from=swift-build /workspace/dist/index_htmx /usr/local/bin/index_htmx
 ENTRYPOINT ["/usr/local/bin/index_htmx"]

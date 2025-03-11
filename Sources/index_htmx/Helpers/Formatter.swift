@@ -51,6 +51,24 @@ enum Formatter {
 			return "\(lowPrecisionNumber(speed)) TB/s"
 		}
 	}
+
+	static func iso8601(date: Date) -> String {
+		Date.ISO8601FormatStyle().format(date)
+	}
+
+	static func nearby(date: Date) -> String {
+		if abs(date.timeIntervalSinceNow) < 60.5 * 60 {
+			Date.RelativeFormatStyle(allowedFields: [.minute], presentation: .named, locale: userLocale).format(date)
+		} else if Calendar.current.isDateInToday(date) {
+			"today, \(shortTimeFormatter.string(from: date))"
+		} else if Calendar.current.isDateInTomorrow(date) {
+			"tomorrow, \(shortTimeFormatter.string(from: date))"
+		} else if Calendar.current.isDateInYesterday(date) {
+			"yesterday, \(shortTimeFormatter.string(from: date))"
+		} else {
+			nearbyDateFormatter.string(from: date)
+		}
+	}
 }
 
 private extension Formatter {
@@ -59,4 +77,21 @@ private extension Formatter {
 	} else {
 		.current
 	}
+
+	static let nearbyDateFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.locale = userLocale
+		formatter.setLocalizedDateFormatFromTemplate("MMddjjmm")
+		// doesn't work on Linux at all
+		// doesn't work on macOS with setLocalizedDateFormatFromTemplate()
+		// formatter.doesRelativeDateFormatting = true
+		return formatter
+	}()
+
+	static let shortTimeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.locale = userLocale
+		formatter.timeStyle = .short
+		return formatter
+	}()
 }

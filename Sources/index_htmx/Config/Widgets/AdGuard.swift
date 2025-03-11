@@ -1,6 +1,8 @@
 import Elementary
 
 struct AdGuard: WidgetConfig, PasswordAuth {
+	typealias Service = DefaultWidgetService<Self>
+
 	let url: String
 	let user: String
 	let password: String
@@ -37,12 +39,12 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 	}
 
 	struct Response: Decodable {
-		var numDnsQueries: Int
-		var numBlockedFiltering: Int
-		var numReplacedSafebrowsing: Int
-		var numReplacedSafesearch: Int
-		var numReplacedParental: Int
-		var avgProcessingTime: Double // microseconds
+		let numDnsQueries: Int
+		let numBlockedFiltering: Int
+		let numReplacedSafebrowsing: Int
+		let numReplacedSafesearch: Int
+		let numReplacedParental: Int
+		let avgProcessingTime: Double // microseconds
 	}
 
 	@HTMLBuilder
@@ -52,5 +54,3 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 		}
 	}
 }
-
-typealias AdGuardService = DefaultWidgetService<AdGuard>

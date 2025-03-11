@@ -6,6 +6,7 @@ import Elementary
 extension Config {
 	enum Widget: Decodable {
 		case adGuard(AdGuard)
+		case sonarr(Sonarr)
 		case transmission(Transmission)
 		case error(String)
 
@@ -21,6 +22,9 @@ extension Config {
 				case "adguard":
 					let value = try AdGuard(from: decoder)
 					self = .adGuard(value)
+				case "sonarr":
+					let value = try Sonarr(from: decoder)
+					self = .sonarr(value)
 				case "transmission":
 					let value = try Transmission(from: decoder)
 					self = .transmission(value)
@@ -35,9 +39,11 @@ extension Config {
 		func createService(id: String, publisher: Publisher) -> (any WidgetService)? {
 			switch self {
 			case let .adGuard(config):
-				AdGuardService(id: id, config: config, publisher: publisher)
+				AdGuard.Service(id: id, config: config, publisher: publisher)
+			case let .sonarr(config):
+				Sonarr.Service(id: id, config: config, publisher: publisher)
 			case let .transmission(config):
-				TransmissionService(id: id, config: config, publisher: publisher)
+				Transmission.Service(id: id, config: config, publisher: publisher)
 			case .error:
 				nil
 			}
@@ -47,6 +53,8 @@ extension Config {
 		func placeholder() -> some HTML {
 			switch self {
 			case let .adGuard(config):
+				config.render(response: nil)
+			case let .sonarr(config):
 				config.render(response: nil)
 			case let .transmission(config):
 				config.render(response: nil)
