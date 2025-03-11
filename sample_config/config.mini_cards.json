@@ -1,0 +1,15 @@
+{
+	"sections": [
+		{
+			"icon": "placeholder.svg",
+			"title": "Bing",
+			"cards": [
+				{
+					"icon": "placeholder.svg",
+					"title": "Bing",
+					"url": "https://bing.com/"
+				}
+			]
+		}
+	]
+}
