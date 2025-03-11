@@ -11,7 +11,6 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 
 	static let oneDay: TimeInterval = 86400
 
-
 	var path: String {
 		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -(previousDays ?? 28) * Self.oneDay))
 		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: (nextDays ?? 28) * Self.oneDay))
@@ -42,7 +41,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 				if let episode = response.first(where: { $0.airDateUtc > now }) {
 					let date = Formatter.nearby(date: episode.airDateUtc)
 					if let title = episode.series.title {
-						return "\(title) - \(date)"
+						return "\(title): \(date)"
 					} else {
 						return "\(date)"
 					}
@@ -53,7 +52,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 				if let episode = response.last(where: { $0.airDateUtc < now }) {
 					let date = Formatter.nearby(date: episode.airDateUtc)
 					if let title = episode.series.title {
-						return "\(title) - \(date)"
+						return "\(title): \(date)"
 					} else {
 						return "\(date)"
 					}

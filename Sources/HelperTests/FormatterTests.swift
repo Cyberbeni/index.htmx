@@ -30,4 +30,32 @@ struct FormatterTests {
 		setenv("LANG", "hu", 1)
 		#expect(Formatter.transferSpeed(input) == expectedOutput)
 	}
+
+	@Test(arguments: [
+		(Date(timeIntervalSinceNow: 10), "ebben a percben"),
+		(Date(timeIntervalSinceNow: 65), "1 perc múlva"),
+		(Date(timeIntervalSinceNow: 60.4 * 60), "60 perc múlva"),
+		(Date(timeIntervalSinceNow: -10), "ebben a percben"),
+		(Date(timeIntervalSinceNow: -65), "1 perccel ezelőtt"),
+	])
+	func nearbyDateFormattingThisHour(input: Date, expectedOutput: String) {
+		setenv("LANG", "hu", 1)
+		#expect(Formatter.nearby(date: input) == expectedOutput)
+	}
+
+	@Test(arguments: [
+		(1, "tomorrow, "),
+		(-1, "yesterday, "),
+	])
+	func nearbyDateFormattingWithinOneDay(input: Int, expectedOutput: String) throws {
+		setenv("LANG", "hu", 1)
+		let date = try #require(Calendar.current.date(byAdding: .day, value: input, to: Date()))
+		#expect(Formatter.nearby(date: date).hasPrefix(expectedOutput))
+	}
+
+	func nearbyDateFormattingToday() throws {
+		setenv("LANG", "hu", 1)
+		let date = try #require(Calendar.current.date(byAdding: .hour, value: 2, to: Date(), wrappingComponents: true))
+		#expect(Formatter.nearby(date: date).hasPrefix("today, "))
+	}
 }
