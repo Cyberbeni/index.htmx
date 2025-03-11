@@ -2,12 +2,12 @@
 	"sections": [
 		{
 			"icon": "placeholder.svg",
-			"title": "Google",
+			"title": "Bing",
 			"cards": [
 				{
 					"icon": "placeholder.svg",
-					"title": "Google",
-					"url": "https://google.com"
+					"title": "Bing",
+					"url": "https://bing.com/"
 				}
 			]
 		}
