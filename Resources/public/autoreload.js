@@ -2,7 +2,9 @@
 if (navigator.maxTouchPoints > 1) {
 	window.addEventListener("visibilitychange", function () {
 		if (document.visibilityState === "visible") {
-			location.reload()
+			const main = document.body.getElementsByTagName('main').item(0)
+			main['htmx-internal-data'].sseEventSource.close()
+			main['htmx-internal-data'].sseEventSource.onerror()
 		}
 	})
 }
