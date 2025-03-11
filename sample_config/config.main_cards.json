@@ -8,6 +8,12 @@
 					"icon": "placeholder.svg",
 					"title": "Google",
 					"url": "https://google.com"
+				},
+				{
+					"icon": "placeholder.svg",
+					"title": "Jellyfin",
+					"url": "samehost:8096/web/index.html#!/home.html",
+					"pwa_url": "org.jellyfin.expo://web/index.html#!/home.html"
 				}
 			]
 		},
