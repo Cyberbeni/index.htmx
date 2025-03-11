@@ -10,6 +10,54 @@
 					"url": "https://google.com"
 				}
 			]
+		},
+		{
+			"icon": "placeholder.svg",
+			"title": "Widgets",
+			"cards": [
+				{
+					"icon": "placeholder.svg",
+					"title": "AdGuard",
+					"url": "samehost:3000",
+					"widget": {
+						"type": "adguard",
+						"url": "http://host.docker.internal:3000",
+						"user": "user",
+						"password": "password"
+					}
+				},
+				{
+					"icon": "placeholder.svg",
+					"title": "Transmission",
+					"url": "samehost:9091/transmission/web/",
+					"widget": {
+						"type": "transmission",
+						"url": "http://host.docker.internal:9091",
+						"user": "user",
+						"password": "password"
+					}
+				},
+				{
+					"icon": "placeholder.svg",
+					"title": "Sonarr",
+					"url": "samehost:8989",
+					"widget": {
+						"type": "sonarr",
+						"url": "http://host.docker.internal:8989",
+						"api_key": "apikey"
+					}
+				},
+				{
+					"icon": "placeholder.svg",
+					"title": "Radarr",
+					"url": "samehost:7878",
+					"widget": {
+						"type": "radarr",
+						"url": "http://host.docker.internal:7878",
+						"api_key": "apikey"
+					}
+				}
+			]
 		}
 	]
 }
