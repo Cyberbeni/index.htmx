@@ -15,7 +15,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	var path: String {
 		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -(previousDays ?? 28) * Self.oneDay))
 		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: (nextDays ?? 28) * Self.oneDay))
-		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)&unmonitored=\(unmonitored ?? false)"
+		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)&unmonitored=\(unmonitored ?? true)"
 	}
 
 	static var defaultFields: [Field] { [.nextAiring, .previousAiring] }

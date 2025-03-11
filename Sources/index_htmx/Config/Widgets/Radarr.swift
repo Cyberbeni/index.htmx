@@ -17,7 +17,7 @@ struct Radarr: WidgetConfig, ApiKeyAuth {
 	var path: String {
 		let start = Formatter.iso8601(date: startDate)
 		let end = Formatter.iso8601(date: endDate)
-		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)&unmonitored=\(unmonitored ?? false)"
+		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)&unmonitored=\(unmonitored ?? true)"
 	}
 
 	static var defaultFields: [Field] { [.nextRelease, .previousRelease] }
