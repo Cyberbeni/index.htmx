@@ -2,8 +2,8 @@ import Elementary
 
 protocol WidgetConfig: Decodable, Sendable {
 	associatedtype Service: WidgetService<Self>
-	associatedtype Field: Decodable
-	associatedtype Response: Decodable
+	associatedtype Field: Decodable, Sendable
+	associatedtype Response: Decodable, Sendable
 	associatedtype View: HTML
 
 	var url: String { get }
@@ -12,19 +12,21 @@ protocol WidgetConfig: Decodable, Sendable {
 	var path: String { get }
 	static var authHeaderName: String { get }
 	static var defaultFields: [Field] { get }
-	static var pollingInterval: Int { get }
+	var pollingInterval: Int { get }
 	static var timeout: Int64 { get }
 	static var maxResponseSize: Int { get }
 
 	@HTMLBuilder func render(response: Response?) -> View
 	func authHeader() -> String?
+	func requestData() throws -> Data?
 }
 
 extension WidgetConfig {
 	var fieldConfig: [Field] { fields ?? Self.defaultFields }
-	static var pollingInterval: Int { 5 }
+	var pollingInterval: Int { 5 }
 	static var timeout: Int64 { 5 }
 	static var maxResponseSize: Int { 1_000_000 }
+	func requestData() throws -> Data? { nil }
 }
 
 // Password auth
@@ -52,5 +54,18 @@ extension WidgetConfig where Self: ApiKeyAuth {
 	func authHeader() -> String? {
 		guard !apiKey.isEmpty else { return nil }
 		return apiKey
+	}
+}
+
+// Access token auth
+protocol AccessTokenAuth {
+	var accessToken: String { get }
+}
+
+extension WidgetConfig where Self: AccessTokenAuth {
+	static var authHeaderName: String { "Authorization" }
+	func authHeader() -> String? {
+		guard !accessToken.isEmpty else { return nil }
+		return "Bearer \(accessToken)"
 	}
 }

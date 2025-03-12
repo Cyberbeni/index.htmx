@@ -21,7 +21,7 @@ struct Radarr: WidgetConfig, ApiKeyAuth {
 	}
 
 	static var defaultFields: [Field] { [.nextRelease, .previousRelease] }
-	static var pollingInterval: Int { 30 }
+	var pollingInterval: Int { 30 }
 
 	enum Field: String, Decodable {
 		case nextRelease
