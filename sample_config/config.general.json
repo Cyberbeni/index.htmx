@@ -1,7 +1,6 @@
 {
 	"title": "Dashboard",
 	"base_url_fallback": "http://localhost:8080",
-	"enable_compression": false,
 	"show_reload_config_button": false,
 	"favicon": "placeholder.svg",
 	"pwa_icons": {"180x180": "placeholder-pwa-icon.png"},

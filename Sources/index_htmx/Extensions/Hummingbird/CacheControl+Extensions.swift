@@ -3,7 +3,7 @@ import Hummingbird
 extension [CacheControl.Value] {
 	static var publicImmutable: Self {
 		#if DEBUG
-			[.public, .noCache]
+			publicNoCache
 		#else
 			[.public, .maxAge(31_536_000)]
 		#endif
