@@ -65,7 +65,7 @@ struct FormatterTests {
 		setenv("LANG", "hu", 1)
 		let now = Date()
 		let dayOfWeek = Formatter.userCalendar.component(.weekday, from: now)
-		if [1,5,6,7].contains(dayOfWeek) {
+		if [1, 5, 6, 7].contains(dayOfWeek) {
 			// Thursday-Sunday
 			// Set to Tuesday
 			let date = try #require(Formatter.userCalendar.date(bySetting: .weekday, value: 3, of: now))
