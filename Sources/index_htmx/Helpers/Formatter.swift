@@ -59,32 +59,47 @@ enum Formatter {
 	static func nearby(date: Date) -> String {
 		if abs(date.timeIntervalSinceNow) < 60.5 * 60 {
 			Date.RelativeFormatStyle(allowedFields: [.minute], presentation: .named, locale: userLocale).format(date)
-		} else if Calendar.current.isDateInToday(date) {
+		} else if userCalendar.isDateInToday(date) {
 			"today, \(shortTimeFormatter.string(from: date))"
-		} else if Calendar.current.isDateInTomorrow(date) {
+		} else if userCalendar.isDateInTomorrow(date) {
 			"tomorrow, \(shortTimeFormatter.string(from: date))"
-		} else if Calendar.current.isDateInYesterday(date) {
+		} else if userCalendar.isDateInYesterday(date) {
 			"yesterday, \(shortTimeFormatter.string(from: date))"
+		} else if abs(date.timeIntervalSinceNow) < 5 * 86400 ||
+			userCalendar.isDate(date, equalTo: Date(), toGranularity: .weekOfYear)
+		{
+			thisWeekDateFormatter.string(from: date)
 		} else {
-			nearbyDateFormatter.string(from: date)
+			thisYearDateFormatter.string(from: date)
 		}
 	}
 }
 
-private extension Formatter {
+extension Formatter {
 	static let userLocale: Locale = if let localeId = ProcessInfo.processInfo.environment["LANG"] {
 		.init(identifier: localeId)
 	} else {
 		.current
 	}
 
-	static let nearbyDateFormatter: DateFormatter = {
+	static let userCalendar: Calendar = userLocale.calendar
+}
+
+private extension Formatter {
+	static let thisWeekDateFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.locale = userLocale
-		formatter.setLocalizedDateFormatFromTemplate("MMddjjmm")
+		formatter.setLocalizedDateFormatFromTemplate("Ejjmm")
 		// doesn't work on Linux at all
 		// doesn't work on macOS with setLocalizedDateFormatFromTemplate()
 		// formatter.doesRelativeDateFormatting = true
+		return formatter
+	}()
+
+	static let thisYearDateFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.locale = userLocale
+		formatter.setLocalizedDateFormatFromTemplate("MMddjjmm")
 		return formatter
 	}()
 

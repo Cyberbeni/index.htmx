@@ -49,13 +49,32 @@ struct FormatterTests {
 	])
 	func nearbyDateFormattingWithinOneDay(input: Int, expectedOutput: String) throws {
 		setenv("LANG", "hu", 1)
-		let date = try #require(Calendar.current.date(byAdding: .day, value: input, to: Date()))
+		let date = try #require(Formatter.userCalendar.date(byAdding: .day, value: input, to: Date()))
 		#expect(Formatter.nearby(date: date).hasPrefix(expectedOutput))
 	}
 
+	@Test
 	func nearbyDateFormattingToday() throws {
 		setenv("LANG", "hu", 1)
-		let date = try #require(Calendar.current.date(byAdding: .hour, value: 2, to: Date(), wrappingComponents: true))
+		let date = try #require(Formatter.userCalendar.date(byAdding: .hour, value: 2, to: Date(), wrappingComponents: true))
 		#expect(Formatter.nearby(date: date).hasPrefix("today, "))
+	}
+
+	@Test
+	func nearbyDateFormattingThisWeek() throws {
+		setenv("LANG", "hu", 1)
+		let now = Date()
+		let dayOfWeek = Formatter.userCalendar.component(.weekday, from: now)
+		if [1,5,6,7].contains(dayOfWeek) {
+			// Thursday-Sunday
+			// Set to Tuesday
+			let date = try #require(Formatter.userCalendar.date(bySetting: .weekday, value: 3, of: now))
+			#expect(Formatter.nearby(date: date).hasPrefix("K "))
+		} else {
+			// Monday-Wednesday
+			// Set to Friday
+			let date = try #require(Formatter.userCalendar.date(bySetting: .weekday, value: 6, of: now))
+			#expect(Formatter.nearby(date: date).hasPrefix("P "))
+		}
 	}
 }
