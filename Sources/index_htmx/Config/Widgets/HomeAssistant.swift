@@ -1,6 +1,9 @@
 import Elementary
 
 struct HomeAssistant: WidgetConfig, AccessTokenAuth {
+	// TODO: use WebSocket API instead of polling
+	// https://developers.home-assistant.io/docs/api/websocket/
+	// PoC code: https://github.com/Cyberbeni/Wiring/blob/9f6bb95aa23a600e6826bd7e7f9aa146129694f9/Sources/Wiring/HomeAssistantWebSocket/HomeAssistantWebSocket.swift
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
