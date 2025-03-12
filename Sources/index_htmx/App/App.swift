@@ -1,5 +1,4 @@
 import Hummingbird
-import HummingbirdCompression
 
 actor App {
 	let configDir: URL
@@ -83,9 +82,7 @@ actor App {
 		let router = Router()
 
 		router
-			.add(if: generalConfig.enableCompression, middleware: RequestDecompressionMiddleware())
 			.addSseRoutes(runTimestamp: runTimestamp, publisher: publisher)
-			.add(if: generalConfig.enableCompression, middleware: ResponseCompressionMiddleware())
 
 		#if DEBUG
 			router
