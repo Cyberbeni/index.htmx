@@ -19,6 +19,19 @@ struct FormatterTests {
 	}
 
 	@Test(arguments: [
+		(100, 100, "100%"),
+		(1, 100, "1%"),
+		(0.49, 100, "0%"),
+		(0.51, 100, "1%"),
+		(1, 1, "100%"),
+		(0.1, 1, "10%"),
+	])
+	func percentageFormatting(input: Double, base: Double, expectedOutput: String) {
+		setenv("LANG", "hu", 1)
+		#expect(Formatter.percentage(input, base: base) == expectedOutput)
+	}
+
+	@Test(arguments: [
 		(1, "1 B/s"),
 		(900, "900 B/s"),
 		(1000, "1,0 kB/s"),

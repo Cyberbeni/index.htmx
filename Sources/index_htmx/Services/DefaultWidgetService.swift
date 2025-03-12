@@ -25,8 +25,21 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		runTask = Task { [weak self] in
 			while !Task.isCancelled {
 				await self?.getData()
-				try await Task.sleep(for: .seconds(Config.pollingInterval))
+				try await Task.sleep(for: .seconds(self?.config.pollingInterval ?? 1))
 			}
+		}
+	}
+
+	func decode(body: ByteBuffer) throws -> Config.Response? {
+		if Config.Response.self == String.self {
+			String(buffer: body) as? Config.Response
+		} else {
+			try body.getJSONDecodable(
+				Config.Response.self,
+				decoder: Self.jsonDecoder(),
+				at: 0,
+				length: body.readableBytes
+			)
 		}
 	}
 
@@ -34,28 +47,29 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		do {
 			let url = config.url.appending(config.path)
 			var request = HTTPClientRequest(url: url)
-			request.method = .GET
 			request.headers = [
-				"Accept": MediaType.applicationJson.description,
+				"Accept": (Config.Response.self == String.self) ? MediaType.textPlain.description : MediaType.applicationJson.description,
 			]
 			if let authHeader = config.authHeader() {
 				request.headers.add(name: Config.authHeaderName, value: authHeader)
+			}
+			if let requestData = try config.requestData() {
+				request.method = .POST
+				request.body = .bytes(requestData)
+				request.headers.add(name: "Content-Type", value: MediaType.applicationJson.description)
+			} else {
+				request.method = .GET
 			}
 			let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
 			switch response.status.code {
 			case 200:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				if let response = try body.getJSONDecodable(
-					Config.Response.self,
-					decoder: Self.jsonDecoder(),
-					at: 0,
-					length: body.readableBytes
-				) {
+				if let response = try decode(body: body) {
 					Log.debug("HTTP call OK: \(response)")
 					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 					await publisher.publish(sse, id: id)
 				} else {
-					Log.error("getJSONDecodable returned nil")
+					Log.error("Couldn't decode the response")
 				}
 			default:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)

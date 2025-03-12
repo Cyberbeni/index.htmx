@@ -19,6 +19,12 @@ enum Formatter {
 		}
 	}
 
+	static func percentage(_ value: Double, base: Double) -> String {
+		FloatingPointFormatStyle.Percent(locale: userLocale)
+			.precision(.fractionLength(0))
+			.format(value / base)
+	}
+
 	/// value should be at least 0.95
 	static func lowPrecisionNumber(_ value: Double) -> String {
 		if value < 99.95 {

@@ -19,7 +19,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	}
 
 	static var defaultFields: [Field] { [.nextAiring, .previousAiring] }
-	static var pollingInterval: Int { 30 }
+	var pollingInterval: Int { 30 }
 
 	enum Field: String, Decodable {
 		case nextAiring

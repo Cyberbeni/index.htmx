@@ -37,7 +37,7 @@ extension Transmission {
 			runTask = Task { [weak self] in
 				while !Task.isCancelled {
 					await self?.getData(retryOnSessionRenew: true)
-					try await Task.sleep(for: .seconds(Config.pollingInterval))
+					try await Task.sleep(for: .seconds(self?.config.pollingInterval ?? 1))
 				}
 			}
 		}

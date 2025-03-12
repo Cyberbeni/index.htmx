@@ -6,6 +6,7 @@ import Elementary
 extension Config {
 	enum Widget: Decodable {
 		case adGuard(AdGuard)
+		case homeAssistant(HomeAssistant)
 		case radarr(Radarr)
 		case sonarr(Sonarr)
 		case transmission(Transmission)
@@ -23,6 +24,9 @@ extension Config {
 				case "adguard":
 					let value = try AdGuard(from: decoder)
 					self = .adGuard(value)
+				case "homeassistant":
+					let value = try HomeAssistant(from: decoder)
+					self = .homeAssistant(value)
 				case "radarr":
 					let value = try Radarr(from: decoder)
 					self = .radarr(value)
@@ -44,6 +48,8 @@ extension Config {
 			switch self {
 			case let .adGuard(config):
 				AdGuard.Service(id: id, config: config, publisher: publisher)
+			case let .homeAssistant(config):
+				HomeAssistant.Service(id: id, config: config, publisher: publisher)
 			case let .radarr(config):
 				Radarr.Service(id: id, config: config, publisher: publisher)
 			case let .sonarr(config):
@@ -59,6 +65,8 @@ extension Config {
 		func placeholder() -> some HTML {
 			switch self {
 			case let .adGuard(config):
+				config.render(response: nil)
+			case let .homeAssistant(config):
 				config.render(response: nil)
 			case let .radarr(config):
 				config.render(response: nil)
