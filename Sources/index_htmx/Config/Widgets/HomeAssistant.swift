@@ -26,8 +26,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 
 		init?(rawValue: String) {
 			var parts = rawValue.split(separator: "/")
-			guard !parts.isEmpty else { return nil }
-			switch parts.removeFirst() {
+			switch parts.first {
 			case "person":
 				if let name = parts.popLast(),
 				   let entityId = parts.popLast()
