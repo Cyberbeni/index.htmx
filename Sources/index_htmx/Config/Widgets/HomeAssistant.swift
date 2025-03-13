@@ -4,6 +4,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 	// TODO: use WebSocket API instead of polling
 	// https://developers.home-assistant.io/docs/api/websocket/
 	// PoC code: https://github.com/Cyberbeni/Wiring/blob/9f6bb95aa23a600e6826bd7e7f9aa146129694f9/Sources/Wiring/HomeAssistantWebSocket/HomeAssistantWebSocket.swift
+	// Probably better to use Hummingbird's WS lib: https://github.com/hummingbird-project/swift-websocket
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
@@ -59,7 +60,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 		var template: String {
 			switch self {
 			case let .person(entityId, _):
-				"{{states('person.\(entityId)')}}"
+				"{{'person.\(entityId)'|state_translated}}"
 			case let .battery(entityId):
 				"{{states('sensor.\(entityId)')}}"
 			}
