@@ -4,6 +4,12 @@ import Testing
 struct FormatterTests {
 	static let thousandsSeparator = "\u{00a0}" // non-breaking space
 
+	init() {
+		// LANG is only read during the fist use of `.userLocale`
+		// TODO: use mixed Locale for testing once this is solved: https://github.com/swiftlang/swift-foundation-icu/issues/49
+		setenv("LANG", "hu", 1)
+	}
+
 	@Test(arguments: [
 		(0.1234, "0,123"),
 		(1.2345, "1,234"),
@@ -14,7 +20,6 @@ struct FormatterTests {
 		(123_456.7, "123\(thousandsSeparator)457"),
 	])
 	func decimalFormatting(input: Double, expectedOutput: String) {
-		setenv("LANG", "hu", 1)
 		#expect(Formatter.number(input) == expectedOutput)
 	}
 
@@ -27,7 +32,6 @@ struct FormatterTests {
 		(0.1, 1, "10%"),
 	])
 	func percentageFormatting(input: Double, base: Double, expectedOutput: String) {
-		setenv("LANG", "hu", 1)
 		#expect(Formatter.percentage(input, base: base) == expectedOutput)
 	}
 
@@ -40,7 +44,6 @@ struct FormatterTests {
 		(1000 * 1024, "1,0 MB/s"),
 	])
 	func transferSpeedFormatting(input: Int, expectedOutput: String) {
-		setenv("LANG", "hu", 1)
 		#expect(Formatter.transferSpeed(input) == expectedOutput)
 	}
 
@@ -52,7 +55,6 @@ struct FormatterTests {
 		(Date(timeIntervalSinceNow: -65), "1 perccel ezelőtt"),
 	])
 	func nearbyDateFormattingThisHour(input: Date, expectedOutput: String) {
-		setenv("LANG", "hu", 1)
 		#expect(Formatter.nearby(date: input) == expectedOutput)
 	}
 
@@ -61,21 +63,18 @@ struct FormatterTests {
 		(-1, "yesterday, "),
 	])
 	func nearbyDateFormattingWithinOneDay(input: Int, expectedOutput: String) throws {
-		setenv("LANG", "hu", 1)
 		let date = try #require(Formatter.userCalendar.date(byAdding: .day, value: input, to: Date()))
 		#expect(Formatter.nearby(date: date).hasPrefix(expectedOutput))
 	}
 
 	@Test
 	func nearbyDateFormattingToday() throws {
-		setenv("LANG", "hu", 1)
 		let date = try #require(Formatter.userCalendar.date(byAdding: .hour, value: 2, to: Date(), wrappingComponents: true))
 		#expect(Formatter.nearby(date: date).hasPrefix("today, "))
 	}
 
 	@Test
 	func nearbyDateFormattingThisWeek() throws {
-		setenv("LANG", "hu", 1)
 		let now = Date()
 		let dayOfWeek = Formatter.userCalendar.component(.weekday, from: now)
 		if [1, 5, 6, 7].contains(dayOfWeek) {
