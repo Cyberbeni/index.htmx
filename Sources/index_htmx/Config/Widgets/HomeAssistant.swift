@@ -60,7 +60,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 		var template: String {
 			switch self {
 			case let .person(entityId, _):
-				"{{'person.\(entityId)'|state_translated}}"
+				"{{state_translated('person.\(entityId)')}}"
 			case let .battery(entityId):
 				"{{states('sensor.\(entityId)')}}"
 			}
