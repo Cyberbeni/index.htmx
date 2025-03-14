@@ -1,11 +1,11 @@
 import Hummingbird
 
-extension [CacheControl.Value] {
+extension [CacheControl.CacheControlValue] {
 	static var publicImmutable: Self {
 		#if DEBUG
 			publicNoCache
 		#else
-			[.public, .maxAge(31_536_000)]
+			[.public, .maxAge(31_536_000), .immutable]
 		#endif
 	}
 
@@ -15,6 +15,6 @@ extension [CacheControl.Value] {
 }
 
 extension CacheControl {
-	static var publicImmutable: String { [CacheControl.Value].publicImmutable.map(\.description).joined(separator: ", ") }
-	static var publicNoCache: String { [CacheControl.Value].publicNoCache.map(\.description).joined(separator: ", ") }
+	static var publicImmutable: String { [CacheControl.CacheControlValue].publicImmutable.map(\.description).joined(separator: ", ") }
+	static var publicNoCache: String { [CacheControl.CacheControlValue].publicNoCache.map(\.description).joined(separator: ", ") }
 }
