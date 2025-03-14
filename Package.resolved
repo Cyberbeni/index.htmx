@@ -1,5 +1,5 @@
 {
-  "originHash" : "bf1f8530fed3b1db23bae2a047491f6e9725d0ad8e1cff0bf787e1f06e1c816d",
+  "originHash" : "d8a3a0bb2eb526a2abdef72309c8de9af321aebccdc4edb3b54e6a4313c641c1",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hummingbird-project/hummingbird",
       "state" : {
-        "revision" : "8219ec6cb484941c4195648b961cdb83a3d1290e"
+        "revision" : "e839f7eefad4c116d6581ff326ac4a7f45b4b5c7"
       }
     },
     {
@@ -57,7 +57,7 @@
     {
       "identity" : "swift-async-algorithms",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-async-algorithms",
+      "location" : "https://github.com/apple/swift-async-algorithms.git",
       "state" : {
         "revision" : "4c3ea81f81f0a25d0470188459c6d4bf20cf2f97",
         "version" : "1.0.3"
@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "96a2f8a0fa41e9e09af4585e2724c4e825410b91",
-        "version" : "1.6.2"
+        "revision" : "3d8596ed08bd13520157f0355e35caed215ffbfa",
+        "version" : "1.6.3"
       }
     },
     {
@@ -122,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-metrics.git",
       "state" : {
-        "revision" : "5e63558d12e0267782019f5dadfcae83a7d06e09",
-        "version" : "2.5.1"
+        "revision" : "3c0f419970ae1c9f942d3abfd4f562e243e9f9e8",
+        "version" : "2.6.0"
       }
     },
     {
@@ -192,10 +192,10 @@
     {
       "identity" : "swift-service-lifecycle",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swift-server/swift-service-lifecycle",
+      "location" : "https://github.com/swift-server/swift-service-lifecycle.git",
       "state" : {
-        "revision" : "c2e97cf6f81510f2d6b4a69453861db65d478560",
-        "version" : "2.6.3"
+        "revision" : "7ee57f99fbe0073c3700997186721e74d925b59b",
+        "version" : "2.7.0"
       }
     },
     {
