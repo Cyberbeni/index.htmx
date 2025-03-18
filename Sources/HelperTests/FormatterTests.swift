@@ -89,4 +89,10 @@ struct FormatterTests {
 			#expect(Formatter.nearby(date: date).hasPrefix("P "))
 		}
 	}
+
+	@Test
+	func nearbyDateFormattingSpecificDate() throws {
+		let date = try #require(Formatter.userCalendar.date(from: .init(year: 2025, month: 1, day: 2, hour: 13, minute: 45)))
+		#expect(Formatter.nearby(date: date) == "01. 02. 13:45")
+	}
 }

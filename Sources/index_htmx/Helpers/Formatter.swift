@@ -105,7 +105,18 @@ private extension Formatter {
 	static let thisYearDateFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.locale = userLocale
-		formatter.setLocalizedDateFormatFromTemplate("MMddjjmm")
+		let monthCount = shortDateOnlyFormatter.dateFormat.count(where: { $0 == "M" })
+		let dayCount = shortDateOnlyFormatter.dateFormat.count(where: { $0 == "d" })
+		formatter.setLocalizedDateFormatFromTemplate(
+			"\(String(repeating: "M", count: monthCount))\(String(repeating: "d", count: dayCount))jjmm"
+		)
+		return formatter
+	}()
+
+	static let shortDateOnlyFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.locale = userLocale
+		formatter.dateStyle = .short
 		return formatter
 	}()
 
