@@ -81,18 +81,20 @@ struct FormatterTests {
 			// Thursday-Sunday
 			// Set to Tuesday
 			let date = try #require(Formatter.userCalendar.date(bySetting: .weekday, value: 3, of: now))
-			#expect(Formatter.nearby(date: date).hasPrefix("K "))
+			#expect(Formatter.nearby(date: date) == "K 0:00")
 		} else {
 			// Monday-Wednesday
 			// Set to Friday
 			let date = try #require(Formatter.userCalendar.date(bySetting: .weekday, value: 6, of: now))
-			#expect(Formatter.nearby(date: date).hasPrefix("P "))
+			#expect(Formatter.nearby(date: date) == "P 0:00")
 		}
 	}
 
 	@Test
 	func nearbyDateFormattingSpecificDate() throws {
-		let date = try #require(Formatter.userCalendar.date(from: .init(year: 2025, month: 1, day: 2, hour: 13, minute: 45)))
-		#expect(Formatter.nearby(date: date) == "01. 02. 13:45")
+		let date1 = try #require(Formatter.userCalendar.date(from: .init(year: 2025, month: 1, day: 2, hour: 13, minute: 45)))
+		#expect(Formatter.nearby(date: date1) == "01. 02. 13:45")
+		let date2 = try #require(Formatter.userCalendar.date(from: .init(year: 2025, month: 1, day: 2, hour: 3, minute: 4)))
+		#expect(Formatter.nearby(date: date2) == "01. 02. 3:04")
 	}
 }

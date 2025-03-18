@@ -96,6 +96,19 @@ private extension Formatter {
 		let formatter = DateFormatter()
 		formatter.locale = userLocale
 		formatter.setLocalizedDateFormatFromTemplate("Ejjmm")
+		if var dateFormat = formatter.dateFormat {
+			let hour24Count = dateFormat.count(where: { $0 == "H" })
+			let expectedHour24Count = shortTimeFormatter.dateFormat.count(where: { $0 == "H" })
+			let hour12Count = dateFormat.count(where: { $0 == "h" })
+			let expectedHour12Count = shortTimeFormatter.dateFormat.count(where: { $0 == "h" })
+			if hour24Count != expectedHour24Count {
+				dateFormat = dateFormat.replacingOccurrences(of: String(repeating: "H", count: hour24Count), with: String(repeating: "H", count: expectedHour24Count))
+			}
+			if hour12Count != expectedHour12Count {
+				dateFormat = dateFormat.replacingOccurrences(of: String(repeating: "h", count: hour12Count), with: String(repeating: "h", count: expectedHour12Count))
+			}
+			formatter.dateFormat = dateFormat
+		}
 		// doesn't work on Linux at all
 		// doesn't work on macOS with setLocalizedDateFormatFromTemplate()
 		// formatter.doesRelativeDateFormatting = true
