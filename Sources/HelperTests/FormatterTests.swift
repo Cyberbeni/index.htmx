@@ -59,8 +59,8 @@ struct FormatterTests {
 	}
 
 	@Test(arguments: [
-		(1, "tomorrow, "),
-		(-1, "yesterday, "),
+		(1, "holnap "),
+		(-1, "tegnap "),
 	])
 	func nearbyDateFormattingWithinOneDay(input: Int, expectedOutput: String) throws {
 		let date = try #require(Formatter.userCalendar.date(byAdding: .day, value: input, to: Date()))
@@ -70,7 +70,7 @@ struct FormatterTests {
 	@Test
 	func nearbyDateFormattingToday() throws {
 		let date = try #require(Formatter.userCalendar.date(byAdding: .hour, value: 2, to: Date(), wrappingComponents: true))
-		#expect(Formatter.nearby(date: date).hasPrefix("today, "))
+		#expect(Formatter.nearby(date: date).hasPrefix("ma "))
 	}
 
 	@Test
