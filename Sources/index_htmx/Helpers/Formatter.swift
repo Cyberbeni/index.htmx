@@ -65,12 +65,11 @@ enum Formatter {
 	static func nearby(date: Date) -> String {
 		if abs(date.timeIntervalSinceNow) < 60.5 * 60 {
 			Date.RelativeFormatStyle(allowedFields: [.minute], presentation: .named, locale: userLocale).format(date)
-		} else if userCalendar.isDateInToday(date) {
-			"today, \(shortTimeFormatter.string(from: date))"
-		} else if userCalendar.isDateInTomorrow(date) {
-			"tomorrow, \(shortTimeFormatter.string(from: date))"
-		} else if userCalendar.isDateInYesterday(date) {
-			"yesterday, \(shortTimeFormatter.string(from: date))"
+		} else if userCalendar.isDateInToday(date) ||
+			userCalendar.isDateInTomorrow(date) ||
+			userCalendar.isDateInYesterday(date)
+		{
+			"\(Date.RelativeFormatStyle(allowedFields: [.day], presentation: .named, locale: userLocale).format(date))\(dateTimeSeparator)\(shortTimeFormatter.string(from: date))"
 		} else if abs(date.timeIntervalSinceNow) < 5 * 86400 ||
 			userCalendar.isDate(date, equalTo: Date(), toGranularity: .weekOfYear)
 		{
@@ -92,6 +91,12 @@ extension Formatter {
 }
 
 private extension Formatter {
+	static let dateTimeSeparator: String = if thisYearDateFormatter.dateFormat?.contains(",") == true {
+		", "
+	} else {
+		" "
+	}
+
 	static let thisWeekDateFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.locale = userLocale
