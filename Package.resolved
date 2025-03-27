@@ -1,5 +1,5 @@
 {
-  "originHash" : "7b23463392769c909762eb55f18dd4b42879638f101d202851763dafbc0e0f14",
+  "originHash" : "c61c1778dcca2127b1ad8404e08b276730b0ff626571cef420ef20364c6fa97c",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sliemeobn/elementary.git",
       "state" : {
-        "revision" : "b307b6b79d7cd5651763de1d0016660a106ed4e3",
-        "version" : "0.4.6"
+        "revision" : "446ae68322caeb3cc3bf6f11a2ea8d6139d6e1de",
+        "version" : "0.5.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hummingbird-project/hummingbird",
       "state" : {
-        "revision" : "56544ae4959f1e1a56b60f3590523cd5592b9750",
-        "version" : "2.10.0"
+        "branch" : "conditional",
+        "revision" : "a7ae7dfbf853838772cc8f84fe216b9612bd319a"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-metrics.git",
       "state" : {
-        "revision" : "3c0f419970ae1c9f942d3abfd4f562e243e9f9e8",
-        "version" : "2.6.0"
+        "revision" : "44491db7cc66774ab930cf15f36324e16b06f425",
+        "version" : "2.6.1"
       }
     },
     {

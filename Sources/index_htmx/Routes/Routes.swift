@@ -4,6 +4,7 @@ import HummingbirdElementary
 extension Router {
 	@discardableResult
 	func addRoutes(
+		configDate: Date,
 		runTimestamp: String,
 		staticFilesTimestamp: String,
 		generalConfig: Config.General,
@@ -11,37 +12,48 @@ extension Router {
 		miniCardsConfig: Config.Cards
 	) -> Self {
 		let contentSecurityPolicy = "default-src 'self' 'unsafe-inline'"
-		get("") { request, _ in
-			HTMLResponse(additionalHeaders: [
-				.cacheControl: CacheControl.publicNoCache,
-				.contentSecurityPolicy: contentSecurityPolicy,
-			]) {
-				MainPage(
-					generalConfig: generalConfig,
-					mainCardsConfig: mainCardsConfig,
-					miniCardsConfig: miniCardsConfig,
-					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-					runTimestamp: runTimestamp,
-					staticFilesTimestamp: staticFilesTimestamp,
-					isPwa: false
-				)
+
+		get("") { request, context in
+			try await request.ifModifiedSince(
+				modificationDate: configDate,
+				context: context
+			) {
+				HTMLResponse(additionalHeaders: [
+					.cacheControl: CacheControl.publicNoCache,
+					.contentSecurityPolicy: contentSecurityPolicy,
+				]) {
+					MainPage(
+						generalConfig: generalConfig,
+						mainCardsConfig: mainCardsConfig,
+						miniCardsConfig: miniCardsConfig,
+						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+						runTimestamp: runTimestamp,
+						staticFilesTimestamp: staticFilesTimestamp,
+						isPwa: false
+					)
+				}
 			}
 		}
 
-		get("pwa.html") { request, _ in
-			HTMLResponse(additionalHeaders: [
-				.cacheControl: CacheControl.publicNoCache,
-				.contentSecurityPolicy: contentSecurityPolicy,
-			]) {
-				MainPage(
-					generalConfig: generalConfig,
-					mainCardsConfig: mainCardsConfig,
-					miniCardsConfig: miniCardsConfig,
-					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-					runTimestamp: runTimestamp,
-					staticFilesTimestamp: staticFilesTimestamp,
-					isPwa: true
-				)
+		get("pwa.html") { request, context in
+			try await request.ifModifiedSince(
+				modificationDate: configDate,
+				context: context
+			) {
+				HTMLResponse(additionalHeaders: [
+					.cacheControl: CacheControl.publicNoCache,
+					.contentSecurityPolicy: contentSecurityPolicy,
+				]) {
+					MainPage(
+						generalConfig: generalConfig,
+						mainCardsConfig: mainCardsConfig,
+						miniCardsConfig: miniCardsConfig,
+						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+						runTimestamp: runTimestamp,
+						staticFilesTimestamp: staticFilesTimestamp,
+						isPwa: true
+					)
+				}
 			}
 		}
 
@@ -54,27 +66,32 @@ extension Router {
 			startUrl: "/pwa.html",
 			icons: icons
 		)
-		let webManifestString: String?
+		let webManifestData: ByteBuffer?
 		do {
-			webManifestString = try String(data: App.responseJsonEncoder().encode(webManifest), encoding: .utf8)
+			webManifestData = try ByteBuffer(data: App.responseJsonEncoder().encode(webManifest))
 		} catch {
-			webManifestString = nil
+			webManifestData = nil
 			Log.error("Failed to encode webmanifest: \(error)")
 		}
-		get("\(runTimestamp)/site.webmanifest") { _, _ in
-			if let webManifestString {
-				Response(
-					status: .ok,
-					headers: [
-						.contentType: "application/manifest+json; charset=utf-8",
-						.cacheControl: CacheControl.publicImmutable,
-					],
-					body: ResponseBody(byteBuffer: .init(string: webManifestString))
-				)
-			} else {
-				Response(
-					status: .internalServerError
-				)
+		get("\(runTimestamp)/site.webmanifest") { request, context in
+			try await request.ifModifiedSince(
+				modificationDate: configDate,
+				context: context
+			) {
+				if let webManifestData {
+					Response(
+						status: .ok,
+						headers: [
+							.contentType: "application/manifest+json; charset=utf-8",
+							.cacheControl: CacheControl.publicImmutable,
+						],
+						body: ResponseBody(byteBuffer: webManifestData)
+					)
+				} else {
+					Response(
+						status: .internalServerError
+					)
+				}
 			}
 		}
 
