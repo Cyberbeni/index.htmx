@@ -3,7 +3,7 @@
 FROM --platform=$BUILDPLATFORM docker.io/swift:6.1.0 AS swift-build
 WORKDIR /workspace
 RUN swift sdk install \
-	https://download.swift.org/swift-6.1-release/static-sdk/swift-6.1-RELEASE/swift-6.1-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz
+	https://download.swift.org/swift-6.1-release/static-sdk/swift-6.1-RELEASE/swift-6.1-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz \
 	--checksum 111c6f7d280a651208b8c74c0521dd99365d785c1976a6e23162f55f65379ac6
 
 COPY ./Package.swift ./Package.resolved /workspace/
