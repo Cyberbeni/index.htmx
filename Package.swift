@@ -13,7 +13,7 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/hummingbird-project/hummingbird", branch: "conditional"),
+		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.11.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
 		.package(url: "https://github.com/swift-server/async-http-client", from: "1.25.2"),
