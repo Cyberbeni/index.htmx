@@ -2,7 +2,8 @@ import Hummingbird
 
 actor App {
 	let configDir: URL
-	let runTimestamp = "\(Date().timeIntervalSince1970)"
+	let configDate = Date()
+	let runTimestamp: String
 	let staticFilesTimestamp: String
 	var services = [any WidgetService]()
 	let publisher = Publisher()
@@ -15,6 +16,8 @@ actor App {
 	}
 
 	init() throws {
+		let runTimestamp = "\(configDate.timeIntervalSinceNow)"
+		self.runTimestamp = runTimestamp
 		#if DEBUG
 			configDir = URL(filePath: "./debug_config")
 			staticFilesTimestamp = runTimestamp
@@ -108,6 +111,7 @@ actor App {
 				])
 			))
 			.addRoutes(
+				configDate: configDate,
 				runTimestamp: runTimestamp,
 				staticFilesTimestamp: staticFilesTimestamp,
 				generalConfig: generalConfig,

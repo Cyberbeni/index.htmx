@@ -29,36 +29,8 @@ extension HTMLAttribute where Tag: HTMLTrait.Attributes.position {
 }
 
 // role
-public extension HTMLTrait.Attributes {
-	protocol role {}
-	enum Role: String {
-		case button
-	}
-}
-
-extension HTMLTag.a: HTMLTrait.Attributes.role {}
-
-extension HTMLAttribute where Tag: HTMLTrait.Attributes.role {
-	static func role(_ value: HTMLTrait.Attributes.Role) -> Self {
-		HTMLAttribute(name: "role", value: value.rawValue)
-	}
-
-	static func role(_ value: String) -> Self {
-		HTMLAttribute(name: "role", value: value)
-	}
-}
-
-// alt
-extension HTMLTrait.Attributes {
-	protocol alt {}
-}
-
-extension HTMLTag.img: HTMLTrait.Attributes.alt {}
-
-extension HTMLAttribute where Tag: HTMLTrait.Attributes.alt {
-	static func alt(_ value: String) -> Self {
-		HTMLAttribute(name: "alt", value: value)
-	}
+public extension HTMLAttributeValue.Role {
+	static var button: Self { "button" }
 }
 
 // sizes
