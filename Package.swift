@@ -13,6 +13,7 @@ let package = Package(
 		),
 	],
 	dependencies: [
+		.package(url: "https://github.com/Cyberbeni/CBLogging", from: "1.0.0"),
 		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.11.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/sliemeobn/elementary-htmx", from: "0.4.0"),
@@ -24,6 +25,7 @@ let package = Package(
 		.executableTarget(
 			name: "index_htmx",
 			dependencies: [
+				.product(name: "CBLogging", package: "CBLogging"),
 				.product(name: "Hummingbird", package: "hummingbird"),
 				.product(name: "HummingbirdElementary", package: "hummingbird-elementary"),
 				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
