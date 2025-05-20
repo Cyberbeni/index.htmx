@@ -16,7 +16,7 @@ actor App {
 	}
 
 	init() throws {
-		let runTimestamp = "\(configDate.timeIntervalSinceNow)"
+		let runTimestamp = "\(configDate.timeIntervalSince1970)"
 		self.runTimestamp = runTimestamp
 		#if DEBUG
 			configDir = URL(filePath: "./debug_config")
