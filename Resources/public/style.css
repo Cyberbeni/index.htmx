@@ -121,7 +121,7 @@ footer {
 	object-fit: contain;
 	padding: 0;
 }
-a.icon,
+[role="button"].icon,
 button.icon
 {
 	width: 50px;
