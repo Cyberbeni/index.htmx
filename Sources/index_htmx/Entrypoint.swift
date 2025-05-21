@@ -1,5 +1,5 @@
-@_exported import Foundation
 import CBLogging
+@_exported import Foundation
 
 var Log: Logger { CBLogHandler.appLogger }
 
