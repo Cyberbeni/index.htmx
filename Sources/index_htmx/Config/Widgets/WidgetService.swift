@@ -1,6 +1,10 @@
 protocol WidgetService<Config>: Sendable {
 	associatedtype Config: WidgetConfig
 
+	var id: String { get }
+	var config: Config { get }
+	var publisher: Publisher { get }
+
 	init(id: String, config: Config, publisher: Publisher)
 
 	func start() async
