@@ -96,21 +96,10 @@ extension Transmission {
 						fallthrough
 					}
 				default:
-					let body = try await response.body.collect(upTo: Config.maxResponseSize)
-					let errorText = String(buffer: body)
-					Log.error("Error status code: \(response.status.code), body: \(errorText)")
-
-					let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "HTTP \(response.status.code)"))
-					await publisher.publish(sse, id: id)
+					try await handleErrorResponse(response)
 				}
 			} catch {
-				Log.error("\(error)")
-				do {
-					let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected error (see logs)"))
-					await publisher.publish(sse, id: id)
-				} catch {
-					Log.error("\(error)")
-				}
+				await handleErrorThrown(error)
 			}
 		}
 	}
