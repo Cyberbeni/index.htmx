@@ -3,7 +3,7 @@
 set -eo pipefail
 
 pushd "$(dirname "${BASH_SOURCE[0]}")/.." > /dev/null
-DOCKER_IMAGE="ghcr.io/krzysztofzablocki/sourcery:2.2.6"
+DOCKER_IMAGE="ghcr.io/krzysztofzablocki/sourcery:2.2.7"
 
 if which docker > /dev/null 2>&1; then
 	docker run --rm \
