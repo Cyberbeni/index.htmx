@@ -15,7 +15,7 @@ struct LargeTile: HTML {
 		if let widget = config.widget,
 		   let widgetId = config.widgetId
 		{
-			a(.href(url), .class("tile detailed"), .role(.button), .target("_blank")) {
+			a(.href(url), .class("tile detailed"), .role(.button)) {
 				div(.class("title-row")) {
 					IconView(config.icon, runTimestamp: runTimestamp)
 					div { config.title }
