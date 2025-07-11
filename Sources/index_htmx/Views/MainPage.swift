@@ -19,6 +19,7 @@ struct MainPage: HTMLDocument {
 		meta(.charset(.utf8))
 		meta(.name("viewport"), .content("width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"))
 		meta(.name("mobile-web-app-capable"), .content("yes"))
+		base(.target("_blank"))
 
 		meta(.name("theme-color"), .content(generalConfig.theme.light), .media("(prefers-color-scheme: light)"))
 		meta(.name("theme-color"), .content(generalConfig.theme.dark), .media("(prefers-color-scheme: dark)"))
@@ -64,7 +65,7 @@ struct MainPage: HTMLDocument {
 			}
 		}
 		footer(.class("container")) {
-			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon"), .title("Refresh page")) {
+			a(.href(isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon"), .title("Refresh page"), .target("_self")) {
 				svg {
 					use(.href("/\(staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
 				}

@@ -17,7 +17,7 @@ struct BasicTile: HTML {
 	}
 
 	var content: some HTML {
-		a(.href(url), .class(aClass), .role(.button), .target("_blank")) {
+		a(.href(url), .class(aClass), .role(.button)) {
 			IconView(config.icon, runTimestamp: runTimestamp)
 			div { config.title }
 		}

@@ -11,12 +11,12 @@ extension WidgetService {
 	}
 
 	func handleErrorThrown(_ error: Error) async {
-		Log.error("\(error)")
+		Log.error(error)
 		do {
 			let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected error (see logs)"))
 			await publisher.publish(sse, id: id)
 		} catch {
-			Log.error("\(error)")
+			Log.error(error)
 		}
 	}
 }
