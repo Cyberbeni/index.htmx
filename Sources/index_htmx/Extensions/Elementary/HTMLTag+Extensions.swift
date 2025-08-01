@@ -6,7 +6,7 @@ extension HTMLTag {
 		HTMLTrait.Attributes.position,
 		HTMLTrait.Attributes.href
 	{
-		public static let name = "use"
+		static let name = "use"
 	}
 }
 

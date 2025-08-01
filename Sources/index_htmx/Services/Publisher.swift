@@ -11,17 +11,13 @@ actor Publisher: Service {
 		case remove(SubscriptionID)
 	}
 
-	nonisolated let (subStream, subSource) = AsyncStream<SubscriptionCommand>.makeStream()
-
-	var cachedValues = [String: Value]()
-
-	init() {
-		subscriptions = [:]
-	}
+	private nonisolated let (subStream, subSource) = AsyncStream<SubscriptionCommand>.makeStream()
+	private var subscriptions = [SubscriptionID: AsyncStream<Value>.Continuation]()
+	private var cachedValues = [String: Value]()
 
 	/// Publish to service
 	/// - Parameter value: Value being published
-	func publish(_ value: Value, id: String) async {
+	func publish(_ value: Value, id: String) {
 		guard cachedValues[id] != value else { return }
 		cachedValues[id] = value
 		for subscription in subscriptions.values {
@@ -74,6 +70,4 @@ actor Publisher: Service {
 		subscriptions[id]?.finish()
 		subscriptions[id] = nil
 	}
-
-	var subscriptions: [SubscriptionID: AsyncStream<Value>.Continuation]
 }
