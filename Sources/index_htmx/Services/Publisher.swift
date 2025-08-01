@@ -6,27 +6,21 @@ import ServiceLifecycle
 actor Publisher: Service {
 	typealias SubscriptionID = UUID
 	typealias Value = ByteBuffer
-	enum SubscriptionCommand {
+	private enum SubscriptionCommand {
 		case add(SubscriptionID, AsyncStream<Value>.Continuation)
 		case remove(SubscriptionID)
+		case publish(Value, String)
 	}
 
-	nonisolated let (subStream, subSource) = AsyncStream<SubscriptionCommand>.makeStream()
-
-	var cachedValues = [String: Value]()
-
-	init() {
-		subscriptions = [:]
-	}
+	private nonisolated let (subStream, subSource) = AsyncStream<SubscriptionCommand>.makeStream()
+	private var subscriptions = [SubscriptionID: AsyncStream<Value>.Continuation]()
+	private var cachedValues = [String: Value]()
 
 	/// Publish to service
 	/// - Parameter value: Value being published
-	func publish(_ value: Value, id: String) async {
-		guard cachedValues[id] != value else { return }
-		cachedValues[id] = value
-		for subscription in subscriptions.values {
-			subscription.yield(value)
-		}
+	/// - Parameter cacheId: identifier for caching the value to immediately send to new subscribers
+	nonisolated func publish(_ value: consuming Value, cacheId: String) {
+		subSource.yield(.publish(value, cacheId))
 	}
 
 	///  Subscribe to service
@@ -46,7 +40,7 @@ actor Publisher: Service {
 
 	///  Unsubscribe from service
 	/// - Parameter id: Subscription identifier
-	nonisolated func unsubscribe(_ id: SubscriptionID) {
+	nonisolated func unsubscribe(_ id: consuming SubscriptionID) {
 		subSource.yield(.remove(id))
 	}
 
@@ -59,6 +53,8 @@ actor Publisher: Service {
 					self._addSubsciber(id, source: source)
 				case let .remove(id):
 					self._removeSubsciber(id)
+				case let .publish(value, cacheId):
+					self._publish(value, cacheId: cacheId)
 				}
 			}
 		} onGracefulShutdown: {
@@ -75,5 +71,11 @@ actor Publisher: Service {
 		subscriptions[id] = nil
 	}
 
-	var subscriptions: [SubscriptionID: AsyncStream<Value>.Continuation]
+	private func _publish(_ value: Value, cacheId: String) {
+		guard cachedValues[cacheId] != value else { return }
+		cachedValues[cacheId] = value
+		for subscription in subscriptions.values {
+			subscription.yield(value)
+		}
+	}
 }

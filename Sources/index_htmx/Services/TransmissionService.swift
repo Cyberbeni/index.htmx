@@ -78,7 +78,7 @@ extension Transmission {
 					) {
 						Log.debug("HTTP call OK: \(response)")
 						let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
-						await publisher.publish(sse, id: id)
+						publisher.publish(sse, cacheId: id)
 					} else {
 						Log.error("getJSONDecodable returned nil")
 					}
@@ -90,7 +90,7 @@ extension Transmission {
 							await getData(retryOnSessionRenew: false)
 						} else {
 							let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected session renew"))
-							await publisher.publish(sse, id: id)
+							publisher.publish(sse, cacheId: id)
 						}
 					} else {
 						fallthrough
