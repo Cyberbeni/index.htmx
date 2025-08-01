@@ -19,7 +19,7 @@ actor Publisher: Service {
 	/// Publish to service
 	/// - Parameter value: Value being published
 	/// - Parameter cacheId: identifier for caching the value to immediately send to new subscribers
-	nonisolated func publish(_ value: Value, cacheId: String) {
+	nonisolated func publish(_ value: consuming Value, cacheId: String) {
 		subSource.yield(.publish(value, cacheId))
 	}
 
@@ -40,7 +40,7 @@ actor Publisher: Service {
 
 	///  Unsubscribe from service
 	/// - Parameter id: Subscription identifier
-	nonisolated func unsubscribe(_ id: SubscriptionID) {
+	nonisolated func unsubscribe(_ id: consuming SubscriptionID) {
 		subSource.yield(.remove(id))
 	}
 
