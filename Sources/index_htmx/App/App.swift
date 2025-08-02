@@ -63,7 +63,7 @@ actor App {
 
 		// Setup services
 		let publisher = Publisher()
-		var services: [Service] = [publisher]
+		var services: [any Service] = [publisher]
 		var serviceIndex = 0
 		for iSection in mainCardsConfig.sections.indices {
 			for iCard in mainCardsConfig.sections[iSection].cards.indices {
