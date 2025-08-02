@@ -1,4 +1,6 @@
-protocol WidgetService<Config>: Sendable {
+import ServiceLifecycle
+
+protocol WidgetService<Config>: Service, Sendable {
 	associatedtype Config: WidgetConfig
 
 	var id: String { get }
@@ -7,7 +9,6 @@ protocol WidgetService<Config>: Sendable {
 
 	init(id: String, config: Config, publisher: Publisher)
 
-	func start() async
 	static func jsonDecoder() -> JSONDecoder
 	static func jsonEncoder() -> JSONEncoder
 }
