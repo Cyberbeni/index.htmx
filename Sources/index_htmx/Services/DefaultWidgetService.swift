@@ -1,13 +1,12 @@
 import AsyncHTTPClient
 import Hummingbird
 import NIOFoundationCompat
+import ServiceLifecycle
 
 actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 	let id: String
 	let config: Config
 	let publisher: Publisher
-
-	var runTask: Task<Void, Error>?
 
 	init(id: String, config: Config, publisher: Publisher) {
 		self.id = id
@@ -15,17 +14,11 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		self.publisher = publisher
 	}
 
-	deinit {
-		runTask?.cancel()
-		Log.debug("Service deinit: \(Self.self)")
-	}
-
-	func start() {
-		guard runTask == nil else { return }
-		runTask = Task { [weak self] in
+	func run() async throws {
+		await cancelWhenGracefulShutdown {
 			while !Task.isCancelled {
-				await self?.getData()
-				try await Task.sleep(for: .seconds(self?.config.pollingInterval ?? 1))
+				await self.getData()
+				try? await Task.sleep(for: .seconds(self.config.pollingInterval))
 			}
 		}
 	}

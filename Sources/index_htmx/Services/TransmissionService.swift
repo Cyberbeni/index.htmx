@@ -1,6 +1,7 @@
 import AsyncHTTPClient
 import Hummingbird
 import NIOFoundationCompat
+import ServiceLifecycle
 
 extension Transmission {
 	struct Request: Encodable {
@@ -19,7 +20,6 @@ extension Transmission {
 
 		let sessionHeaderName = "X-Transmission-Session-Id"
 		var sessionToken: String?
-		var runTask: Task<Void, Error>?
 
 		init(id: String, config: Transmission, publisher: Publisher) {
 			self.id = id
@@ -27,17 +27,11 @@ extension Transmission {
 			self.publisher = publisher
 		}
 
-		deinit {
-			runTask?.cancel()
-			Log.debug("Service deinit: \(Self.self)")
-		}
-
-		func start() {
-			guard runTask == nil else { return }
-			runTask = Task { [weak self] in
+		func run() async throws {
+			await cancelWhenGracefulShutdown {
 				while !Task.isCancelled {
-					await self?.getData(retryOnSessionRenew: true)
-					try await Task.sleep(for: .seconds(self?.config.pollingInterval ?? 1))
+					await self.getData(retryOnSessionRenew: true)
+					try? await Task.sleep(for: .seconds(self.config.pollingInterval))
 				}
 			}
 		}

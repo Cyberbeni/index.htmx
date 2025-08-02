@@ -1,12 +1,11 @@
 import Hummingbird
+import ServiceLifecycle
 
 actor App {
 	let configDir: URL
 	let configDate = Date()
 	let runTimestamp: String
 	let staticFilesTimestamp: String
-	var services = [any WidgetService]()
-	let publisher = Publisher()
 
 	static func responseJsonEncoder() -> JSONEncoder {
 		let encoder = JSONEncoder()
@@ -62,7 +61,9 @@ actor App {
 			miniCardsConfig = .init(sections: [])
 		}
 
-		// Start services
+		// Setup services
+		let publisher = Publisher()
+		var services: [any Service] = [publisher]
 		var serviceIndex = 0
 		for iSection in mainCardsConfig.sections.indices {
 			for iCard in mainCardsConfig.sections[iSection].cards.indices {
@@ -75,10 +76,6 @@ actor App {
 					}
 				}
 			}
-		}
-
-		for service in services {
-			await service.start()
 		}
 
 		// Setup Application
@@ -122,7 +119,7 @@ actor App {
 		let app = Application(
 			router: router,
 			configuration: ApplicationConfiguration(address: .hostname("0.0.0.0", port: 8080)),
-			services: [publisher],
+			services: services,
 			onServerRunning: { _ in
 				Log.info("Server running")
 			}
