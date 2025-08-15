@@ -11,27 +11,30 @@ extension Router {
 		mainCardsConfig: Config.Cards,
 		miniCardsConfig: Config.Cards
 	) -> Self {
-		let contentSecurityPolicy = "default-src 'self' 'unsafe-inline'"
+		@Sendable
+		func mainPageResponse(request: consuming Request, isPwa: Bool) -> HTMLResponse {
+			HTMLResponse(additionalHeaders: [
+				.cacheControl: CacheControl.publicNoCache,
+				.contentSecurityPolicy: "default-src 'self' 'unsafe-inline'",
+			]) {
+				MainPage(
+					generalConfig: generalConfig,
+					mainCardsConfig: mainCardsConfig,
+					miniCardsConfig: miniCardsConfig,
+					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+					runTimestamp: runTimestamp,
+					staticFilesTimestamp: staticFilesTimestamp,
+					isPwa: isPwa
+				)
+			}
+		}
 
 		get("") { request, context in
 			try await request.ifModifiedSince(
 				modificationDate: configDate,
 				context: context
 			) {
-				HTMLResponse(additionalHeaders: [
-					.cacheControl: CacheControl.publicNoCache,
-					.contentSecurityPolicy: contentSecurityPolicy,
-				]) {
-					MainPage(
-						generalConfig: generalConfig,
-						mainCardsConfig: mainCardsConfig,
-						miniCardsConfig: miniCardsConfig,
-						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-						runTimestamp: runTimestamp,
-						staticFilesTimestamp: staticFilesTimestamp,
-						isPwa: false
-					)
-				}
+				mainPageResponse(request: request, isPwa: false)
 			}
 		}
 
@@ -40,20 +43,7 @@ extension Router {
 				modificationDate: configDate,
 				context: context
 			) {
-				HTMLResponse(additionalHeaders: [
-					.cacheControl: CacheControl.publicNoCache,
-					.contentSecurityPolicy: contentSecurityPolicy,
-				]) {
-					MainPage(
-						generalConfig: generalConfig,
-						mainCardsConfig: mainCardsConfig,
-						miniCardsConfig: miniCardsConfig,
-						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-						runTimestamp: runTimestamp,
-						staticFilesTimestamp: staticFilesTimestamp,
-						isPwa: true
-					)
-				}
+				mainPageResponse(request: request, isPwa: true)
 			}
 		}
 
