@@ -9,6 +9,7 @@ struct MainPage: HTMLDocument {
 	let samehostUrlPrefix: String
 	let runTimestamp: String
 	let staticFilesTimestamp: String
+	let isExternal: Bool
 	let isPwa: Bool
 
 	var title: String { generalConfig.title }
@@ -51,6 +52,7 @@ struct MainPage: HTMLDocument {
 						config: section,
 						samehostUrlPrefix: samehostUrlPrefix,
 						runTimestamp: runTimestamp,
+						isExternal: isExternal,
 						isPwa: isPwa
 					)
 				}
@@ -59,6 +61,7 @@ struct MainPage: HTMLDocument {
 						config: section,
 						samehostUrlPrefix: samehostUrlPrefix,
 						runTimestamp: runTimestamp,
+						isExternal: isExternal,
 						isPwa: isPwa
 					)
 				}

@@ -1,16 +1,10 @@
 import Elementary
 
 struct BasicTile: HTML {
+	let url: String
 	let config: Config.Cards.Card
-	let samehostUrlPrefix: String
 	let runTimestamp: String
-	let isPwa: Bool
 	let isMini: Bool
-
-	var url: String {
-		let url = isPwa ? (config.pwaUrl ?? config.url) : config.url
-		return url.replaceSamehost(with: samehostUrlPrefix)
-	}
 
 	var aClass: String {
 		isMini ? "tile mini" : "tile basic"

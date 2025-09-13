@@ -12,11 +12,24 @@ extension Config {
 			let icon: Icon
 			let title: String
 			let url: String
+			let externalUrl: String?
 			let pwaUrl: String?
 			let widget: Widget?
 
 			/// Set up at runtime
 			var widgetId: String?
+
+			func resolvedUrl(samehostUrlPrefix: String, isExternal: Bool, isPwa: Bool) -> String {
+				let resolvedUrl: String
+				if isPwa, let pwaUrl {
+					resolvedUrl = pwaUrl
+				} else if isExternal, let externalUrl {
+					resolvedUrl = externalUrl
+				} else {
+					resolvedUrl = url
+				}
+				return resolvedUrl.replaceSamehost(with: samehostUrlPrefix)
+			}
 		}
 	}
 }

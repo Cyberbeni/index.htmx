@@ -4,6 +4,7 @@ struct MiniSection: HTML {
 	let config: Config.Cards.Section
 	let samehostUrlPrefix: String
 	let runTimestamp: String
+	let isExternal: Bool
 	let isPwa: Bool
 
 	var content: some HTML {
@@ -14,11 +15,11 @@ struct MiniSection: HTML {
 			}
 			div(.class("grid mini")) {
 				for card in config.cards {
+					let url = card.resolvedUrl(samehostUrlPrefix: samehostUrlPrefix, isExternal: isExternal, isPwa: isPwa)
 					BasicTile(
+						url: url,
 						config: card,
-						samehostUrlPrefix: samehostUrlPrefix,
 						runTimestamp: runTimestamp,
-						isPwa: isPwa,
 						isMini: true
 					)
 				}

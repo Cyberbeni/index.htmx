@@ -2,6 +2,7 @@ extension Config {
 	struct General: Decodable {
 		let title: String
 		let baseUrlFallback: String
+		let externalHost: String?
 		var enableCompression: Bool { _enableCompression ?? false }
 		private let _enableCompression: Bool?
 		var showReloadConfigButton: Bool { _showReloadConfigButton ?? false }
@@ -18,6 +19,7 @@ extension Config {
 		enum CodingKeys: String, CodingKey {
 			case title
 			case baseUrlFallback
+			case externalHost
 			case _enableCompression = "enableCompression"
 			case _showReloadConfigButton = "showReloadConfigButton"
 			case favicon
