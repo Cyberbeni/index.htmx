@@ -12,39 +12,47 @@ extension Router {
 		miniCardsConfig: Config.Cards
 	) -> Self {
 		@Sendable
-		func mainPageResponse(request: consuming Request, isPwa: Bool) -> HTMLResponse {
-			HTMLResponse(additionalHeaders: [
-				.cacheControl: CacheControl.publicNoCache,
-				.contentSecurityPolicy: "default-src 'self' 'unsafe-inline'",
-			]) {
-				MainPage(
-					generalConfig: generalConfig,
-					mainCardsConfig: mainCardsConfig,
-					miniCardsConfig: miniCardsConfig,
-					samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-					runTimestamp: runTimestamp,
-					staticFilesTimestamp: staticFilesTimestamp,
-					isPwa: isPwa
-				)
+		func mainPageResponse(
+			request: consuming Request,
+			context: consuming Context,
+			isPwa: Bool
+		) async throws -> some ResponseGenerator {
+			try await request.ifModifiedSince(
+				modificationDate: configDate,
+				context: context
+			) {
+				let isExternal: Bool
+				if let externalHost = generalConfig.externalHost,
+				   externalHost == request.head.authority
+				{
+					isExternal = true
+				} else {
+					isExternal = false
+				}
+				return HTMLResponse(additionalHeaders: [
+					.cacheControl: CacheControl.publicNoCache,
+					.contentSecurityPolicy: "default-src 'self' 'unsafe-inline'",
+				]) {
+					MainPage(
+						generalConfig: generalConfig,
+						mainCardsConfig: mainCardsConfig,
+						miniCardsConfig: miniCardsConfig,
+						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+						runTimestamp: runTimestamp,
+						staticFilesTimestamp: staticFilesTimestamp,
+						isExternal: isExternal,
+						isPwa: isPwa
+					)
+				}
 			}
 		}
 
 		get("") { request, context in
-			try await request.ifModifiedSince(
-				modificationDate: configDate,
-				context: context
-			) {
-				mainPageResponse(request: request, isPwa: false)
-			}
+			try await mainPageResponse(request: request, context: context, isPwa: false)
 		}
 
 		get("pwa.html") { request, context in
-			try await request.ifModifiedSince(
-				modificationDate: configDate,
-				context: context
-			) {
-				mainPageResponse(request: request, isPwa: true)
-			}
+			try await mainPageResponse(request: request, context: context, isPwa: true)
 		}
 
 		let icons = generalConfig.pwaIcons.compactMap { iconConfig in
@@ -88,7 +96,7 @@ extension Router {
 		if generalConfig.showReloadConfigButton {
 			post("reload_config") { _, _ in
 				Task.detached {
-					Entrypoint.reloadConfig()
+					await Entrypoint.reloadConfig()
 				}
 				return Response(status: .noContent)
 			}
