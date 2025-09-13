@@ -96,7 +96,7 @@ extension Router {
 		if generalConfig.showReloadConfigButton {
 			post("reload_config") { _, _ in
 				Task.detached {
-					Entrypoint.reloadConfig()
+					await Entrypoint.reloadConfig()
 				}
 				return Response(status: .noContent)
 			}

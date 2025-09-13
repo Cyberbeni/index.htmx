@@ -4,7 +4,8 @@ import CBLogging
 var Log: Logger { CBLogHandler.appLogger }
 
 @main
-actor Entrypoint {
+@MainActor
+class Entrypoint {
 	private static var runTask: Task<Void, Error>?
 
 	static func main() async throws {
