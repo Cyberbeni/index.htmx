@@ -1,9 +1,8 @@
 import Elementary
 
 struct BasicTile: HTML {
-	let url: String
 	let config: Config.Cards.Card
-	let runTimestamp: String
+	let context: RenderingContext
 	let isMini: Bool
 
 	var aClass: String {
@@ -11,8 +10,8 @@ struct BasicTile: HTML {
 	}
 
 	var content: some HTML {
-		a(.href(url), .class(aClass), .role(.button)) {
-			IconView(config.icon, runTimestamp: runTimestamp)
+		a(.href(config.resolvedUrl(context)), .class(aClass), .role(.button)) {
+			IconView(config.icon, context: context)
 			div { config.title }
 		}
 	}

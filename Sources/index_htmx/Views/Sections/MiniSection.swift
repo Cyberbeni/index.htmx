@@ -2,24 +2,19 @@ import Elementary
 
 struct MiniSection: HTML {
 	let config: Config.Cards.Section
-	let samehostUrlPrefix: String
-	let runTimestamp: String
-	let isExternal: Bool
-	let isPwa: Bool
+	let context: RenderingContext
 
 	var content: some HTML {
 		div(.class("section mini")) {
 			h6(.class("header")) {
-				IconView(config.icon, runTimestamp: runTimestamp)
+				IconView(config.icon, context: context)
 				div { config.title }
 			}
 			div(.class("grid mini")) {
 				for card in config.cards {
-					let url = card.resolvedUrl(samehostUrlPrefix: samehostUrlPrefix, isExternal: isExternal, isPwa: isPwa)
 					BasicTile(
-						url: url,
 						config: card,
-						runTimestamp: runTimestamp,
+						context: context,
 						isMini: true
 					)
 				}

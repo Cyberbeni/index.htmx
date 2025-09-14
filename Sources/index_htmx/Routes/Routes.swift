@@ -37,11 +37,13 @@ extension Router {
 						generalConfig: generalConfig,
 						mainCardsConfig: mainCardsConfig,
 						miniCardsConfig: miniCardsConfig,
-						samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
-						runTimestamp: runTimestamp,
-						staticFilesTimestamp: staticFilesTimestamp,
-						isExternal: isExternal,
-						isPwa: isPwa
+						context: RenderingContext(
+							samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
+							runTimestamp: runTimestamp,
+							staticFilesTimestamp: staticFilesTimestamp,
+							isExternal: isExternal,
+							isPwa: isPwa
+						)
 					)
 				}
 			}

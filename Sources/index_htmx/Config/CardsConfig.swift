@@ -19,16 +19,16 @@ extension Config {
 			/// Set up at runtime
 			var widgetId: String?
 
-			func resolvedUrl(samehostUrlPrefix: String, isExternal: Bool, isPwa: Bool) -> String {
+			func resolvedUrl(_ context: RenderingContext) -> String {
 				let resolvedUrl: String
-				if isPwa, let pwaUrl {
+				if context.isPwa, let pwaUrl {
 					resolvedUrl = pwaUrl
-				} else if isExternal, let externalUrl {
+				} else if context.isExternal, let externalUrl {
 					resolvedUrl = externalUrl
 				} else {
 					resolvedUrl = url
 				}
-				return resolvedUrl.replaceSamehost(with: samehostUrlPrefix)
+				return resolvedUrl.replaceSamehost(with: context.samehostUrlPrefix)
 			}
 		}
 	}
