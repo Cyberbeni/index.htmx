@@ -16,7 +16,8 @@ protocol WidgetConfig: Decodable, Sendable {
 	static var timeout: Int64 { get }
 	static var maxResponseSize: Int { get }
 
-	@HTMLBuilder func render(response: Response?) -> View
+	// FIXME: make the return type of implementations `sending some View` after this is fixed: https://github.com/swiftlang/swift/issues/84318
+	@HTMLBuilder func render(response: Response?) -> sending View
 	func authHeader() -> String?
 	func requestData() throws -> Data?
 }
@@ -29,7 +30,7 @@ extension WidgetConfig {
 	func requestData() throws -> Data? { nil }
 }
 
-// Password auth
+/// MARK: Password auth
 protocol PasswordAuth {
 	var user: String { get }
 	var password: String { get }
@@ -44,7 +45,7 @@ extension WidgetConfig where Self: PasswordAuth {
 	}
 }
 
-// API key auth
+/// MARK: API key auth
 protocol ApiKeyAuth {
 	var apiKey: String { get }
 }
@@ -57,7 +58,7 @@ extension WidgetConfig where Self: ApiKeyAuth {
 	}
 }
 
-// Access token auth
+/// MARK: Access token auth
 protocol AccessTokenAuth {
 	var accessToken: String { get }
 }
