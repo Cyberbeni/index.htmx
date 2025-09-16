@@ -30,7 +30,8 @@ extension WidgetConfig {
 	func requestData() throws -> Data? { nil }
 }
 
-/// MARK: Password auth
+// MARK: Password auth
+
 protocol PasswordAuth {
 	var user: String { get }
 	var password: String { get }
@@ -45,7 +46,8 @@ extension WidgetConfig where Self: PasswordAuth {
 	}
 }
 
-/// MARK: API key auth
+// MARK: API key auth
+
 protocol ApiKeyAuth {
 	var apiKey: String { get }
 }
@@ -58,7 +60,8 @@ extension WidgetConfig where Self: ApiKeyAuth {
 	}
 }
 
-/// MARK: Access token auth
+// MARK: Access token auth
+
 protocol AccessTokenAuth {
 	var accessToken: String { get }
 }
