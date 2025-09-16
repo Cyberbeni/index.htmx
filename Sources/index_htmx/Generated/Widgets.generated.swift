@@ -61,6 +61,7 @@ extension Config {
 			}
 		}
 
+		// FIXME: make the return type `sending some HTML` after this is fixed: https://github.com/swiftlang/swift/issues/84318
 		@HTMLBuilder
 		func placeholder() -> some HTML {
 			switch self {

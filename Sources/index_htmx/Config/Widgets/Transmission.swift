@@ -110,7 +110,7 @@ struct Transmission: WidgetConfig, PasswordAuth {
 	}
 
 	@HTMLBuilder
-	func render(response: Response?) -> some HTML {
+	func render(response: Response?) -> sending _HTMLConditional<ErrorView, _HTMLArray<DetailItem>> {
 		if let response, case let .error(error) = response.result {
 			ErrorView(title: error)
 		} else {

@@ -76,7 +76,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	}
 
 	@HTMLBuilder
-	func render(response: Response?) -> some HTML {
+	func render(response: Response?) -> sending _HTMLArray<DetailItem> {
 		for field in fieldConfig {
 			DetailItem(title: field.title, value: field.value(for: response))
 		}

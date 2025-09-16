@@ -91,7 +91,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 	typealias Response = String
 
 	@HTMLBuilder
-	func render(response: Response?) -> some HTML {
+	func render(response: Response?) -> sending _HTMLConditional<_HTMLArray<DetailItem>, _HTMLArray<DetailItem>> {
 		if let response {
 			for (field, response) in zip(fieldConfig, response.split(separator: "\n", omittingEmptySubsequences: false)) {
 				DetailItem(title: field.title, value: field.value(for: String(response)))
