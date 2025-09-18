@@ -4,7 +4,7 @@ set -eo pipefail
 pushd "$(dirname "${BASH_SOURCE[0]}")/.." > /dev/null
 SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 
-DOCKER_IMAGE="ghcr.io/krzysztofzablocki/sourcery:2.2.7"
+DOCKER_IMAGE="ghcr.io/krzysztofzablocki/sourcery:2.3.0"
 PROCESS=""
 
 do_it() {
