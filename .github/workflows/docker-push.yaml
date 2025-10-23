@@ -3,6 +3,8 @@ name: Push tagged version to container registry
 on:
   push:
     tags: [ 'v*.*.*' ]
+  pull_request:
+    paths: [ 'Dockerfile' ]
 
 jobs:
   docker-push:
