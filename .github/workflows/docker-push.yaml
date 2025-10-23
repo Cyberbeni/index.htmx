@@ -14,3 +14,4 @@ jobs:
     uses: Cyberbeni/workflows/.github/workflows/docker-push.yml@master
     with:
       image_name: ${{ github.repository }}
+      platforms: linux/amd64
