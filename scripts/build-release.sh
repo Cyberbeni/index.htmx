@@ -7,8 +7,11 @@ pushd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null
 BUILD_ARGS=(
 	--product index_htmx
 	--configuration release
-	--cache-path /workspace/.spm-cache
 	-Xlinker -ljemalloc
 )
+
+if [[ "$DOCKER_BUILD" = true ]]; then
+	BUILD_ARGS+=(--cache-path /workspace/.spm-cache)
+fi
 
 swift build "${BUILD_ARGS[@]}"
