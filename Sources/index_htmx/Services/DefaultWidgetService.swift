@@ -59,7 +59,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
 				if let response = try decode(body: body) {
 					Log.debug("HTTP call OK: \(response)")
-					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
+					let sse = try await ByteBuffer.htmxSse(id: id, html: config.render(response: response))
 					publisher.publish(sse, cacheId: id)
 				} else {
 					Log.error("Couldn't decode the response")

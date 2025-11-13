@@ -29,7 +29,6 @@ let package = Package(
 				.product(name: "Hummingbird", package: "hummingbird"),
 				.product(name: "HummingbirdElementary", package: "hummingbird-elementary"),
 				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
-				.product(name: "ElementaryHTMXSSE", package: "elementary-htmx"),
 				.product(name: "AsyncHTTPClient", package: "async-http-client"),
 			],
 			swiftSettings: [

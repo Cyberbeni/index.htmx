@@ -13,7 +13,7 @@ struct LargeTile: HTML {
 					IconView(config.icon, context: context)
 					div { config.title }
 				}
-				div(.class("detail-row"), .sse.swap(widgetId)) {
+				div(.class("detail-row"), .id(widgetId)) {
 					widget.placeholder()
 				}
 			}

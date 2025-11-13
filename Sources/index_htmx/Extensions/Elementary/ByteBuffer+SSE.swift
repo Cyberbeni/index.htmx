@@ -2,16 +2,14 @@ import Elementary
 import NIO
 
 extension ByteBuffer {
-	static func sse(event: String?, html: consuming (any HTML)?) async throws -> ByteBuffer {
+	static func htmxSse(id: String, html innerHtml: consuming some HTML) async throws -> ByteBuffer {
 		var buffer = ByteBuffer()
 		buffer.reserveCapacity(512)
-		if let event {
-			buffer.writeString("event: \(event)\n")
-		}
 		buffer.writeStaticString("data: ")
-		if let html {
-			try await buffer.writeHTML(html)
+		let html = div(.id(id), .hx.swapOOB(.innerHTML)) {
+			innerHtml
 		}
+		try await buffer.writeHtml(html)
 		buffer.writeStaticString("\n\n")
 		return buffer
 	}

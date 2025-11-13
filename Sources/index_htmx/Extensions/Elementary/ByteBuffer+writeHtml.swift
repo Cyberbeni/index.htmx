@@ -2,7 +2,7 @@ import Elementary
 import NIO
 
 extension ByteBuffer {
-	mutating func writeHTML(_ html: consuming any HTML, chunkSize: Int = 1024) async throws {
+	mutating func writeHtml(_ html: consuming any HTML, chunkSize: Int = 1024) async throws {
 		try await html.render(into: &self, chunkSize: chunkSize)
 	}
 }

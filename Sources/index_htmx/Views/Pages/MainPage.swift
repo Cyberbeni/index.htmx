@@ -1,5 +1,5 @@
 import Elementary
-import ElementaryHTMXSSE
+import ElementaryHTMX
 
 struct MainPage: HTMLDocument {
 	let generalConfig: Config.General
@@ -32,16 +32,14 @@ struct MainPage: HTMLDocument {
 			link(.href("/\(context.runTimestamp)/\(path)"), .rel(.stylesheet))
 		}
 		script(.src("/\(context.staticFilesTimestamp)/htmx.min.js")) {}
-		script(.src("/\(context.staticFilesTimestamp)/htmxsse.min.js")) {}
 		for path in generalConfig.customJs {
 			script(.src("/\(context.runTimestamp)/\(path)"), .defer) {}
 		}
 	}
 
 	var body: some HTML {
-		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(context.runTimestamp)")) {
-			script(.src("/\(context.staticFilesTimestamp)/autoreload.js")) {}
-			script(.sse.swap("reload")) {}
+		main(.class("container"), .hx.get("/sse?timestamp=\(context.runTimestamp)"), .hx.trigger(.event(.load)), .hx.stream(.continuous), .hx.swap(.none)) {
+			script(.id("reload")) {}
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {
 					Section(
