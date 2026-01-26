@@ -6,7 +6,7 @@ extension ByteBuffer {
 		var buffer = ByteBuffer()
 		buffer.reserveCapacity(512)
 		buffer.writeStaticString("data: ")
-		let html = div(.id(id), .hx.swapOOB(.innerHTML)) {
+		let html = hxPartial(.hx.target("#\(id)"), .hx.swap(.innerHTML)) {
 			innerHtml
 		}
 		try await buffer.writeHtml(html)
