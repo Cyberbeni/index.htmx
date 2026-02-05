@@ -3,7 +3,7 @@ import Elementary
 struct ErrorView: HTML {
 	let title: String
 
-	var content: some HTML {
+	var body: some HTML {
 		div(.class("error")) {
 			title
 		}

@@ -4,7 +4,7 @@ struct MiniSection: HTML {
 	let config: Config.Cards.Section
 	let context: RenderingContext
 
-	var content: some HTML {
+	var body: some HTML {
 		div(.class("section mini")) {
 			h6(.class("header")) {
 				IconView(config.icon, context: context)
@@ -15,7 +15,7 @@ struct MiniSection: HTML {
 					BasicTile(
 						config: card,
 						context: context,
-						isMini: true
+						isMini: true,
 					)
 				}
 			}

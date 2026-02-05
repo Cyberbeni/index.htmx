@@ -4,7 +4,7 @@ struct Section: HTML {
 	let config: Config.Cards.Section
 	let context: RenderingContext
 
-	var content: some HTML {
+	var body: some HTML {
 		div(.class("section")) {
 			h6(.class("header")) {
 				IconView(config.icon, context: context)
@@ -13,7 +13,7 @@ struct Section: HTML {
 			for card in config.cards {
 				LargeTile(
 					config: card,
-					context: context
+					context: context,
 				)
 			}
 		}

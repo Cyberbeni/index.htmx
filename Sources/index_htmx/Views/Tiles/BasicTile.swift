@@ -9,7 +9,7 @@ struct BasicTile: HTML {
 		isMini ? "tile mini" : "tile basic"
 	}
 
-	var content: some HTML {
+	var body: some HTML {
 		a(.href(config.resolvedUrl(context)), .class(aClass), .role(.button)) {
 			IconView(config.icon, context: context)
 			div { config.title }
