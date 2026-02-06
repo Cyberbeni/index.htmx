@@ -4,7 +4,7 @@ struct LargeTile: HTML {
 	let config: Config.Cards.Card
 	let context: RenderingContext
 
-	var content: some HTML {
+	var body: some HTML {
 		if let widget = config.widget,
 		   let widgetId = config.widgetId
 		{
@@ -21,7 +21,7 @@ struct LargeTile: HTML {
 			BasicTile(
 				config: config,
 				context: context,
-				isMini: false
+				isMini: false,
 			)
 		}
 	}

@@ -13,7 +13,7 @@ private extension HTML {
 	}
 }
 
-private class ByteBufferWriter: HTMLStreamWriter {
+private struct ByteBufferWriter: HTMLStreamWriter {
 	private let buffer: UnsafeMutablePointer<ByteBuffer>
 
 	init(buffer: UnsafeMutablePointer<ByteBuffer>) {

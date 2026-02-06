@@ -9,7 +9,7 @@ struct IconView: HTML {
 		self.context = context
 	}
 
-	var content: some HTML {
+	var body: some HTML {
 		switch icon.type {
 		case .mask:
 			div(.class("mask icon"), .ariaHidden(true), .style("mask-image: url(/\(context.runTimestamp)/\(icon.path));")) {}

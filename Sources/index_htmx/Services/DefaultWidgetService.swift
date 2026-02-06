@@ -31,7 +31,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 				Config.Response.self,
 				decoder: Self.jsonDecoder(),
 				at: 0,
-				length: body.readableBytes
+				length: body.readableBytes,
 			)
 		}
 	}

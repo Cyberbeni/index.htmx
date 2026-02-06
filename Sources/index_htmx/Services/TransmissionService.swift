@@ -58,7 +58,7 @@ extension Transmission {
 						"status",
 						"rateDownload",
 						"rateUpload",
-					])
+					]),
 				)))
 				let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
 				switch response.status.code {
@@ -68,7 +68,7 @@ extension Transmission {
 						Config.Response.self,
 						decoder: Self.jsonDecoder(),
 						at: 0,
-						length: body.readableBytes
+						length: body.readableBytes,
 					) {
 						Log.debug("HTTP call OK: \(response)")
 						let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
