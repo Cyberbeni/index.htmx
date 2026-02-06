@@ -1,5 +1,5 @@
 {
-  "originHash" : "5e4e5a2a4bd63b6b770ee8b369c7c9c272beed14a393c3a65a90a416fcdc9c9f",
+  "originHash" : "5a2857df62a7f8d9646f17075f7d26ab20a9e941e441adc6d6a403e97ca6f591",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -31,7 +31,7 @@
     {
       "identity" : "elementary-htmx",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sliemeobn/elementary-htmx",
+      "location" : "https://github.com/elementary-swift/elementary-htmx",
       "state" : {
         "revision" : "f7ba147f2a076142a90a4f8300a89584164dba6d",
         "version" : "0.5.1"
