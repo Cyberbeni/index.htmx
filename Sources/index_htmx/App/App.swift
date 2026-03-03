@@ -36,7 +36,7 @@ actor App {
 		do {
 			generalConfig = try decoder.decode(
 				Config.General.self,
-				from: Data(contentsOf: configDir.appending(component: "config.general.json"))
+				from: Data(contentsOf: configDir.appending(component: "config.general.json")),
 			)
 		} catch {
 			Log.error("Error parsing config.general.json: \(error)")
@@ -45,7 +45,7 @@ actor App {
 		do {
 			mainCardsConfig = try decoder.decode(
 				Config.Cards.self,
-				from: Data(contentsOf: configDir.appending(component: "config.main_cards.json"))
+				from: Data(contentsOf: configDir.appending(component: "config.main_cards.json")),
 			)
 		} catch {
 			Log.warning("Error parsing config.main_cards.json: \(error)")
@@ -54,7 +54,7 @@ actor App {
 		do {
 			miniCardsConfig = try decoder.decode(
 				Config.Cards.self,
-				from: Data(contentsOf: configDir.appending(component: "config.mini_cards.json"))
+				from: Data(contentsOf: configDir.appending(component: "config.mini_cards.json")),
 			)
 		} catch {
 			Log.warning("Error parsing config.mini_cards.json: \(error)")
@@ -105,7 +105,7 @@ actor App {
 				urlBasePath: "/" + runTimestamp,
 				cacheControl: .init([
 					(MediaType(type: .any), .publicImmutable),
-				])
+				]),
 			))
 			.addRoutes(
 				configDate: configDate,
@@ -113,7 +113,7 @@ actor App {
 				staticFilesTimestamp: staticFilesTimestamp,
 				generalConfig: generalConfig,
 				mainCardsConfig: mainCardsConfig,
-				miniCardsConfig: miniCardsConfig
+				miniCardsConfig: miniCardsConfig,
 			)
 
 		let app = Application(
@@ -122,7 +122,7 @@ actor App {
 			services: services,
 			onServerRunning: { _ in
 				Log.info("Server running")
-			}
+			},
 		)
 
 		try await app.runService()

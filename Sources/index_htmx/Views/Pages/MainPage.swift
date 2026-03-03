@@ -44,13 +44,13 @@ struct MainPage: HTMLDocument {
 				for section in mainCardsConfig.sections {
 					Section(
 						config: section,
-						context: context
+						context: context,
 					)
 				}
 				for section in miniCardsConfig.sections {
 					MiniSection(
 						config: section,
-						context: context
+						context: context,
 					)
 				}
 			}

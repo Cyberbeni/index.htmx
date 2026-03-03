@@ -1,7 +1,7 @@
 
 services:
   index_htmx:
-    image: ghcr.io/cyberbeni/index.htmx:latest
+    image: docker.io/cyberbeni/index.htmx:latest
     container_name: index_htmx
     mem_limit: '128m'
     cpus: 1
@@ -10,9 +10,9 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway' # used for accessing other services running on the host machine
     environment:
-      TZ: 'Europe/Budapest'
       LANG: 'hu' # used for formatting dates/numbers
     volumes:
       - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 80:8080/tcp

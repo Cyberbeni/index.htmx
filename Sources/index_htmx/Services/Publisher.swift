@@ -29,12 +29,6 @@ actor Publisher: Service {
 		let id = SubscriptionID()
 		let (stream, source) = AsyncStream<Value>.makeStream()
 		subSource.yield(.add(id, source))
-		Task {
-			let values = await cachedValues.values
-			for value in values {
-				source.yield(value)
-			}
-		}
 		return (stream, id)
 	}
 
@@ -64,6 +58,9 @@ actor Publisher: Service {
 
 	private func _addSubsciber(_ id: SubscriptionID, source: AsyncStream<Value>.Continuation) {
 		subscriptions[id] = source
+		for value in cachedValues.values {
+			source.yield(value)
+		}
 	}
 
 	private func _removeSubsciber(_ id: SubscriptionID) {

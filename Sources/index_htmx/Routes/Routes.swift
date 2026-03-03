@@ -9,17 +9,17 @@ extension Router {
 		staticFilesTimestamp: String,
 		generalConfig: Config.General,
 		mainCardsConfig: Config.Cards,
-		miniCardsConfig: Config.Cards
+		miniCardsConfig: Config.Cards,
 	) -> Self {
 		@Sendable
 		func mainPageResponse(
 			request: consuming Request,
 			context: consuming Context,
-			isPwa: Bool
+			isPwa: Bool,
 		) async throws -> some ResponseGenerator {
 			try await request.ifModifiedSince(
 				modificationDate: configDate,
-				context: context
+				context: context,
 			) {
 				let isExternal: Bool
 				if let externalHost = generalConfig.externalHost,
@@ -42,8 +42,8 @@ extension Router {
 							runTimestamp: runTimestamp,
 							staticFilesTimestamp: staticFilesTimestamp,
 							isExternal: isExternal,
-							isPwa: isPwa
-						)
+							isPwa: isPwa,
+						),
 					)
 				}
 			}
@@ -64,7 +64,7 @@ extension Router {
 			name: generalConfig.title,
 			display: "standalone",
 			startUrl: "/pwa.html",
-			icons: icons
+			icons: icons,
 		)
 		let webManifestData: ByteBuffer?
 		do {
@@ -76,7 +76,7 @@ extension Router {
 		get("\(runTimestamp)/site.webmanifest") { request, context in
 			try await request.ifModifiedSince(
 				modificationDate: configDate,
-				context: context
+				context: context,
 			) {
 				if let webManifestData {
 					Response(
@@ -85,11 +85,11 @@ extension Router {
 							.contentType: "application/manifest+json; charset=utf-8",
 							.cacheControl: CacheControl.publicImmutable,
 						],
-						body: ResponseBody(byteBuffer: webManifestData)
+						body: ResponseBody(byteBuffer: webManifestData),
 					)
 				} else {
 					Response(
-						status: .internalServerError
+						status: .internalServerError,
 					)
 				}
 			}

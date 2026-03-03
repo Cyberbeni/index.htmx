@@ -32,7 +32,7 @@ extension Router {
 						}
 					}
 					try await writer.finish(nil)
-				}
+				},
 			)
 		}
 

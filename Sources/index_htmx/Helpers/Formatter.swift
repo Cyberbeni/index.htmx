@@ -109,13 +109,13 @@ private extension Formatter {
 			if hour24Count != expectedHour24Count {
 				dateFormat = dateFormat.replacingOccurrences(
 					of: String(repeating: "H", count: hour24Count),
-					with: String(repeating: "H", count: expectedHour24Count)
+					with: String(repeating: "H", count: expectedHour24Count),
 				)
 			}
 			if hour12Count != expectedHour12Count {
 				dateFormat = dateFormat.replacingOccurrences(
 					of: String(repeating: "h", count: hour12Count),
-					with: String(repeating: "h", count: expectedHour12Count)
+					with: String(repeating: "h", count: expectedHour12Count),
 				)
 			}
 			formatter.dateFormat = dateFormat
@@ -132,7 +132,7 @@ private extension Formatter {
 		let monthCount = shortDateOnlyFormatter.dateFormat.count(where: { $0 == "M" })
 		let dayCount = shortDateOnlyFormatter.dateFormat.count(where: { $0 == "d" })
 		formatter.setLocalizedDateFormatFromTemplate(
-			"\(String(repeating: "M", count: monthCount))\(String(repeating: "d", count: dayCount))jjmm"
+			"\(String(repeating: "M", count: monthCount))\(String(repeating: "d", count: dayCount))jjmm",
 		)
 		return formatter
 	}()
