@@ -15,6 +15,7 @@ do_it() {
 
 	npm ci
 
+	# TODO: also get hx-sse.min.js after next htmx4 release
 	cp ./node_modules/htmx.org/dist/htmx.min.js "$RESOURCES_DIR/htmx.min.js"
 	cp ./node_modules/@picocss/pico/css/pico.css "$RESOURCES_DIR/pico.css"
 }

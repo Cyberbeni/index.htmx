@@ -38,7 +38,16 @@ struct MainPage: HTMLDocument {
 	}
 
 	var body: some HTML {
-		main(.class("container"), .hx.get("/sse?timestamp=\(context.runTimestamp)"), .hx.trigger(.event(.load)), .hx.stream(.continuous), .hx.swap(.none)) {
+		main(
+			.class("container"),
+			.hx.get("/sse?timestamp=\(context.runTimestamp)"),
+			.hx.trigger(.event(.load)),
+			.hx.config(context.isAppleWebKit
+				? "sse.reconnect:true sse.closeOnHide:true"
+				: "sse.reconnect:true"
+			),
+			.hx.swap(.none),
+		) {
 			script(.id("reload")) {}
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {

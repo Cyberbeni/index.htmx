@@ -8,8 +8,8 @@ public extension HTMLTag {
 public typealias hxPartial<Content: HTML> = HTMLElement<HTMLTag.hxPartial, Content>
 
 public extension HTMLAttribute.hx {
-	static func stream(_ streamMode: HTMLAttributeValue.HTMX.StreamMode) -> HTMLAttribute {
-		.init(name: "hx-stream", value: streamMode.rawValue)
+	static func config(_ value: String) -> HTMLAttribute {
+		.init(name: "hx-config", value: value)
 	}
 }
 

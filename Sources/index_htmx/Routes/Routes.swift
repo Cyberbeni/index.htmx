@@ -21,6 +21,7 @@ extension Router {
 				modificationDate: configDate,
 				context: context,
 			) {
+				let isAppleWebKit = request.headers[.userAgent]?.contains("AppleWebKit/") ?? false
 				let isExternal: Bool
 				if let externalHost = generalConfig.externalHost,
 				   externalHost == request.head.authority
@@ -41,6 +42,7 @@ extension Router {
 							samehostUrlPrefix: request.samehostUrlPrefix(fallback: generalConfig.baseUrlFallback),
 							runTimestamp: runTimestamp,
 							staticFilesTimestamp: staticFilesTimestamp,
+							isAppleWebKit: isAppleWebKit,
 							isExternal: isExternal,
 							isPwa: isPwa,
 						),
