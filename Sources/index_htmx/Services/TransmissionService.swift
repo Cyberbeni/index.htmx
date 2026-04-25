@@ -1,6 +1,6 @@
 import AsyncHTTPClient
 import Hummingbird
-import NIOFoundationCompat
+import NIOFoundationEssentialsCompat
 import ServiceLifecycle
 
 extension Transmission {

@@ -14,20 +14,20 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://codeberg.org/Cyberbeni/CBLogging", from: "1.3.2"),
-		.package(url: "https://github.com/apple/swift-nio", from: "2.97.1"),
+		.package(url: "https://github.com/apple/swift-nio", from: "2.99.0"),
 		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.11.0"),
 		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
 		.package(url: "https://github.com/elementary-swift/elementary-htmx", from: "0.4.0"),
 		.package(url: "https://github.com/swift-server/async-http-client", from: "1.25.2"),
 		// Plugins:
-		.package(url: "https://codeberg.org/Cyberbeni/SwiftFormat-mirror", from: "0.59.1"),
+		.package(url: "https://codeberg.org/Cyberbeni/SwiftFormat-mirror", from: "0.60.1"),
 	],
 	targets: [
 		.executableTarget(
 			name: "index_htmx",
 			dependencies: [
 				.product(name: "CBLogging", package: "CBLogging"),
-				.product(name: "NIOFoundationCompat", package: "swift-nio"),
+				.product(name: "NIOFoundationEssentialsCompat", package: "swift-nio"),
 				.product(name: "Hummingbird", package: "hummingbird"),
 				.product(name: "HummingbirdElementary", package: "hummingbird-elementary"),
 				.product(name: "ElementaryHTMX", package: "elementary-htmx"),
