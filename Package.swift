@@ -13,12 +13,12 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://codeberg.org/Cyberbeni/CBLogging", from: "1.3.2"),
-		.package(url: "https://github.com/apple/swift-nio", from: "2.99.0"),
-		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.11.0"),
-		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.4.1"),
-		.package(url: "https://github.com/elementary-swift/elementary-htmx", from: "0.4.0"),
-		.package(url: "https://github.com/swift-server/async-http-client", from: "1.25.2"),
+		.package(url: "https://codeberg.org/Cyberbeni/CBLogging", from: "1.4.2"),
+		.package(url: "https://github.com/apple/swift-nio", from: "2.101.0"),
+		.package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.25.0"),
+		.package(url: "https://github.com/hummingbird-community/hummingbird-elementary", from: "0.5.1"),
+		.package(url: "https://github.com/elementary-swift/elementary-htmx", from: "0.5.1"),
+		.package(url: "https://github.com/swift-server/async-http-client", from: "1.34.0"),
 		// Plugins:
 		.package(url: "https://codeberg.org/Cyberbeni/SwiftFormat-mirror", from: "0.60.1"),
 	],
@@ -37,7 +37,7 @@ let package = Package(
 			swiftSettings: [
 				.define("DEBUG", .when(configuration: .debug)),
 				.unsafeFlags(["-Xfrontend", "-warn-long-expression-type-checking=100"], .when(configuration: .debug)),
-				.unsafeFlags(["-warnings-as-errors"], .when(configuration: .release)),
+				.treatAllWarnings(as: .error, .when(configuration: .release)),
 				// .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
 			],
 			linkerSettings: [
