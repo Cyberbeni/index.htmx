@@ -37,7 +37,7 @@ let package = Package(
 			swiftSettings: [
 				.define("DEBUG", .when(configuration: .debug)),
 				.unsafeFlags(["-Xfrontend", "-warn-long-expression-type-checking=100"], .when(configuration: .debug)),
-				.unsafeFlags(["-warnings-as-errors"], .when(configuration: .release)),
+				.treatAllWarnings(as: .error, .when(configuration: .release)),
 				// .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
 			],
 			linkerSettings: [
