@@ -61,9 +61,8 @@ extension Config {
 			}
 		}
 
-		// FIXME: make the return type `sending some HTML` after this is fixed: https://github.com/swiftlang/swift/issues/84318
 		@HTMLBuilder
-		func placeholder() -> some HTML {
+		func placeholder() -> some HTML & Sendable {
 			switch self {
 			case let .adGuard(config):
 				config.render(response: nil)
