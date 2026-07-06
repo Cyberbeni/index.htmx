@@ -4,7 +4,7 @@ protocol WidgetConfig: Decodable, Sendable {
 	associatedtype Service: WidgetService<Self>
 	associatedtype Field: Decodable, Sendable
 	associatedtype Response: Decodable, Sendable
-	associatedtype View: HTML
+	associatedtype View: HTML, Sendable
 
 	var url: String { get }
 	var fields: [Field]? { get }
@@ -16,8 +16,7 @@ protocol WidgetConfig: Decodable, Sendable {
 	static var timeout: Int64 { get }
 	static var maxResponseSize: Int { get }
 
-	// FIXME: make the return type of implementations `sending some View` after this is fixed: https://github.com/swiftlang/swift/issues/74846
-	@HTMLBuilder func render(response: Response?) -> sending View
+	@HTMLBuilder func render(response: Response?) -> View
 	func authHeader() -> String?
 	func requestData() throws -> Data?
 }

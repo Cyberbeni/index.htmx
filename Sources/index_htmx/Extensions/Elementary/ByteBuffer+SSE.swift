@@ -2,7 +2,7 @@ import Elementary
 import NIO
 
 extension ByteBuffer {
-	static func sse(event: String?, html: consuming (any HTML)?) async throws -> ByteBuffer {
+	static func sse(event: String?, html: consuming (any HTML & Sendable)?) async throws -> ByteBuffer {
 		var buffer = ByteBuffer()
 		buffer.reserveCapacity(512)
 		if let event {
