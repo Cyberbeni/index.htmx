@@ -10,10 +10,8 @@ struct Radarr: WidgetConfig, ApiKeyAuth {
 	let apiKey: String
 	let fields: [Field]?
 
-	static let oneDay: TimeInterval = 86400
-
-	var startDate: Date { Date(timeIntervalSinceNow: -(previousDays ?? 28) * Self.oneDay) }
-	var endDate: Date { Date(timeIntervalSinceNow: (nextDays ?? 90) * Self.oneDay) }
+	var startDate: Date { Date(timeIntervalSinceNow: -(previousDays ?? 28) * Constants.oneDay) }
+	var endDate: Date { Date(timeIntervalSinceNow: (nextDays ?? 90) * Constants.oneDay) }
 	var path: String {
 		let start = Formatter.iso8601(date: startDate)
 		let end = Formatter.iso8601(date: endDate)

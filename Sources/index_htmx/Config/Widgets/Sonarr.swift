@@ -10,11 +10,9 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	let apiKey: String
 	let fields: [Field]?
 
-	static let oneDay: TimeInterval = 86400
-
 	var path: String {
-		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -(previousDays ?? 28) * Self.oneDay))
-		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: (nextDays ?? 28) * Self.oneDay))
+		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -(previousDays ?? 28) * Constants.oneDay))
+		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: (nextDays ?? 28) * Constants.oneDay))
 		return "/api/v3/calendar?includeSeries=true&start=\(start)&end=\(end)&unmonitored=\(unmonitored ?? true)"
 	}
 
