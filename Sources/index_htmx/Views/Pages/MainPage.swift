@@ -59,15 +59,16 @@ struct MainPage: HTMLDocument {
 		}
 		footer(.class("container")) {
 			a(.href(context.isPwa ? "/pwa.html" : "/"), .role(.button), .class("icon"), .title("Refresh page"), .target("_self")) {
-				svg {
-					use(.href("/\(context.staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
+				SVG.svg {
+					SVG.use(.href("/\(context.staticFilesTimestamp)/refresh.svg#icon"), .width("100%"), .height("100%")) {}
 				}
 			}
 			if generalConfig.showReloadConfigButton {
 				button(.class("icon"), .on(.click, #"fetch("/reload_config",{method:"POST"})"#), .title("Reload config")) {
-					svg {
-						use(.href("/\(context.staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"), .y("30%")) {}
-						use(.href("/\(context.staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
+					SVG.svg {
+						SVG.use(.href("/\(context.staticFilesTimestamp)/refresh.svg#icon"), .width("70%"), .height("70%"), .x("30%"),
+						        .y("30%")) {}
+						SVG.use(.href("/\(context.staticFilesTimestamp)/settings.svg#icon"), .width("60%"), .height("60%")) {}
 					}
 				}
 			}
