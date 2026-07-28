@@ -10,7 +10,7 @@ struct Technitium: WidgetConfig, AccessTokenAuth {
 
 	var path: String {
 		let start = Formatter.iso8601(date: Date(timeIntervalSinceNow: -Constants.oneDay))
-		let end = Formatter.iso8601(date: Date.now)
+		let end = Formatter.iso8601(date: Date(timeIntervalSinceNow: 60))
 		return "/api/dashboard/stats/get?type=custom&start=\(start)&end=\(end)"
 	}
 
@@ -32,7 +32,7 @@ struct Technitium: WidgetConfig, AccessTokenAuth {
 			guard let response else { return "-" }
 			return switch self {
 			case .queries: Formatter.number(response.response.stats.totalQueries)
-			case .blocked: Formatter.number(response.response.stats.totalNxDomain + response.response.stats.totalBlocked)
+			case .blocked: Formatter.number(response.response.stats.totalBlocked)
 			}
 		}
 	}
@@ -41,8 +41,22 @@ struct Technitium: WidgetConfig, AccessTokenAuth {
 		struct InnerResponse: Decodable {
 			struct Stats: Decodable {
 				let totalQueries: Int
+				let totalNoError: Int
+				let totalServerFailure: Int
 				let totalNxDomain: Int
+				let totalRefused: Int
+				let totalAuthoritative: Int
+				let totalRecursive: Int
+				let totalCached: Int
 				let totalBlocked: Int
+				let totalDropped: Int
+				let totalClients: Int
+				let zones: Int
+				let cachedEntries: Int
+				let allowedZones: Int
+				let blockedZones: Int
+				let allowListZones: Int
+				let blockListZones: Int
 			}
 
 			let stats: Stats
