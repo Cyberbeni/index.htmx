@@ -1,33 +1,5 @@
 import Elementary
 
-// dimensions
-extension HTMLTag.svg: @retroactive HTMLTrait.Attributes.dimensions {}
-
-extension HTMLAttribute where Tag: HTMLTrait.Attributes.dimensions {
-	static func width(_ value: String) -> Self {
-		HTMLAttribute(name: "width", value: value)
-	}
-
-	static func height(_ value: String) -> Self {
-		HTMLAttribute(name: "height", value: value)
-	}
-}
-
-// position
-extension HTMLTrait.Attributes {
-	protocol position {}
-}
-
-extension HTMLAttribute where Tag: HTMLTrait.Attributes.position {
-	static func x(_ value: String) -> Self {
-		HTMLAttribute(name: "x", value: value)
-	}
-
-	static func y(_ value: String) -> Self {
-		HTMLAttribute(name: "y", value: value)
-	}
-}
-
 // role
 public extension HTMLAttributeValue.Role {
 	static var button: Self { "button" }
@@ -66,10 +38,21 @@ extension HTMLTrait.Attributes {
 
 extension HTMLTag.div: HTMLTrait.Attributes.ariaHidden {}
 extension HTMLTag.img: HTMLTrait.Attributes.ariaHidden {}
-extension HTMLTag.svg: HTMLTrait.Attributes.ariaHidden {}
 
 extension HTMLAttribute where Tag: HTMLTrait.Attributes.ariaHidden {
 	static func ariaHidden(_ value: Bool) -> Self {
 		HTMLAttribute(name: "aria-hidden", value: "\(value)")
+	}
+}
+
+extension SVGTrait.Attributes {
+	protocol ariaHidden {}
+}
+
+extension SVGTag.svg: SVGTrait.Attributes.ariaHidden {}
+
+extension SVGAttribute where Tag: SVGTrait.Attributes.ariaHidden {
+	static func ariaHidden(_ value: Bool) -> Self {
+		SVGAttribute(name: "aria-hidden", value: "\(value)")
 	}
 }
