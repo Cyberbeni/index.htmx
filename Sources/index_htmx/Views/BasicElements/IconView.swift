@@ -14,8 +14,8 @@ struct IconView: HTML {
 		case .mask:
 			div(.class("mask icon"), .ariaHidden(true), .style("mask-image: url(/\(context.runTimestamp)/\(icon.path));")) {}
 		case .doctoredSvg:
-			SVG.svg(.class("icon"), .ariaHidden(true)) {
-				SVG.use(.href("/\(context.runTimestamp)/\(icon.path)#icon"), .width("100%"), .height("100%")) {}
+			svg(.class("icon"), .ariaHidden(true)) {
+				use(.href("/\(context.runTimestamp)/\(icon.path)#icon"), .width("100%"), .height("100%")) {}
 			}
 		case .image:
 			img(.class("icon"), .ariaHidden(true), .src("/\(context.runTimestamp)/\(icon.path)"))
