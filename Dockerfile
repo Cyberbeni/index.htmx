@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM codeberg.org/cyberbeni/swift-builder:latest-musl-allocator AS swift-build
+FROM --platform=$BUILDPLATFORM codeberg.org/cyberbeni/swift-builder:latest-mimalloc3 AS swift-build
 ARG BUILDPLATFORM
 WORKDIR /workspace
 COPY ./Package.swift ./Package.resolved /workspace/
@@ -24,6 +24,7 @@ COPY ./package.json ./package-lock.json /workspace/
 RUN npm ci
 
 FROM docker.io/alpine:latest AS release
+ENV MIMALLOC_ARENA_EAGER_COMMIT=0
 RUN apk add --no-cache \
 	tzdata
 COPY ./Resources /data
