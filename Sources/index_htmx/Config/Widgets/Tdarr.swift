@@ -20,8 +20,8 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 		var title: String {
 			switch self {
 			case .workers: "Workers"
-			case .transcodeQueue: "Transcode"
-			case .healthCheckQueue: "Health Check"
+			case .transcodeQueue: "Transcode Queue"
+			case .healthCheckQueue: "Health Check Queue"
 			}
 		}
 
@@ -34,8 +34,8 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 			else { return "-" }
 			return switch self {
 			case .workers: Formatter.number(node.workers.count)
-			case .transcodeQueue: Formatter.number(node.queueLengths.transcodecpu + node.queueLengths.transcodegpu)
-			case .healthCheckQueue: Formatter.number(node.queueLengths.healthcheckcpu + node.queueLengths.healthcheckgpu)
+			case .transcodeQueue: Formatter.number(node.queueLengths.transcodecpu)
+			case .healthCheckQueue: Formatter.number(node.queueLengths.healthcheckcpu)
 			}
 		}
 	}
