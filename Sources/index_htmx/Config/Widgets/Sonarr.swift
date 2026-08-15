@@ -7,7 +7,7 @@ struct Sonarr: WidgetConfig, ApiKeyAuth {
 	let nextDays: Double?
 	let previousDays: Double?
 	let unmonitored: Bool?
-	let apiKey: String
+	let apiKey: String?
 	let fields: [Field]?
 
 	var path: String {

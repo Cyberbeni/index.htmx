@@ -9,6 +9,7 @@ extension Config {
 		case homeAssistant(HomeAssistant)
 		case radarr(Radarr)
 		case sonarr(Sonarr)
+		case tdarr(Tdarr)
 		case technitium(Technitium)
 		case transmission(Transmission)
 		case error(String)
@@ -34,6 +35,9 @@ extension Config {
 				case "sonarr":
 					let value = try Sonarr(from: decoder)
 					self = .sonarr(value)
+				case "tdarr":
+					let value = try Tdarr(from: decoder)
+					self = .tdarr(value)
 				case "technitium":
 					let value = try Technitium(from: decoder)
 					self = .technitium(value)
@@ -58,6 +62,8 @@ extension Config {
 				Radarr.Service(id: id, config: config, publisher: publisher)
 			case let .sonarr(config):
 				Sonarr.Service(id: id, config: config, publisher: publisher)
+			case let .tdarr(config):
+				Tdarr.Service(id: id, config: config, publisher: publisher)
 			case let .technitium(config):
 				Technitium.Service(id: id, config: config, publisher: publisher)
 			case let .transmission(config):
@@ -77,6 +83,8 @@ extension Config {
 			case let .radarr(config):
 				config.render(response: nil)
 			case let .sonarr(config):
+				config.render(response: nil)
+			case let .tdarr(config):
 				config.render(response: nil)
 			case let .technitium(config):
 				config.render(response: nil)

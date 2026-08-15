@@ -7,7 +7,7 @@ struct Radarr: WidgetConfig, ApiKeyAuth {
 	let nextDays: Double?
 	let previousDays: Double?
 	let unmonitored: Bool?
-	let apiKey: String
+	let apiKey: String?
 	let fields: [Field]?
 
 	var startDate: Date { Date(timeIntervalSinceNow: -(previousDays ?? 28) * Constants.oneDay) }
