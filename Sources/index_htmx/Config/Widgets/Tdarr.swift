@@ -9,7 +9,7 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 	let fields: [Field]?
 
 	var path: String { "/api/v2/get-nodes" }
-	static var defaultFields: [Field] { [.workers, .transcodeQueue, .healthCheckQueue] }
+	static var defaultFields: [Field] { [.workers, .transcodeQueue] }
 	var pollingInterval: Int { 5 }
 
 	enum Field: String, Decodable {
@@ -21,7 +21,7 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 			switch self {
 			case .workers: "Workers"
 			case .transcodeQueue: "Transcode"
-			case .healthCheckQueue: "Healthcheck"
+			case .healthCheckQueue: "Health Check"
 			}
 		}
 
