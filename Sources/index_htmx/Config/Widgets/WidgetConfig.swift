@@ -48,13 +48,16 @@ extension WidgetConfig where Self: PasswordAuth {
 // MARK: API key auth
 
 protocol ApiKeyAuth {
-	var apiKey: String { get }
+	var apiKey: String? { get }
 }
 
 extension WidgetConfig where Self: ApiKeyAuth {
 	static var authHeaderName: String { "X-API-Key" }
 	func authHeader() -> String? {
-		guard !apiKey.isEmpty else { return nil }
+		guard
+			let apiKey,
+			!apiKey.isEmpty
+		else { return nil }
 		return apiKey
 	}
 }
