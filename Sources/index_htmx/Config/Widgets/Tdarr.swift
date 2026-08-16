@@ -4,62 +4,72 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
-	let nodeName: String
 	let apiKey: String?
 	let fields: [Field]?
 
-	var path: String { "/api/v2/get-nodes" }
-	static var defaultFields: [Field] { [.workers, .transcodeQueue] }
+	var path: String { "/api/v2/stats/get-pies" }
+	static var defaultFields: [Field] { [.transcodeQueue] }
 	var pollingInterval: Int { 5 }
 
 	enum Field: String, Decodable {
-		case workers
 		case transcodeQueue
 		case healthCheckQueue
 
 		var title: String {
 			switch self {
-			case .workers: "Workers"
 			case .transcodeQueue: "Transcode Queue"
 			case .healthCheckQueue: "Health Check Queue"
 			}
 		}
 
-		func value(for response: Response?, nodeName: String) -> String {
-			guard
-				let response,
-				let node = response.values.first(where: { node in
-					node.nodeName == nodeName
-				})
-			else { return "-" }
+		func value(for response: Response?) -> String {
+			guard let response else { return "-" }
 			return switch self {
-			case .workers: Formatter.number(node.workers.count)
-			case .transcodeQueue: Formatter.number(node.queueLengths.transcodecpu)
-			case .healthCheckQueue: Formatter.number(node.queueLengths.healthcheckcpu)
+			case .transcodeQueue: Formatter.number(response.pieStats.status.transcode.first(where: { $0.name == "Queued" })?.value ?? 0)
+			case .healthCheckQueue: Formatter.number(response.pieStats.status.healthcheck.first(where: { $0.name == "Queued" })?.value ?? 0)
 			}
 		}
 	}
 
-	typealias Response = [String: InnerResponse]
-	struct InnerResponse: Decodable {
-		let nodeName: String
-		let workers: [String: Worker]
-		let queueLengths: QueueLengths
+	struct Response: Decodable {
+		let pieStats: PieStats
 
-		struct Worker: Decodable {}
+		struct PieStats: Decodable {
+			let status: Statuses
 
-		struct QueueLengths: Decodable {
-			let healthcheckcpu: Int
-			let healthcheckgpu: Int
-			let transcodecpu: Int
-			let transcodegpu: Int
+			struct Statuses: Decodable {
+				let transcode: [Status]
+				let healthcheck: [Status]
+
+				struct Status: Decodable {
+					let name: String
+					let value: Int
+				}
+			}
 		}
+	}
+
+	struct Request: Encodable {
+		let data: RequestData
+
+		struct RequestData: Encodable {
+			let libraryId: String
+		}
+	}
+
+	func requestData() throws -> Data? {
+		let request = Request(data: .init(libraryId: ""))
+		return try Service.jsonEncoder().encode(request)
 	}
 
 	@HTMLBuilder
 	func render(response: Response?) -> some HTML & Sendable {
 		for field in fieldConfig {
-			DetailItem(title: field.title, value: field.value(for: response, nodeName: nodeName))
+			DetailItem(title: field.title, value: field.value(for: response))
 		}
 	}
+}
+
+extension Tdarr.Service {
+	static func jsonEncoder() -> JSONEncoder { JSONEncoder() }
 }
