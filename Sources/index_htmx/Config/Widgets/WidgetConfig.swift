@@ -32,14 +32,19 @@ extension WidgetConfig {
 // MARK: Password auth
 
 protocol PasswordAuth {
-	var user: String { get }
-	var password: String { get }
+	var user: String? { get }
+	var password: String? { get }
 }
 
 extension WidgetConfig where Self: PasswordAuth {
 	static var authHeaderName: String { "Authorization" }
 	func authHeader() -> String? {
-		guard !user.isEmpty, !password.isEmpty else { return nil }
+		guard
+			let user,
+			let password,
+			!user.isEmpty,
+			!password.isEmpty
+		else { return nil }
 		let authData = Data("\(user):\(password)".utf8).base64EncodedString()
 		return "Basic \(authData)"
 	}
@@ -65,13 +70,16 @@ extension WidgetConfig where Self: ApiKeyAuth {
 // MARK: Access token auth
 
 protocol AccessTokenAuth {
-	var accessToken: String { get }
+	var accessToken: String? { get }
 }
 
 extension WidgetConfig where Self: AccessTokenAuth {
 	static var authHeaderName: String { "Authorization" }
 	func authHeader() -> String? {
-		guard !accessToken.isEmpty else { return nil }
+		guard
+			let accessToken,
+			!accessToken.isEmpty
+		else { return nil }
 		return "Bearer \(accessToken)"
 	}
 }

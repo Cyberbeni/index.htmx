@@ -4,8 +4,8 @@ struct AdGuard: WidgetConfig, PasswordAuth {
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
-	let user: String
-	let password: String
+	let user: String?
+	let password: String?
 	let fields: [Field]?
 
 	var path: String { "/control/stats" }

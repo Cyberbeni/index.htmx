@@ -8,7 +8,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
-	let accessToken: String
+	let accessToken: String?
 	let fields: [Field]?
 
 	var path: String { "/api/template" }
