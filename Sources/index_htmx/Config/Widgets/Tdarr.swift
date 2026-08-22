@@ -37,11 +37,11 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 			return switch self {
 			case .spaceSaved: "\(Formatter.number(response.sizeDiff)) GB"
 			case .transcodeQueue: Formatter.number(response.table1Count)
-			case .transcodeSuccess: Formatter.number(response.table1Count)
-			case .transcodeError: Formatter.number(response.table1Count)
+			case .transcodeSuccess: Formatter.number(response.table2Count)
+			case .transcodeError: Formatter.number(response.table3Count)
 			case .healthCheckQueue: Formatter.number(response.table4Count)
-			case .healthCheckSuccess: Formatter.number(response.table4Count)
-			case .healthCheckError: Formatter.number(response.table4Count)
+			case .healthCheckSuccess: Formatter.number(response.table5Count)
+			case .healthCheckError: Formatter.number(response.table6Count)
 			}
 		}
 	}
