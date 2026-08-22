@@ -2,8 +2,8 @@ import Elementary
 
 struct Transmission: WidgetConfig, PasswordAuth {
 	let url: String
-	let user: String
-	let password: String
+	let user: String?
+	let password: String?
 	let rpcUrl: String?
 	let fields: [Field]?
 

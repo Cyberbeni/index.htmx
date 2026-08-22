@@ -10,7 +10,6 @@ protocol WidgetService<Config>: Service, Sendable {
 	init(id: String, config: Config, publisher: Publisher)
 
 	static func jsonDecoder() -> JSONDecoder
-	static func jsonEncoder() -> JSONEncoder
 }
 
 extension WidgetService {
@@ -19,12 +18,5 @@ extension WidgetService {
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
 		decoder.dateDecodingStrategy = .iso8601
 		return decoder
-	}
-
-	static func jsonEncoder() -> JSONEncoder {
-		let encoder = JSONEncoder()
-		encoder.keyEncodingStrategy = .convertToSnakeCase
-		encoder.dateEncodingStrategy = .iso8601
-		return encoder
 	}
 }

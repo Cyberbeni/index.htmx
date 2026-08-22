@@ -21,7 +21,10 @@ class Entrypoint {
 				try await app.run()
 			}
 			let result = await runTask?.result
-			guard runTask?.isCancelled == true else {
+			guard
+				let runTask,
+				runTask.isCancelled
+			else {
 				if case let .failure(error) = result {
 					Log.error("app.run() returned error: \(error)")
 				}

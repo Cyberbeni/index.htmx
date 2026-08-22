@@ -8,7 +8,7 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 	typealias Service = DefaultWidgetService<Self>
 
 	let url: String
-	let accessToken: String
+	let accessToken: String?
 	let fields: [Field]?
 
 	var path: String { "/api/template" }
@@ -107,8 +107,10 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 		let template: String
 	}
 
+	func jsonEncoder() -> JSONEncoder { JSONEncoder() }
+
 	func requestData() throws -> Data? {
 		let request = Request(template: fieldConfig.map(\.template).joined(separator: "\n"))
-		return try Service.jsonEncoder().encode(request)
+		return try jsonEncoder().encode(request)
 	}
 }

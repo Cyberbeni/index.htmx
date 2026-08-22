@@ -36,6 +36,8 @@ extension Transmission {
 			}
 		}
 
+		func jsonEncoder() -> JSONEncoder { JSONEncoder() }
+
 		func getData(retryOnSessionRenew: Bool) async {
 			do {
 				let url = config.url.appending(config.path)
@@ -51,7 +53,7 @@ extension Transmission {
 				if let sessionToken {
 					request.headers.add(name: sessionHeaderName, value: sessionToken)
 				}
-				request.body = try .bytes(Self.jsonEncoder().encode(Transmission.Request(
+				request.body = try .bytes(jsonEncoder().encode(Transmission.Request(
 					method: "torrent-get",
 					arguments: .init(fields: [
 						"percentDone",
