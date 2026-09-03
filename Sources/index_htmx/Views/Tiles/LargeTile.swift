@@ -34,7 +34,7 @@ struct LargeTile: HTML {
 		IconView(config.icon, context: context)
 		div { config.title }
 		if widget.hasBadge {
-			div(.class("badge"), .sse.swap(widgetId.appending("badge"))) { }
+			div(.class("badge"), .sse.swap(widgetId.appending("badge"))) {}
 		}
 	}
 }
