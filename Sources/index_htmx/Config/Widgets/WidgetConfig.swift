@@ -12,20 +12,25 @@ protocol WidgetConfig: Decodable, Sendable {
 	var path: String { get }
 	static var authHeaderName: String { get }
 	static var defaultFields: [Field] { get }
+	var hasBadge: Bool { get }
 	var pollingInterval: Int { get }
 	static var timeout: Int64 { get }
 	static var maxResponseSize: Int { get }
 
 	@HTMLBuilder func render(response: Response?) -> View
+	func renderBadge(response: Response?) -> StringContent
 	func authHeader() -> String?
 	func requestData() throws -> Data?
 }
 
 extension WidgetConfig {
 	var fieldConfig: [Field] { fields ?? Self.defaultFields }
+	var hasBadge: Bool { false }
 	var pollingInterval: Int { 5 }
 	static var timeout: Int64 { 5 }
 	static var maxResponseSize: Int { 1_000_000 }
+
+	func renderBadge(response _: Response?) -> StringContent { StringContent("") }
 	func requestData() throws -> Data? { nil }
 }
 

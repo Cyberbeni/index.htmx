@@ -52,5 +52,27 @@ extension Config {
 				ErrorView(title: error)
 			}
 		}
+
+		var hasBadge: Bool {
+			switch self {
+			{% for type in types.implementing.WidgetConfig %}
+			case let .{{ type.name|lowerFirstLetter }}(config):
+				config.hasBadge
+			{% endfor %}
+			case .error:
+				false
+			}
+		}
+
+		var hasDetails: Bool {
+			switch self {
+			{% for type in types.implementing.WidgetConfig %}
+			case let .{{ type.name|lowerFirstLetter }}(config):
+				!config.fieldConfig.isEmpty
+			{% endfor %}
+			case .error:
+				true
+			}
+		}
 	}
 }

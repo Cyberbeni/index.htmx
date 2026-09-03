@@ -9,11 +9,12 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 
 	let url: String
 	let accessToken: String?
+	let badgeSensor: String?
 	let fields: [Field]?
 
 	var path: String { "/api/template" }
 	static var defaultFields: [Field] { [] }
-	var pollingInterval: Int { fieldConfig.contains(where: \.isPerson) ? 5 : 30 }
+	var hasBadge: Bool { badgeSensor != nil }
 
 	enum Field: RawRepresentable, Decodable {
 		case person(entityId: String, name: String)
@@ -103,6 +104,18 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 		}
 	}
 
+	func renderBadge(response: Response?) -> StringContent {
+		if
+			let response,
+			let badgeResponse = response.split(separator: "\n", omittingEmptySubsequences: false).last,
+			badgeResponse != "0"
+		{
+			StringContent(String(badgeResponse))
+		} else {
+			StringContent("")
+		}
+	}
+
 	struct Request: Encodable {
 		let template: String
 	}
@@ -110,7 +123,11 @@ struct HomeAssistant: WidgetConfig, AccessTokenAuth {
 	func jsonEncoder() -> JSONEncoder { JSONEncoder() }
 
 	func requestData() throws -> Data? {
-		let request = Request(template: fieldConfig.map(\.template).joined(separator: "\n"))
+		var templateLines = fieldConfig.map(\.template)
+		if let badgeSensor {
+			templateLines.append("{{states('\(badgeSensor)')}}")
+		}
+		let request = Request(template: templateLines.joined(separator: "\n"))
 		return try jsonEncoder().encode(request)
 	}
 }
