@@ -53,6 +53,8 @@
 @media not (prefers-color-scheme: dark) {
 	:root {
 		--secondary-background: #00000010;
+		--badge-background: red;
+		--badge-foreground: white;
 		--error-background: #f00c;
 		--error-foreground: white;
 	}
@@ -60,6 +62,8 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--secondary-background: #00000010;
+		--badge-background: red;
+		--badge-foreground: white;
 		--error-background: #f00c;
 		--error-foreground: white;
 	}
@@ -229,6 +233,20 @@ button.icon
 	border-color: var(--pico-dropdown-border-color);
 	border-radius: var(--pico-border-radius);
 	padding: var(--gap-m);
+}
+
+/* badge */
+.badge {
+	background-color: var(--badge-background);
+	color: var(--badge-foreground);
+	border-radius: min(50%, var(--gap-l));
+	min-width: calc(1.75*var(--gap-l));
+	font-size: var(--font-size-s);
+	font-weight: 500;
+	padding-inline: var(--gap-s);
+}
+.badge:empty {
+	display:none;
 }
 
 /* mini tile */

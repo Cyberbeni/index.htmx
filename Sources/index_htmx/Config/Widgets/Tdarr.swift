@@ -9,7 +9,6 @@ struct Tdarr: WidgetConfig, ApiKeyAuth {
 
 	var path: String { "/api/v2/cruddb" }
 	static var defaultFields: [Field] { [.transcodeQueue] }
-	var pollingInterval: Int { 5 }
 
 	enum Field: String, Decodable {
 		case spaceSaved

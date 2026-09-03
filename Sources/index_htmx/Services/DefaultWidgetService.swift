@@ -61,6 +61,11 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 					Log.debug("HTTP call OK: \(response)")
 					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 					publisher.publish(sse, cacheId: id)
+					if config.hasBadge {
+						let id = "\(id)badge"
+						let sse = try await ByteBuffer.sse(event: id, html: config.renderBadge(response: response))
+						publisher.publish(sse, cacheId: id)
+					}
 				} else {
 					Log.error("Couldn't decode the response")
 				}

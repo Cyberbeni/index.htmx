@@ -15,7 +15,6 @@ struct Technitium: WidgetConfig, AccessTokenAuth {
 	}
 
 	static var defaultFields: [Field] { [.queries, .blocked] }
-	var pollingInterval: Int { 5 }
 
 	enum Field: String, Decodable {
 		case queries

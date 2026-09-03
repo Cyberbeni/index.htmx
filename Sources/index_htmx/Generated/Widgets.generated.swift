@@ -94,5 +94,47 @@ extension Config {
 				ErrorView(title: error)
 			}
 		}
+
+		var hasBadge: Bool {
+			switch self {
+			case let .adGuard(config):
+				config.hasBadge
+			case let .homeAssistant(config):
+				config.hasBadge
+			case let .radarr(config):
+				config.hasBadge
+			case let .sonarr(config):
+				config.hasBadge
+			case let .tdarr(config):
+				config.hasBadge
+			case let .technitium(config):
+				config.hasBadge
+			case let .transmission(config):
+				config.hasBadge
+			case .error:
+				false
+			}
+		}
+
+		var hasDetails: Bool {
+			switch self {
+			case let .adGuard(config):
+				!config.fieldConfig.isEmpty
+			case let .homeAssistant(config):
+				!config.fieldConfig.isEmpty
+			case let .radarr(config):
+				!config.fieldConfig.isEmpty
+			case let .sonarr(config):
+				!config.fieldConfig.isEmpty
+			case let .tdarr(config):
+				!config.fieldConfig.isEmpty
+			case let .technitium(config):
+				!config.fieldConfig.isEmpty
+			case let .transmission(config):
+				!config.fieldConfig.isEmpty
+			case .error:
+				true
+			}
+		}
 	}
 }
