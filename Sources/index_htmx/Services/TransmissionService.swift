@@ -17,6 +17,7 @@ extension Transmission {
 		let id: String
 		let config: Transmission
 		let publisher: Publisher
+		let titleBadgeService: TitleBadgeService
 
 		let sessionHeaderName = "X-Transmission-Session-Id"
 		var sessionToken: String?
@@ -25,11 +26,12 @@ extension Transmission {
 			id: String,
 			config: Transmission,
 			publisher: Publisher,
-			titleBadgeService _: TitleBadgeService,
+			titleBadgeService: TitleBadgeService,
 		) {
 			self.id = id
 			self.config = config
 			self.publisher = publisher
+			self.titleBadgeService = titleBadgeService
 		}
 
 		func run() async throws {
@@ -71,18 +73,20 @@ extension Transmission {
 				switch response.status.code {
 				case 200:
 					let body = try await response.body.collect(upTo: Config.maxResponseSize)
-					if let response = try body.getJSONDecodable(
+					guard let response = try body.getJSONDecodable(
 						Config.Response.self,
 						decoder: Self.jsonDecoder(),
 						at: 0,
 						length: body.readableBytes,
-					) {
-						Log.debug("HTTP call OK: \(response)")
-						let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
-						publisher.publish(sse, cacheId: id)
-					} else {
-						Log.error("getJSONDecodable returned nil")
+					) else {
+						throw DecodingError.valueNotFound(
+							Config.Response.self,
+							DecodingError.Context(codingPath: [], debugDescription: "getJSONDecodable returned nil"),
+						)
 					}
+					Log.debug("HTTP call OK: \(response)")
+					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
+					publisher.publish(sse, cacheId: id)
 				case 409:
 					Log.debug("Session renew")
 					if let sessionToken = response.headers.first(name: sessionHeaderName) {

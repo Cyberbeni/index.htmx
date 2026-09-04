@@ -30,17 +30,25 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		}
 	}
 
-	func decode(body: ByteBuffer) throws -> Config.Response? {
+	func decode(body: ByteBuffer) throws -> Config.Response {
+		let retVal: Config.Response?
 		if Config.Response.self == String.self {
-			String(buffer: body) as? Config.Response
+			retVal = String(buffer: body) as? Config.Response
 		} else {
-			try body.getJSONDecodable(
+			retVal = try body.getJSONDecodable(
 				Config.Response.self,
 				decoder: Self.jsonDecoder(),
 				at: 0,
 				length: body.readableBytes,
 			)
 		}
+		guard let retVal else {
+			throw DecodingError.valueNotFound(
+				Config.Response.self,
+				DecodingError.Context(codingPath: [], debugDescription: "Response data empty."),
+			)
+		}
+		return retVal
 	}
 
 	func getData() async {
@@ -64,19 +72,18 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 			switch response.status.code {
 			case 200:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				if let response = try decode(body: body) {
-					Log.debug("HTTP call OK: \(response)")
-					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
+				let response = try decode(body: body)
+				Log.debug("HTTP call OK: \(response)")
+				let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
+				publisher.publish(sse, cacheId: id)
+				if config.hasBadge {
+					let id = "\(id)badge"
+					let content = config.renderBadge(response: response)
+					titleBadgeService.updateBadge(id: id, content: content.text)
+					let sse = try await ByteBuffer.sse(event: id, html: content)
 					publisher.publish(sse, cacheId: id)
-					if config.hasBadge {
-						let id = "\(id)badge"
-						let content = config.renderBadge(response: response)
-						titleBadgeService.updateBadge(id: id, content: content.text)
-						let sse = try await ByteBuffer.sse(event: id, html: content)
-						publisher.publish(sse, cacheId: id)
-					}
 				} else {
-					Log.error("Couldn't decode the response")
+					titleBadgeService.updateBadge(id: id, content: "")
 				}
 			default:
 				try await handleErrorResponse(response)

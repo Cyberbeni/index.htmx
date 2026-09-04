@@ -6,6 +6,7 @@ protocol WidgetService<Config>: Service, Sendable {
 	var id: String { get }
 	var config: Config { get }
 	var publisher: Publisher { get }
+	var titleBadgeService: TitleBadgeService { get }
 
 	init(
 		id: String,

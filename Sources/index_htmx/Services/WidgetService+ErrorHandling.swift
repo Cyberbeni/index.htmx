@@ -3,6 +3,7 @@ import NIOCore
 
 extension WidgetService {
 	func handleErrorResponse(_ response: HTTPClientResponse) async throws {
+		titleBadgeService.updateBadge(id: id, content: "1")
 		let body = try await response.body.collect(upTo: Config.maxResponseSize)
 		Log.error("Error status code: \(response.status.code), body: \(String(buffer: body))")
 
@@ -11,6 +12,7 @@ extension WidgetService {
 	}
 
 	func handleErrorThrown(_ error: Error) async {
+		titleBadgeService.updateBadge(id: id, content: "1")
 		Log.error(error)
 		do {
 			let sse = try await ByteBuffer.sse(event: id, html: ErrorView(title: "Unexpected error (see logs)"))
