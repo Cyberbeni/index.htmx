@@ -45,27 +45,26 @@ struct MainPage: HTMLDocument {
 			if let badgedFavicon = generalConfig.badgedFavicon {
 				script { """
 				document.body.addEventListener('htmx:sseBeforeMessage', function (messageEvent) {
-					console.log(messageEvent.detail.type)
 					switch(messageEvent.detail.type) {
 						case '\(TitleBadgeService.originalFaviconEventName)':
-							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(generalConfig.favicon)"
+							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(generalConfig.favicon)";
+							break;
 						case '\(TitleBadgeService.badgedFaviconEventName)':
-							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(badgedFavicon)"
+							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(badgedFavicon)";
+							break;
 					}
-				})
+				});
 				"""
 				}
-				div(
-					.hidden,
-					.sse.swap([
-						TitleBadgeService.eventName,
-						TitleBadgeService.originalFaviconEventName,
-						TitleBadgeService.badgedFaviconEventName,
-					].joined(separator: ",")),
-				) {}
-			} else {
-				div(.hidden, .sse.swap(TitleBadgeService.eventName)) {}
 			}
+			div(
+				.hidden,
+				.sse.swap([
+					TitleBadgeService.eventName,
+					TitleBadgeService.originalFaviconEventName,
+					TitleBadgeService.badgedFaviconEventName,
+				].joined(separator: ",")),
+			) {}
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {
 					Section(
