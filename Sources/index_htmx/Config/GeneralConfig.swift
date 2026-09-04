@@ -8,6 +8,7 @@ extension Config {
 		var showReloadConfigButton: Bool { _showReloadConfigButton ?? false }
 		private let _showReloadConfigButton: Bool?
 		let favicon: String
+		let badgedFavicon: String?
 		let pwaIcons: [String: String] // sizes: path
 		var customCss: [String] { _customCss ?? [] }
 		private let _customCss: [String]?
@@ -23,6 +24,7 @@ extension Config {
 			case _enableCompression = "enableCompression"
 			case _showReloadConfigButton = "showReloadConfigButton"
 			case favicon
+			case badgedFavicon
 			case pwaIcons
 			case _customCss = "customCss"
 			case _customJs = "customJs"

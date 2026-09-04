@@ -10,9 +10,14 @@ actor TitleBadgeService: Service {
 	private let generalConfig: Config.General
 	private let publisher: Publisher
 
-	private let eventName = "title"
 	private var badges = [String: String]()
 	private nonisolated let (commandStream, commandSource) = AsyncStream<Command>.makeStream()
+
+	static let eventName = "title"
+
+	private static let faviconCacheId = "favicon"
+	static let originalFaviconEventName = "FaviconOriginal"
+	static let badgedFaviconEventName = "FaviconBadged"
 
 	init(
 		generalConfig: Config.General,
@@ -41,17 +46,29 @@ actor TitleBadgeService: Service {
 	}
 
 	private func _updateBadge(id: String, content: String) async {
+		// TODO: Also add up error count?
 		guard badges[id] != content else { return }
 		do {
 			badges[id] = content
 			let count: Int = badges.values.reduce(0) { $0 + (Int($1) ?? 0) }
+
+			// Update title
 			var titleText = generalConfig.title
 			if count != 0 {
 				titleText.append(" (\(count))")
 			}
 			let title = title { titleText }
-			let sse = try await ByteBuffer.sse(event: eventName, html: title)
-			publisher.publish(sse, cacheId: eventName)
+			let sse = try await ByteBuffer.sse(event: Self.eventName, html: title)
+			publisher.publish(sse, cacheId: Self.eventName)
+
+			// Update favicon
+			let faviconSse: ByteBuffer
+			if count == 0 {
+				faviconSse = try await ByteBuffer.sse(event: Self.originalFaviconEventName, html: nil)
+			} else {
+				faviconSse = try await ByteBuffer.sse(event: Self.badgedFaviconEventName, html: nil)
+			}
+			publisher.publish(faviconSse, cacheId: Self.faviconCacheId)
 		} catch {
 			Log.error(error)
 		}
