@@ -52,22 +52,22 @@ extension Config {
 			}
 		}
 
-		func createService(id: String, publisher: Publisher) -> (any WidgetService)? {
+		func createService(id: String, publisher: Publisher, titleBadgeService: TitleBadgeService) -> (any WidgetService)? {
 			switch self {
 			case let .adGuard(config):
-				AdGuard.Service(id: id, config: config, publisher: publisher)
+				AdGuard.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .homeAssistant(config):
-				HomeAssistant.Service(id: id, config: config, publisher: publisher)
+				HomeAssistant.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .radarr(config):
-				Radarr.Service(id: id, config: config, publisher: publisher)
+				Radarr.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .sonarr(config):
-				Sonarr.Service(id: id, config: config, publisher: publisher)
+				Sonarr.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .tdarr(config):
-				Tdarr.Service(id: id, config: config, publisher: publisher)
+				Tdarr.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .technitium(config):
-				Technitium.Service(id: id, config: config, publisher: publisher)
+				Technitium.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case let .transmission(config):
-				Transmission.Service(id: id, config: config, publisher: publisher)
+				Transmission.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			case .error:
 				nil
 			}

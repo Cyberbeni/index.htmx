@@ -21,7 +21,12 @@ extension Transmission {
 		let sessionHeaderName = "X-Transmission-Session-Id"
 		var sessionToken: String?
 
-		init(id: String, config: Transmission, publisher: Publisher) {
+		init(
+			id: String,
+			config: Transmission,
+			publisher: Publisher,
+			titleBadgeService _: TitleBadgeService,
+		) {
 			self.id = id
 			self.config = config
 			self.publisher = publisher

@@ -1,5 +1,5 @@
 import Elementary
-import NIO
+import NIOCore
 
 extension ByteBuffer {
 	static func sse(event: String?, html: consuming (any HTML & Sendable)?) async throws -> ByteBuffer {

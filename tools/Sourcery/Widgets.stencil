@@ -30,11 +30,11 @@ extension Config {
 			}
 		}
 
-		func createService(id: String, publisher: Publisher) -> (any WidgetService)? {
+		func createService(id: String, publisher: Publisher, titleBadgeService: TitleBadgeService) -> (any WidgetService)? {
 			switch self {
 			{% for type in types.implementing.WidgetConfig %}
 			case let .{{ type.name|lowerFirstLetter }}(config):
-				{{ type.name }}.Service(id: id, config: config, publisher: publisher)
+				{{ type.name }}.Service(id: id, config: config, publisher: publisher, titleBadgeService: titleBadgeService)
 			{% endfor %}
 			case .error:
 				nil

@@ -7,7 +7,12 @@ protocol WidgetService<Config>: Service, Sendable {
 	var config: Config { get }
 	var publisher: Publisher { get }
 
-	init(id: String, config: Config, publisher: Publisher)
+	init(
+		id: String,
+		config: Config,
+		publisher: Publisher,
+		titleBadgeService: TitleBadgeService,
+	)
 
 	static func jsonDecoder() -> JSONDecoder
 }

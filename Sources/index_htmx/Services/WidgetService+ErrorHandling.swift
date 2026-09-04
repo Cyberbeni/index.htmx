@@ -1,5 +1,5 @@
 import AsyncHTTPClient
-import NIO
+import NIOCore
 
 extension WidgetService {
 	func handleErrorResponse(_ response: HTTPClientResponse) async throws {

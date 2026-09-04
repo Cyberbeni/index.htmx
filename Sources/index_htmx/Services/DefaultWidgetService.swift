@@ -7,11 +7,18 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 	let id: String
 	let config: Config
 	let publisher: Publisher
+	let titleBadgeService: TitleBadgeService
 
-	init(id: String, config: Config, publisher: Publisher) {
+	init(
+		id: String,
+		config: Config,
+		publisher: Publisher,
+		titleBadgeService: TitleBadgeService,
+	) {
 		self.id = id
 		self.config = config
 		self.publisher = publisher
+		self.titleBadgeService = titleBadgeService
 	}
 
 	func run() async throws {
@@ -63,7 +70,9 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 					publisher.publish(sse, cacheId: id)
 					if config.hasBadge {
 						let id = "\(id)badge"
-						let sse = try await ByteBuffer.sse(event: id, html: config.renderBadge(response: response))
+						let content = config.renderBadge(response: response)
+						titleBadgeService.updateBadge(id: id, content: content.text)
+						let sse = try await ByteBuffer.sse(event: id, html: content)
 						publisher.publish(sse, cacheId: id)
 					}
 				} else {
