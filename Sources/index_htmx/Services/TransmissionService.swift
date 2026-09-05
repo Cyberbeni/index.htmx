@@ -73,20 +73,16 @@ extension Transmission {
 				switch response.status.code {
 				case 200:
 					let body = try await response.body.collect(upTo: Config.maxResponseSize)
-					guard let response = try body.getJSONDecodable(
+					let response = try body.getJSONDecodable(
 						Config.Response.self,
 						decoder: Self.jsonDecoder(),
 						at: 0,
 						length: body.readableBytes,
-					) else {
-						throw DecodingError.valueNotFound(
-							Config.Response.self,
-							DecodingError.Context(codingPath: [], debugDescription: "getJSONDecodable returned nil"),
-						)
-					}
+					).unwrap()
 					Log.debug("HTTP call OK: \(response)")
 					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 					publisher.publish(sse, cacheId: id)
+					titleBadgeService.updateBadge(id: id, content: "")
 				case 409:
 					Log.debug("Session renew")
 					if let sessionToken = response.headers.first(name: sessionHeaderName) {
