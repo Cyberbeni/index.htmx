@@ -16,8 +16,8 @@ actor TitleBadgeService: Service {
 	static let eventName = "title"
 
 	private static let faviconCacheId = "favicon"
-	static let originalFaviconEventName = "FaviconOriginal"
-	static let badgedFaviconEventName = "FaviconBadged"
+	static let originalFaviconEventName = "favicon-original"
+	static let badgedFaviconEventName = "favicon-badged"
 
 	init(
 		generalConfig: Config.General,
