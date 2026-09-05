@@ -46,7 +46,6 @@ actor TitleBadgeService: Service {
 	}
 
 	private func _updateBadge(id: String, content: String) async {
-		// TODO: Also add up error count?
 		guard badges[id] != content else { return }
 		do {
 			badges[id] = content
