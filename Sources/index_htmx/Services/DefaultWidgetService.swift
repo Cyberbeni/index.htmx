@@ -5,13 +5,21 @@ import ServiceLifecycle
 
 actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 	let id: String
+	var badgeId: String { "\(id)badge" }
 	let config: Config
 	let publisher: Publisher
+	let titleBadgeService: TitleBadgeService
 
-	init(id: String, config: Config, publisher: Publisher) {
+	init(
+		id: String,
+		config: Config,
+		publisher: Publisher,
+		titleBadgeService: TitleBadgeService,
+	) {
 		self.id = id
 		self.config = config
 		self.publisher = publisher
+		self.titleBadgeService = titleBadgeService
 	}
 
 	func run() async throws {
@@ -57,17 +65,17 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 			switch response.status.code {
 			case 200:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				if let response = try decode(body: body) {
-					Log.debug("HTTP call OK: \(response)")
-					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
-					publisher.publish(sse, cacheId: id)
-					if config.hasBadge {
-						let id = "\(id)badge"
-						let sse = try await ByteBuffer.sse(event: id, html: config.renderBadge(response: response))
-						publisher.publish(sse, cacheId: id)
-					}
+				let response = try decode(body: body).unwrap()
+				Log.debug("HTTP call OK: \(response)")
+				let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
+				publisher.publish(sse, cacheId: id)
+				if config.hasBadge {
+					let content = config.renderBadge(response: response)
+					titleBadgeService.updateBadge(id: id, content: content.text)
+					let sse = try await ByteBuffer.sse(event: badgeId, html: content)
+					publisher.publish(sse, cacheId: badgeId)
 				} else {
-					Log.error("Couldn't decode the response")
+					titleBadgeService.updateBadge(id: id, content: "")
 				}
 			default:
 				try await handleErrorResponse(response)

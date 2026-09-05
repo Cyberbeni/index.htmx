@@ -1,5 +1,5 @@
 import Elementary
-import NIO
+import NIOCore
 
 extension ByteBuffer {
 	mutating func writeHTML(_ html: consuming any HTML & Sendable, chunkSize: Int = 1024) async throws {

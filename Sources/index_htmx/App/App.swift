@@ -63,7 +63,8 @@ actor App {
 
 		// Setup services
 		let publisher = Publisher()
-		var services: [any Service] = [publisher]
+		let titleBadgeService = TitleBadgeService(generalConfig: generalConfig, publisher: publisher)
+		var services: [any Service] = [publisher, titleBadgeService]
 		var serviceIndex = 0
 		for iSection in mainCardsConfig.sections.indices {
 			for iCard in mainCardsConfig.sections[iSection].cards.indices {
@@ -71,7 +72,7 @@ actor App {
 					let widgetId = "widget\(serviceIndex)"
 					serviceIndex += 1
 					mainCardsConfig.sections[iSection].cards[iCard].widgetId = widgetId
-					if let service = widget.createService(id: widgetId, publisher: publisher) {
+					if let service = widget.createService(id: widgetId, publisher: publisher, titleBadgeService: titleBadgeService) {
 						services.append(service)
 					}
 				}

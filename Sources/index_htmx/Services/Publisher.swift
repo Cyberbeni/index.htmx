@@ -1,4 +1,4 @@
-import NIO
+import NIOCore
 import ServiceLifecycle
 
 /// Modified version of Publisher from this example

@@ -20,7 +20,7 @@ struct MainPage: HTMLDocument {
 
 		meta(.name("theme-color"), .content(generalConfig.theme.light), .media("(prefers-color-scheme: light)"))
 		meta(.name("theme-color"), .content(generalConfig.theme.dark), .media("(prefers-color-scheme: dark)"))
-		link(.href("/\(context.runTimestamp)/\(generalConfig.favicon)"), .rel(.icon))
+		link(.href("/\(context.runTimestamp)/\(generalConfig.favicon)"), .rel(.icon), .id("favicon"))
 		for (sizes, path) in generalConfig.pwaIcons {
 			link(.href("/\(context.runTimestamp)/\(path)"), .rel("apple-touch-icon"), .sizes(sizes))
 		}
@@ -42,6 +42,29 @@ struct MainPage: HTMLDocument {
 		main(.class("container"), .hx.ext(.sse), .sse.connect("/sse?timestamp=\(context.runTimestamp)")) {
 			script(.src("/\(context.staticFilesTimestamp)/autoreload.js")) {}
 			script(.sse.swap("reload")) {}
+			if let badgedFavicon = generalConfig.badgedFavicon {
+				script { """
+				document.body.addEventListener('htmx:sseBeforeMessage', function (messageEvent) {
+					switch(messageEvent.detail.type) {
+						case '\(TitleBadgeService.originalFaviconEventName)':
+							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(generalConfig.favicon)";
+							break;
+						case '\(TitleBadgeService.badgedFaviconEventName)':
+							document.getElementById("favicon").href = "/\(context.runTimestamp)/\(badgedFavicon)";
+							break;
+					}
+				});
+				"""
+				}
+			}
+			div(
+				.hidden,
+				.sse.swap([
+					TitleBadgeService.eventName,
+					TitleBadgeService.originalFaviconEventName,
+					TitleBadgeService.badgedFaviconEventName,
+				].joined(separator: ",")),
+			) {}
 			div(.class("grid")) {
 				for section in mainCardsConfig.sections {
 					Section(
