@@ -5,6 +5,7 @@ import ServiceLifecycle
 
 actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 	let id: String
+	var badgeId: String { "\(id)badge" }
 	let config: Config
 	let publisher: Publisher
 	let titleBadgeService: TitleBadgeService
@@ -77,11 +78,10 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 				let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 				publisher.publish(sse, cacheId: id)
 				if config.hasBadge {
-					let id = "\(id)badge"
 					let content = config.renderBadge(response: response)
 					titleBadgeService.updateBadge(id: id, content: content.text)
-					let sse = try await ByteBuffer.sse(event: id, html: content)
-					publisher.publish(sse, cacheId: id)
+					let sse = try await ByteBuffer.sse(event: badgeId, html: content)
+					publisher.publish(sse, cacheId: badgeId)
 				} else {
 					titleBadgeService.updateBadge(id: id, content: "")
 				}
