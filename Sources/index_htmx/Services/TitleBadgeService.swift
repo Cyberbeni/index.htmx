@@ -61,13 +61,15 @@ actor TitleBadgeService: Service {
 			publisher.publish(sse, cacheId: Self.eventName)
 
 			// Update favicon
-			let faviconSse: ByteBuffer
-			if count == 0 {
-				faviconSse = try await ByteBuffer.sse(event: Self.originalFaviconEventName, html: nil)
-			} else {
-				faviconSse = try await ByteBuffer.sse(event: Self.badgedFaviconEventName, html: nil)
+			if generalConfig.badgedFavicon != nil {
+				let faviconSse: ByteBuffer
+				if count == 0 {
+					faviconSse = try await ByteBuffer.sse(event: Self.originalFaviconEventName, html: nil)
+				} else {
+					faviconSse = try await ByteBuffer.sse(event: Self.badgedFaviconEventName, html: nil)
+				}
+				publisher.publish(faviconSse, cacheId: Self.faviconCacheId)
 			}
-			publisher.publish(faviconSse, cacheId: Self.faviconCacheId)
 		} catch {
 			Log.error(error)
 		}
