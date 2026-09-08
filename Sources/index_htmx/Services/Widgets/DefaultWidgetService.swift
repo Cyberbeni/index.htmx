@@ -31,16 +31,11 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 		}
 	}
 
-	func decode(body: ByteBuffer) throws -> Config.Response? {
+	func decode(body: ByteBuffer) throws -> Config.Response {
 		if Config.Response.self == String.self {
-			String(buffer: body) as? Config.Response
+			String(buffer: body) as! Config.Response
 		} else {
-			try body.getJSONDecodable(
-				Config.Response.self,
-				decoder: Self.jsonDecoder(),
-				at: 0,
-				length: body.readableBytes,
-			)
+			try Self.jsonDecoder().decode(Config.Response.self, from: body)
 		}
 	}
 
@@ -65,7 +60,7 @@ actor DefaultWidgetService<Config: WidgetConfig>: WidgetService {
 			switch response.status.code {
 			case 200:
 				let body = try await response.body.collect(upTo: Config.maxResponseSize)
-				let response = try decode(body: body).unwrap()
+				let response = try decode(body: body)
 				Log.debug("HTTP call OK: \(response)")
 				let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 				publisher.publish(sse, cacheId: id)
