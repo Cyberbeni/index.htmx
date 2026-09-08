@@ -73,12 +73,7 @@ extension Transmission {
 				switch response.status.code {
 				case 200:
 					let body = try await response.body.collect(upTo: Config.maxResponseSize)
-					let response = try body.getJSONDecodable(
-						Config.Response.self,
-						decoder: Self.jsonDecoder(),
-						at: 0,
-						length: body.readableBytes,
-					).unwrap()
+					let response = try Self.jsonDecoder().decode(Config.Response.self, from: body)
 					Log.debug("HTTP call OK: \(response)")
 					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 					publisher.publish(sse, cacheId: id)
