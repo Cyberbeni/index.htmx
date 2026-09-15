@@ -20,7 +20,7 @@ let package = Package(
 		.package(url: "https://github.com/elementary-swift/elementary-htmx", from: "0.5.1"),
 		.package(url: "https://github.com/swift-server/async-http-client", from: "1.34.0"),
 		// Plugins:
-		.package(url: "https://codeberg.org/Cyberbeni/SwiftFormat-mirror", from: "0.60.1"),
+		.package(url: "https://codeberg.org/Cyberbeni/SwiftFormat-artifactbundle", from: "0.63.0"),
 	],
 	targets: [
 		.executableTarget(
