@@ -5,10 +5,12 @@ import ServiceLifecycle
 
 extension Transmission {
 	struct Request: Encodable {
+		let id: UUID = .init()
+		let jsonrpc: String = "2.0"
 		let method: String
-		let arguments: Arguments
+		let params: Params
 
-		struct Arguments: Encodable {
+		struct Params: Encodable {
 			let fields: [String]
 		}
 	}
@@ -61,12 +63,12 @@ extension Transmission {
 					request.headers.add(name: sessionHeaderName, value: sessionToken)
 				}
 				request.body = try .bytes(jsonEncoder().encode(Transmission.Request(
-					method: "torrent-get",
-					arguments: .init(fields: [
-						"percentDone",
+					method: "torrent_get",
+					params: .init(fields: [
+						"percent_done",
 						"status",
-						"rateDownload",
-						"rateUpload",
+						"rate_download",
+						"rate_upload",
 					]),
 				)))
 				let response = try await HTTPClient.shared.execute(request, timeout: .seconds(Config.timeout))
@@ -75,6 +77,9 @@ extension Transmission {
 					let body = try await response.body.collect(upTo: Config.maxResponseSize)
 					let response = try Self.jsonDecoder().decode(Config.Response.self, from: body)
 					Log.debug("HTTP call OK: \(response)")
+					if let error = response.error {
+						Log.error("Transmission error: \(error)")
+					}
 					let sse = try await ByteBuffer.sse(event: id, html: config.render(response: response))
 					publisher.publish(sse, cacheId: id)
 					titleBadgeService.updateBadge(id: id, content: "")

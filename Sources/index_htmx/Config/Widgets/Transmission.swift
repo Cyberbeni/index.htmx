@@ -26,11 +26,11 @@ struct Transmission: WidgetConfig, PasswordAuth {
 		}
 
 		func value(for response: Response?) -> String {
-			guard let response else { return "-" }
+			guard let result = response?.result else { return "-" }
 			switch self {
 			case .leech:
-				let runningCount = response.arguments.torrents.count(where: { $0.status == .downloading })
-				let totalCount = response.arguments.torrents.count(where: {
+				let runningCount = result.torrents.count(where: { $0.status == .downloading })
+				let totalCount = result.torrents.count(where: {
 					[.queuedToVerifyLocalData, .verifyingLocalData, .queuedToDownload, .downloading].contains($0.status) ||
 						($0.status == .stopped && $0.percentDone != 1)
 				})
@@ -40,8 +40,8 @@ struct Transmission: WidgetConfig, PasswordAuth {
 					return "\(Formatter.number(runningCount)) (\(Formatter.number(totalCount)))"
 				}
 			case .seed:
-				let runningCount = response.arguments.torrents.count(where: { $0.status == .seeding })
-				let totalCount = response.arguments.torrents.count(where: {
+				let runningCount = result.torrents.count(where: { $0.status == .seeding })
+				let totalCount = result.torrents.count(where: {
 					[.queuedToSeed, .seeding].contains($0.status) ||
 						($0.status == .stopped && $0.percentDone == 1)
 				})
@@ -51,10 +51,10 @@ struct Transmission: WidgetConfig, PasswordAuth {
 					return "\(Formatter.number(runningCount)) (\(Formatter.number(totalCount)))"
 				}
 			case .download:
-				let speed = response.arguments.torrents.reduce(0) { $0 + $1.rateDownload }
+				let speed = result.torrents.reduce(0) { $0 + $1.rateDownload }
 				return Formatter.transferSpeed(speed)
 			case .upload:
-				let speed = response.arguments.torrents.reduce(0) { $0 + $1.rateUpload }
+				let speed = result.torrents.reduce(0) { $0 + $1.rateUpload }
 				return Formatter.transferSpeed(speed)
 			}
 		}
@@ -62,10 +62,10 @@ struct Transmission: WidgetConfig, PasswordAuth {
 
 	/// https://github.com/transmission/transmission/blob/main/docs/rpc-spec.md
 	struct Response: Decodable {
-		let arguments: Arguments
-		let result: Result
+		let result: Result?
+		let error: Error?
 
-		struct Arguments: Decodable {
+		struct Result: Decodable {
 			let torrents: [Torrent]
 
 			struct Torrent: Decodable {
@@ -86,33 +86,21 @@ struct Transmission: WidgetConfig, PasswordAuth {
 			}
 		}
 
-		enum Result: RawRepresentable, Decodable {
-			case success
-			case error(String)
+		struct Error: Decodable {
+			let code: Int
+			let message: String
+			let data: ErrorData?
 
-			var rawValue: String {
-				switch self {
-				case .success:
-					"success"
-				case let .error(error):
-					error
-				}
-			}
-
-			init(rawValue: String) {
-				if rawValue == "success" {
-					self = .success
-				} else {
-					self = .error(rawValue)
-				}
+			struct ErrorData: Decodable {
+				let errorString: String?
 			}
 		}
 	}
 
 	@HTMLBuilder
 	func render(response: Response?) -> some HTML & Sendable {
-		if let response, case let .error(error) = response.result {
-			ErrorView(title: error)
+		if let error = response?.error {
+			ErrorView(title: "Error code: \(error.code)")
 		} else {
 			for field in fieldConfig {
 				DetailItem(title: field.title, value: field.value(for: response))
